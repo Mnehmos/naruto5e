@@ -124,4 +124,35 @@ describe("E2E playable loop (controller + WS)", () => {
     expect(seqs).toEqual([...seqs].sort((a, b) => a - b));
     expect(batch.events[0].type).toBe("move");
   });
+
+  // ---- Phase 4: fight a real tiered adversary through the controller ---
+  it("spawns a Bingo Book Solo boss and fights it (adversary uses the same combat surface)", async () => {
+    const room = "boss-fight";
+    const hero = (await client.submitIntent({
+      roomId: room,
+      type: "character_create",
+      params: { name: "Kakashi", clan: "Hatake", className: "Ninjutsu Specialist", abilities: { method: "manual", scores: { str: 12, dex: 16, con: 14, int: 16, wis: 12, cha: 12 } }, classSkillChoices: broad, clanSkillChoices: broad, abilityChoices: ["int"] },
+    })).events[0].data.character.id;
+
+    const spawn = await client.submitIntent({ roomId: room, type: "from_bingo_book", params: { name: "Zabuza", partySize: 1 } });
+    expect(spawn.status).toBe("resolved");
+    const boss = spawn.events[0].data.adversary.id;
+    expect(spawn.events[0].data.adversary.legendary).toBeDefined();
+
+    const start = await client.submitIntent({ roomId: room, type: "combat_start", params: { combatants: [{ actorId: hero, team: "pc" }, { actorId: boss, team: "enemy" }] } });
+    expect(start.status).toBe("resolved");
+
+    // get to the hero's turn, then strike the boss
+    const activeIn = async () => (await client.getEncounter(room)).encounter.order[(await client.getEncounter(room)).encounter.activeIndex];
+    let g = 0;
+    while ((await activeIn()) !== hero && g++ < 4) await client.submitIntent({ roomId: room, type: "advance" });
+    const atk = await client.submitIntent({ roomId: room, actorId: hero, type: "attack", params: { target: boss, damage: "2d6", ability: "dex" } });
+    expect(atk.status).toBe("resolved");
+    expect(atk.events.some((e: any) => e.type === "attack")).toBe(true);
+
+    // the boss takes a Legendary Action off-turn (it's still the hero's turn)
+    const la = await client.submitIntent({ roomId: room, actorId: boss, type: "legendary_action", params: { action: "freeform_attack", params: { target: hero } } });
+    expect(la.status).toBe("resolved");
+    expect(la.events.some((e: any) => e.type === "legendary_action")).toBe(true);
+  });
 });

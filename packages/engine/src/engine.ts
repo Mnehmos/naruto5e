@@ -59,6 +59,11 @@ export class Engine {
     return this.handlers.has(type) || type === "batch";
   }
 
+  /** Read a registered handler (used for re-entrant sub-ops, e.g. legendary actions). */
+  getHandler(type: string): IntentHandler | undefined {
+    return this.handlers.get(type);
+  }
+
   knownActions(): string[] {
     return [...this.handlers.keys(), "batch"].sort();
   }
@@ -274,7 +279,9 @@ export class Engine {
     const room = this.getRoom(roomId);
     const out: Record<string, unknown> = { roomId, mode: room?.mode ?? "scene" };
     if (actorId) {
-      const actor = this.store.collection("characters").get(actorId) as Record<string, unknown> | undefined;
+      const actor = (this.store.collection("characters").get(actorId) ?? this.store.collection("adversaries").get(actorId)) as
+        | Record<string, unknown>
+        | undefined;
       if (actor) {
         out.actor = {
           id: actorId,
@@ -292,10 +299,11 @@ export class Engine {
   getRoomState(roomId: string): Record<string, unknown> {
     const room = this.ensureRoom(roomId);
     const characters = this.store.collection("characters").find((c) => (c as any).roomId === roomId);
+    const adversaries = this.store.collection("adversaries").find((a) => (a as any).roomId === roomId);
     const encounter = room.encounterId
       ? this.store.collection("encounters").get(room.encounterId)
       : undefined;
-    return { room, characters, encounter };
+    return { room, characters, adversaries, encounter };
   }
 
   getEntity(collection: string, id: string): Record<string, unknown> | undefined {

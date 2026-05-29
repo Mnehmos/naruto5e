@@ -9,6 +9,7 @@ import { defaultBudget, canAfford, spend, costFromCastingTime, type CostDescript
 import { activeEncounter } from "../rules/turn.js";
 import { applyDamageDoc } from "../rules/resolve.js";
 import { rollDamage } from "../rules/combat.js";
+import { checkPhaseTransition } from "../rules/adversary.js";
 import { INCAPACITATING } from "../rules/conditions.js";
 import { castJutsu } from "./jutsu.js";
 
@@ -41,8 +42,9 @@ function gateAction(ctx: ResolveContext, cost: CostDescriptor): { ref: ActorRef;
   if (!actorId) throw reject("actor_required", "This action requires an actorId.", {}, ["Set actorId."]);
   const ref = loadActor(ctx.store, actorId);
   if (!ref) throw reject("entity_not_found", `No actor "${actorId}".`, { actorId });
+  const legendary = ctx.op.params.__legendary === true;
   const active = enc.order[enc.activeIndex];
-  if (active !== actorId && !cost.reaction) {
+  if (active !== actorId && !cost.reaction && !legendary) {
     throw reject("off_turn", `It is ${active}'s turn, not ${ref.doc.name}'s.`, { active }, ["Wait for your turn, or use a reaction."]);
   }
   // incapacitating conditions block actions
@@ -51,6 +53,7 @@ function gateAction(ctx: ResolveContext, cost: CostDescriptor): { ref: ActorRef;
     const blocking = conds.find((c) => INCAPACITATING.has(c));
     if (blocking) throw reject("incapacitated", `${ref.doc.name} is ${blocking} and cannot act.`, { condition: blocking }, ["Remove the condition first."]);
   }
+  if (legendary) return { ref, enc }; // legendary actions don't spend the turn budget
   if (!ref.doc.turnBudget) ref.doc.turnBudget = defaultBudget(ref.doc.speed ?? 30);
   const aff = canAfford(ref.doc.turnBudget, cost);
   if (!aff.ok) throw reject("action_economy", `${ref.doc.name}: ${aff.detail}.`, { lacking: aff.lacking }, ["Use a different action, or end your turn (advance)."]);
@@ -160,6 +163,15 @@ export function registerCombatIntents(engine: Engine): void {
     if (ref) {
       resetBudget(ref.doc);
       saveActor(ctx.store, ref);
+      // Solo Legendary Actions refresh: +1 per other combatant's turn (capped).
+      for (const c of enc.combatants) {
+        if (c.actorId === ref.doc.id) continue;
+        const sref = loadActor(ctx.store, c.actorId);
+        if (sref?.doc.legendary && sref.doc.legendary.actions < sref.doc.legendary.max) {
+          sref.doc.legendary.actions = Math.min(sref.doc.legendary.max, sref.doc.legendary.actions + 1);
+          saveActor(ctx.store, sref);
+        }
+      }
       ctx.ir.emit("advance", { actor: ref.doc.id, data: { round, activeIndex: idx, turn: ref.doc.id }, narration: `Round ${round}: ${ref.doc.name}'s turn.` });
       // downed PC auto-rolls a death save at the start of its turn
       if (ref.doc.isPC && !ref.doc.dead && (ref.doc.hp?.current ?? 1) === 0 && !ref.doc.deathSaves?.stable) {
@@ -233,8 +245,10 @@ export function registerCombatIntents(engine: Engine): void {
       const total = dmg.total + actorAbilityMod(attacker, ability);
       const isPC = tref.doc.isPC ?? tref.coll === "characters";
       const out = applyDamageDoc(tref.doc, total, { isPC });
+      const crossed = tref.coll === "adversaries" ? checkPhaseTransition(tref.doc) : null;
       saveActor(ctx.store, tref);
       ctx.ir.emit("damage", { actor: attacker.id, data: { target: targetId, amount: out.dealt, type: ctx.op.params.damageType ?? "physical", rolls: dmg.rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} damage (${out.hp.current}/${out.hp.max}).` });
+      if (crossed) ctx.ir.emit("phase_transition", { actor: tref.doc.id, data: { threshold: crossed, phase: tref.doc.phases.current }, narration: `${tref.doc.name} enters a new phase (${crossed}% HP)!` });
       if (out.died) ctx.ir.emit("down", { actor: attacker.id, data: { target: targetId, dead: true }, narration: `${tref.doc.name} falls, slain.` });
       else if (out.downed) ctx.ir.emit("down", { actor: attacker.id, data: { target: targetId, dead: false }, narration: `${tref.doc.name} drops, dying.` });
     }

@@ -243,3 +243,47 @@ extraction — flagged). Standing-gated stock + vendor heat + the full economy_m
 land in Phase 7; the embedded rest tick in Phase 9.
 
 **Next:** Phase 4 — adversaries (tier baselines, Minion/Elite/Solo, Bingo Book).
+
+---
+
+## Phase 4 — Adversaries ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Ch.14 (adversary_manage) — tier baselines L1–30, Minion/Elite/Solo
+modifiers, Bingo Book roster, freeform attacks, the 8-step build.
+
+**Built (real):**
+- `rules/adversary.ts`: `adversaryBaseline(level)` — HP = 8+5·(L−1) (exact at all
+  four verified anchors), AC/prof/attack piecewise-interpolated through the
+  source anchors (L1 11/3/8/5 · L10 13/6/53/30 · L20 14/9/103/58 · L30 16/12/153/90).
+  `tierMods` with the EXACT source modifiers (Minion AC−2/dmg×0.2/XP×0.25;
+  Elite AC+2/HP×1.5/XP×2 + Elite Action + Tenacity; Solo AC+4/HP×players/XP×4 +
+  Legendary Actions (players−1) + Legendary Resistance 3 + Phase Transitions).
+  `jutsuRankCap` (minion D / elite B / solo S), `useLegendaryResistance`,
+  `checkPhaseTransition` (60% / 30%).
+- `domain/adversary.ts`: the trimmed sheet (shares the actor shape so it fights on
+  the same combat_action surface as PCs — the architecture's symmetry principle).
+- `content/bingo_book.json`: the verified roster — generics (Genin, Chunin, Jonin,
+  Anbu, Bandit, Assassin, Monk, Samurai, Warlord) + named foes (Zabuza, Haku,
+  Kisame, Itachi, Orochimaru, Kimimaro, Tayuya) with tier/role/clan/affinity/traits
+  and "Using X as an Adversary" guidance.
+- `intents/adversary.ts`: adversary_spawn/build (8-step), from_bingo_book,
+  adversary_scale (the Scaling Enemy rule), freeform_attack (tier/level-scaled),
+  legendary_action (off-turn, re-entrant via a `__legendary` bypass that exempts
+  the sub-op from the off-turn lockout + budget spend).
+- Combat integration: Solo legendary actions refresh +1 per other combatant's
+  turn (capped); Legendary Resistance auto-converts a failed save in the jutsu
+  save path; Phase Transition fires from both jutsu and weapon damage paths.
+  Room state + scoped after-state now include adversaries.
+- MCP tools: spawn_adversary, from_bingo_book, freeform_attack, legendary_action.
+
+**Checkpoint proven:** spawns minion/elite/solo with correctly scaled stats;
+instantiates a Bingo Book Solo (Zabuza); runs a Solo boss with legendary actions,
+legendary resistance, and a phase transition; the living E2E fights a spawned
+Solo through the controller. 39 tests pass.
+
+**Logged defaults:** Chakra/damage-per-round scalings and per-level ability mods
+are rules-faithful formulas (the full p341 grid flattens in extraction; AC/HP/
+prof/attack anchors are exact). Named-foe signature jutsu are flavor traits;
+mechanical jutsu assignment uses the catalog + tier rank cap.
+
+**Next:** Phase 5 — customization (multiclass + the feat catalog).

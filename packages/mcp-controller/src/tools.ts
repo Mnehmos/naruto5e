@@ -200,4 +200,29 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "Equip a carried weapon/armor (recomputes AC).", inputSchema: { roomId: z.string(), actorId: z.string(), item: z.string() } },
     async ({ roomId, actorId, item }) => ok(await client.submitIntent({ roomId, actorId, type: "equip", params: { item } })),
   );
+
+  // ---- Phase 4: adversaries -------------------------------------------
+  server.registerTool(
+    "spawn_adversary",
+    {
+      description: "Spawn a tier-scaled adversary (minion/elite/solo) via the 8-step build. Solo gets Legendary Actions/Resistance + Phase Transitions; Elite gets an extra action.",
+      inputSchema: { roomId: z.string(), name: z.string(), tier: z.enum(["minion", "elite", "solo"]), role: z.string().optional(), clan: z.string().optional(), level: z.number(), partySize: z.number().optional(), jutsu: z.array(z.string()).optional(), traits: z.array(z.string()).optional() },
+    },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "adversary_spawn", params })),
+  );
+  server.registerTool(
+    "from_bingo_book",
+    { description: "Instantiate a premade Bingo Book foe (Genin, Chunin, Anbu, Zabuza, Haku, Itachi, ...), optionally scaled.", inputSchema: { roomId: z.string(), name: z.string(), level: z.number().optional(), partySize: z.number().optional() } },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "from_bingo_book", params })),
+  );
+  server.registerTool(
+    "freeform_attack",
+    { description: "An adversary's tier/level-scaled freeform attack on a target.", inputSchema: { roomId: z.string(), actorId: z.string(), target: z.string(), descriptor: z.string().optional() } },
+    async ({ roomId, actorId, target, descriptor }) => ok(await client.submitIntent({ roomId, actorId, type: "freeform_attack", params: { target, descriptor } })),
+  );
+  server.registerTool(
+    "legendary_action",
+    { description: "A Solo boss spends a Legendary Action off-turn (action: freeform_attack|cast|move).", inputSchema: { roomId: z.string(), actorId: z.string(), action: z.string(), params: z.record(z.any()).optional() } },
+    async ({ roomId, actorId, action, params }) => ok(await client.submitIntent({ roomId, actorId, type: "legendary_action", params: { action, params } })),
+  );
 }

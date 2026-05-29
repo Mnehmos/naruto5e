@@ -122,14 +122,30 @@ curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"equip"
   - **equipment & Ryo economy**: 21 weapons / 6 armor tiers / consumables, buy/sell,
     equip/unequip with armor-aware AC, consumable effects, equipment packs.
 
+## Spawn enemies / a boss (Phase 4)
+
+```bash
+# a scaled minion, and a premade Solo boss from the Bingo Book:
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"type":"adversary_spawn","params":{"name":"Bandit","tier":"minion","level":3}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"type":"from_bingo_book","params":{"name":"Zabuza","partySize":4}}' -H 'content-type: application/json'
+# the boss acts off-turn with a Legendary Action:
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<bossId>","type":"legendary_action","params":{"action":"freeform_attack","params":{"target":"<pcId>"}}}' -H 'content-type: application/json'
+```
+
+## What's playable now (through Phase 4)
+
+- Everything in Phases 1–3, plus the **adversary engine**:
+  - tier baselines L1–30; Minion/Elite/Solo scaling; the Bingo Book roster.
+  - Solo bosses: Legendary Actions (off-turn, refresh per player turn), Legendary
+    Resistance (auto-saves), Phase Transitions at 60%/30% HP.
+  - adversaries fight on the same combat surface as PCs (initiative, damage,
+    death) — `from_bingo_book`, `adversary_scale`, `freeform_attack`.
+
 ## Current limits
 
-- Enemies are still characters on the "enemy" team; the tiered adversary engine +
-  Bingo Book arrive in Phase 4. Standing-gated stock + the world tick come later.
-- Renderers and the DM-brain harness come in Phases 10–11.
+- Standing/RPP gating, the world-consequence systems, content tools, the world
+  tick, renderers, and the DM-brain harness arrive in Phases 5–11.
 
 ## What's next
 
-Phase 4: adversaries — tier baselines (L1–30), Minion/Elite/Solo modifiers
-(Elite Actions/Tenacity; Solo Legendary Actions/Resistance/Phase Transitions), and
-the Bingo Book roster.
+Phase 5: customization — multiclassing + the feat catalog.

@@ -1,0 +1,19 @@
+[
+  { "name": "Genin", "tier": "minion", "role": "striker", "level": 3, "traits": ["Academy Training"], "attacks": [{ "name": "Kunai", "damageDie": "1d4", "type": "piercing" }] },
+  { "name": "Chunin", "tier": "minion", "role": "striker", "level": 6, "traits": ["Field Experience"] },
+  { "name": "Jonin", "tier": "elite", "role": "striker", "level": 11, "traits": ["Veteran", "Tactical Mind"] },
+  { "name": "Anbu", "tier": "elite", "role": "skirmisher", "level": 12, "traits": ["Silent Killing", "Masked"] },
+  { "name": "Bandit", "tier": "minion", "role": "brute", "level": 2, "traits": ["Desperate"] },
+  { "name": "Assassin", "tier": "elite", "role": "skirmisher", "level": 9, "traits": ["Poison Blade", "Ambusher"] },
+  { "name": "Monk", "tier": "minion", "role": "defender", "level": 5, "traits": ["Iron Body"] },
+  { "name": "Samurai", "tier": "elite", "role": "defender", "level": 8, "traits": ["Iaido", "Chakra Sabre"] },
+  { "name": "Warlord", "tier": "solo", "role": "controller", "level": 14, "traits": ["Commanding Presence", "Battle Fury"] },
+
+  { "name": "Zabuza", "tier": "solo", "role": "skirmisher", "level": 13, "clan": "Non-Clan", "affinity": ["Water"], "traits": ["Demon of the Hidden Mist", "Silent Killing", "Hidden Mist Jutsu"], "usingAs": { "offense": "Open with Hidden Mist to blind the party, then pick off isolated targets with the Executioner's Blade.", "defense": "Uses mist + water clones to break line of sight; retreats to water when bloodied." } },
+  { "name": "Haku", "tier": "elite", "role": "controller", "level": 10, "clan": "Yuki", "affinity": ["Ice"], "traits": ["Crystal Ice Mirrors", "Senbon Precision"], "usingAs": { "offense": "Traps a target in the Ice Mirror dome and strikes from every angle with senbon.", "defense": "Mirrors grant near-untouchability until shattered." } },
+  { "name": "Kisame", "tier": "solo", "role": "brute", "level": 15, "clan": "Hoshigaki", "affinity": ["Water"], "traits": ["Samehada (chakra-eater)", "Tailless Tailed Beast", "Huge Chakra"] },
+  { "name": "Itachi", "tier": "solo", "role": "controller", "level": 16, "clan": "Uchiha", "affinity": ["Fire"], "traits": ["Mangekyo Sharingan", "Tsukuyomi", "Amaterasu"] },
+  { "name": "Orochimaru", "tier": "solo", "role": "controller", "level": 17, "clan": "Hebi", "traits": ["Immortality", "Forbidden Jutsu", "Snake Sage"] },
+  { "name": "Kimimaro", "tier": "elite", "role": "striker", "level": 13, "clan": "Kaguya", "traits": ["Shikotsumyaku", "Dance of the Camellia"] },
+  { "name": "Tayuya", "tier": "elite", "role": "controller", "level": 12, "traits": ["Demonic Flute", "Doki Summons"] }
+]

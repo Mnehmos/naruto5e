@@ -6,6 +6,7 @@ import type { JutsuRecord } from "../content.js";
 import { actorAC, actorAbilityMod, actorAffinity, actorCasting, loadActor, saveActor, type ActorRef } from "../rules/actor.js";
 import { RANK_VALUE, clashResolve, elementalAdvantage, jutsuElement, rollDamage } from "../rules/combat.js";
 import { applyDamageDoc, healDoc } from "../rules/resolve.js";
+import { useLegendaryResistance, checkPhaseTransition } from "../rules/adversary.js";
 import { blockedComponents } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
 import { activeCombatantId } from "../rules/turn.js";
@@ -107,15 +108,19 @@ export function castJutsu(ctx: ResolveContext): void {
 
   // budget gate (only in combat, when the actor has a TurnBudget)
   const cost = costFromCastingTime(jutsu.castingTime);
+  const legendary = ctx.op.params.__legendary === true;
   if (isCombatant(caster)) {
-    // off-turn lockout: only the active combatant may act, unless this is a reaction.
+    // off-turn lockout: only the active combatant may act, unless this is a
+    // reaction or a Solo's legendary action.
     const active = activeCombatantId(ctx.store, ctx.room.id);
-    if (active && active !== caster.id && !cost.reaction) {
+    if (active && active !== caster.id && !cost.reaction && !legendary) {
       throw reject("off_turn", `It is not ${caster.name}'s turn.`, { active }, ["Only reaction-cost jutsu may be cast off-turn (e.g. a substitution)."]);
     }
-    const aff = canAfford(caster.turnBudget, cost);
-    if (!aff.ok) {
-      throw reject("action_economy", `${caster.name} can't cast ${jutsu.name}: ${aff.detail}.`, { lacking: aff.lacking, castingTime: jutsu.castingTime }, ["Use a jutsu with a different casting time, or end your turn."]);
+    if (!legendary) {
+      const aff = canAfford(caster.turnBudget, cost);
+      if (!aff.ok) {
+        throw reject("action_economy", `${caster.name} can't cast ${jutsu.name}: ${aff.detail}.`, { lacking: aff.lacking, castingTime: jutsu.castingTime }, ["Use a jutsu with a different casting time, or end your turn."]);
+      }
     }
   }
 
@@ -129,7 +134,7 @@ export function castJutsu(ctx: ResolveContext): void {
 
   // ---- pay costs ----
   caster.chakra.current -= chakraCost;
-  if (isCombatant(caster)) spend(caster.turnBudget, cost);
+  if (isCombatant(caster) && !legendary) spend(caster.turnBudget, cost);
 
   const casting = actorCasting(caster, jutsu.classification);
   const attackerEl = jutsuElement(jutsu);
@@ -209,7 +214,13 @@ export function castJutsu(ctx: ResolveContext): void {
       const ability = eff.saveAbility ?? "dex";
       const saveMod = actorAbilityMod(target, ability) + (target.proficiencies?.savingThrows?.includes?.(ability) ? target.proficiencyBonus ?? 0 : 0);
       const roll = rollD20(ctx.rng, { modifier: saveMod, disadvantage: edge === "attacker", advantage: edge === "defender" });
-      const success = roll.total >= casting.saveDC;
+      let success = roll.total >= casting.saveDC;
+      // Solo Legendary Resistance: turn a failed save into a success.
+      if (!success && tref.coll === "adversaries" && useLegendaryResistance(target)) {
+        success = true;
+        saveActor(ctx.store, tref);
+        ctx.ir.emit("legendary_resistance", { actor: tid, data: { remaining: target.legendary?.resistance, jutsu: jutsu.name }, narration: `${target.name} shrugs off ${jutsu.name} with Legendary Resistance.` });
+      }
       ctx.ir.emit("save", { actor: tid, data: { ability, roll: roll.total, dc: casting.saveDC, success, jutsu: jutsu.name }, narration: `${target.name} ${ability.toUpperCase()} save ${roll.total} vs DC ${casting.saveDC} → ${success ? "success" : "failure"}.` });
       if (dmgDice) {
         const full = rollDamage(ctx.rng, dmgDice);
@@ -246,8 +257,11 @@ function applyDamageAndEmit(ctx: ResolveContext, caster: any, tref: ActorRef, di
 
 function applyDamageNumberAndEmit(ctx: ResolveContext, caster: any, tref: ActorRef, amount: number, type: string, isPC: boolean, rolls?: number[]): void {
   const out = applyDamageDoc(tref.doc, amount, { isPC });
+  // Solo Phase Transition on crossing 60% / 30% HP.
+  const crossed = tref.coll === "adversaries" ? checkPhaseTransition(tref.doc) : null;
   saveActor(ctx.store, tref);
   ctx.ir.emit("damage", { actor: caster.id, data: { target: tref.doc.id, amount: out.dealt, type, rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} ${type} damage (${out.hp.current}/${out.hp.max} HP).` });
+  if (crossed) ctx.ir.emit("phase_transition", { actor: tref.doc.id, data: { threshold: crossed, phase: tref.doc.phases.current }, narration: `${tref.doc.name} enters a new phase (${crossed}% HP)!` });
   concentrationCheck(ctx, tref, out.dealt);
   if (out.died) ctx.ir.emit("down", { actor: caster.id, data: { target: tref.doc.id, dead: true }, narration: `${tref.doc.name} is slain.` });
   else if (out.downed) ctx.ir.emit("down", { actor: caster.id, data: { target: tref.doc.id, dead: false }, narration: `${tref.doc.name} drops, unconscious and dying.` });

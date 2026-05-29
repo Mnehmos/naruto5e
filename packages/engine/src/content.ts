@@ -106,6 +106,10 @@ export class ContentPack {
     return this.itemByKey.get(idOrName.toLowerCase());
   }
 
+  getBingo(name: string): any | undefined {
+    return this.bingoBook.find((b) => String(b.name).toLowerCase() === name.toLowerCase());
+  }
+
   getJutsu(idOrName: string): JutsuRecord | undefined {
     return this.jutsuById.get(idOrName) ?? this.jutsuByName.get(idOrName.toLowerCase());
   }
