@@ -155,7 +155,7 @@ export function applyBackground(char: Character, bg: any, sel: BuildSelections):
 
 export function applyClass(char: Character, cls: any, sel: BuildSelections): void {
   char.className = cls.name;
-  char.classes = [{ className: cls.name, level: char.level }];
+  char.classes = [{ className: cls.name, level: char.level, hitDie: cls.hitDie, chakraDie: cls.chakraDie, archetype: cls.archetype }];
   char.hitDice = { type: cls.hitDie, total: char.level, remaining: char.level };
   char.chakraDice = { type: cls.chakraDie, total: char.level, remaining: char.level };
   char.proficiencies.savingThrows = [...(cls.savingThrows ?? [])];
@@ -253,14 +253,40 @@ export function deriveCharacter(char: Character): Character {
   char.rank = char.rank && char.rank !== "Genin" ? char.rank : rankFromLevel(char.level);
   if (!char.rank) char.rank = rankFromLevel(char.level);
 
-  // pools (take-average leveling, deterministic). Each level gains at least 1.
-  const hpDie = char.hitDice.type || 6;
-  const ckDie = char.chakraDice.type || 6;
-  let hpMax = Math.max(1, hpDie + conMod);
-  let ckMax = Math.max(1, ckDie + conMod);
-  for (let l = 2; l <= char.level; l++) {
-    hpMax += Math.max(1, dieAverage(hpDie) + conMod);
-    ckMax += Math.max(1, dieAverage(ckDie) + conMod);
+  // pools (take-average leveling, deterministic). Multiclass-aware: the very
+  // first character level uses the max die; every later level (any class) uses
+  // that class level's die average. Falls back to the single hitDice.type if
+  // classes[] isn't populated (legacy/adversary path).
+  let hpMax = 0;
+  let ckMax = 0;
+  const classList = char.classes && char.classes.length ? char.classes : null;
+  if (classList) {
+    let first = true;
+    for (const cl of classList) {
+      const hd = cl.hitDie ?? char.hitDice.type ?? 6;
+      const cd = cl.chakraDie ?? char.chakraDice.type ?? 6;
+      for (let l = 0; l < cl.level; l++) {
+        if (first) {
+          hpMax += hd + conMod;
+          ckMax += cd + conMod;
+          first = false;
+        } else {
+          hpMax += Math.max(1, dieAverage(hd) + conMod);
+          ckMax += Math.max(1, dieAverage(cd) + conMod);
+        }
+      }
+    }
+    hpMax = Math.max(1, hpMax);
+    ckMax = Math.max(1, ckMax);
+  } else {
+    const hpDie = char.hitDice.type || 6;
+    const ckDie = char.chakraDice.type || 6;
+    hpMax = Math.max(1, hpDie + conMod);
+    ckMax = Math.max(1, ckDie + conMod);
+    for (let l = 2; l <= char.level; l++) {
+      hpMax += Math.max(1, dieAverage(hpDie) + conMod);
+      ckMax += Math.max(1, dieAverage(ckDie) + conMod);
+    }
   }
   // unique clan resource bonuses
   for (const res of Object.values(char.resources)) {
@@ -304,7 +330,14 @@ export function deriveCharacter(char: Character): Character {
     char.chakraDice.remaining = char.level;
   }
 
-  if ((char as any).archetype) {
+  // jutsu-known cap: sum each class's cap at its class level (multiclass tracks
+  // each casting track), per the "Jutsu Known & Highest Rank Known" rule.
+  if (classList) {
+    char.jutsuKnownCap = classList.reduce(
+      (sum, cl) => sum + jutsuKnownCap((cl.archetype as Archetype) ?? "hybrid", cl.level),
+      0,
+    );
+  } else if ((char as any).archetype) {
     char.jutsuKnownCap = jutsuKnownCap((char as any).archetype as Archetype, char.level);
   }
   return char;

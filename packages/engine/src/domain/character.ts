@@ -37,8 +37,18 @@ export const CharacterSchema = z.object({
   rank: z.string().default("Genin"),
   missionPoints: z.number().int().default(0),
 
-  /** classes[] supports multiclassing (Phase 5); single-class fills [{class,level}]. */
-  classes: z.array(z.object({ className: z.string(), level: z.number().int() })).default([]),
+  /** classes[] supports multiclassing (Phase 5); single-class fills one entry. */
+  classes: z
+    .array(
+      z.object({
+        className: z.string(),
+        level: z.number().int(),
+        hitDie: z.number().int().optional(),
+        chakraDie: z.number().int().optional(),
+        archetype: z.string().optional(),
+      }),
+    )
+    .default([]),
 
   abilities: AbilityScoresSchema, // base, before clan/background increases
   abilityBonuses: z.record(z.number()).default({}), // tracked separately for audit

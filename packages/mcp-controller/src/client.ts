@@ -86,6 +86,10 @@ export class EngineClient {
     return this.req("GET", `/v1/content/${kind}`);
   }
 
+  listContentQuery(kind: string, q?: string): Promise<any> {
+    return this.req("GET", `/v1/content/${kind}${q ? `?q=${encodeURIComponent(q)}` : ""}`);
+  }
+
   health(): Promise<any> {
     return this.req("GET", `/v1/health`);
   }

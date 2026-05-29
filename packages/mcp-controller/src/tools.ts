@@ -225,4 +225,21 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "A Solo boss spends a Legendary Action off-turn (action: freeform_attack|cast|move).", inputSchema: { roomId: z.string(), actorId: z.string(), action: z.string(), params: z.record(z.any()).optional() } },
     async ({ roomId, actorId, action, params }) => ok(await client.submitIntent({ roomId, actorId, type: "legendary_action", params: { action, params } })),
   );
+
+  // ---- Phase 5: customization -----------------------------------------
+  server.registerTool(
+    "multiclass",
+    { description: "Take a level in a new class (validates ability prereqs; recomputes pools/jutsu-known).", inputSchema: { roomId: z.string(), actorId: z.string(), intoClass: z.string() } },
+    async ({ roomId, actorId, intoClass }) => ok(await client.submitIntent({ roomId, actorId, type: "character_multiclass", params: { intoClass } })),
+  );
+  server.registerTool(
+    "take_feat",
+    { description: "Take a feat (in place of an ASI; validates prereqs, applies the feat's ability increase).", inputSchema: { roomId: z.string(), actorId: z.string(), feat: z.string(), abilityChoice: z.string().optional() } },
+    async ({ roomId, actorId, feat, abilityChoice }) => ok(await client.submitIntent({ roomId, actorId, type: "take_feat", params: { feat, abilityChoice } })),
+  );
+  server.registerTool(
+    "list_feats",
+    { description: "Browse the feat catalog (optionally filter by name).", inputSchema: { q: z.string().optional() } },
+    async ({ q }) => ok(await client.listContentQuery("feats", q)),
+  );
 }

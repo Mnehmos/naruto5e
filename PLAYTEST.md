@@ -141,11 +141,26 @@ curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<bossId>","type":"le
   - adversaries fight on the same combat surface as PCs (initiative, damage,
     death) — `from_bingo_book`, `adversary_scale`, `freeform_attack`.
 
+## Customize (Phase 5)
+
+```bash
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"character_multiclass","params":{"intoClass":"Ninjutsu Specialist"}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"take_feat","params":{"feat":"Athlete","abilityChoice":"str"}}' -H 'content-type: application/json'
+curl -s "localhost:8787/v1/content/feats?q=alert"   # browse the 112-feat catalog
+```
+
+## What's playable now (through Phase 5)
+
+- Everything in Phases 1–4, plus **customization**: multiclassing (combined pools
+  + jutsu-known, ability prereqs) and the **112-feat catalog** (take_feat with
+  prereq validation + ability increases; ASI).
+
 ## Current limits
 
 - Standing/RPP gating, the world-consequence systems, content tools, the world
-  tick, renderers, and the DM-brain harness arrive in Phases 5–11.
+  tick, renderers, and the DM-brain harness arrive in Phases 6–11.
 
 ## What's next
 
-Phase 5: customization — multiclassing + the feat catalog.
+Phase 6: Standing / RPP — per-authority reputation + favor, gating, the rogue
+defect path.

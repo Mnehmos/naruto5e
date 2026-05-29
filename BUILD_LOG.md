@@ -287,3 +287,34 @@ prof/attack anchors are exact). Named-foe signature jutsu are flavor traits;
 mechanical jutsu assignment uses the catalog + tier rank cap.
 
 **Next:** Phase 5 — customization (multiclass + the feat catalog).
+
+---
+
+## Phase 5 — Customization (multiclass + feats) ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Ch.13 (character_manage level-up choices) — multiclassing + the feat catalog.
+
+**Built (real):**
+- `tools/extract_feats.py` → `content/feats.json`: **112 feats** parsed from the
+  source (Acrobat, Actor, Advanced Study, Alert, Athlete, Blinding Agility, Apex
+  Heritage, …) with name/category/prerequisite(abilities/level/clan)/abilityIncrease/
+  benefits — 45 with a parsed +ASI, 30 with prereqs.
+- Multiclass-aware **`deriveCharacter`**: pools now sum per-class-level dice
+  (first character level = max die; later levels = die average), and jutsuKnownCap
+  = the sum of each class's cap at its class level (the "Jutsu Known & Highest
+  Rank Known" combining rule). `classes[]` entries carry hitDie/chakraDie/archetype.
+- `rules/multiclass.ts`: ability-prereq gate (casters need 13 in their casting
+  ability; martial/hybrid need 13 in a class ability).
+- `intents/customization.ts`: `character_multiclass` (level into a new class with
+  prereq check, recompute pools/prof/jutsu-known, grant the new class's L1
+  features), `ability_score_improvement` (+2/one or +1/two, capped at 20),
+  `take_feat` (prereq validation: ability mins/level/clan; applies the feat's
+  ability-increase choice; records it). Feat levels L4/8/12/16/19 flagged.
+- `/v1/content/feats|bingo|equipment` reads + MCP tools: multiclass, take_feat,
+  list_feats.
+
+**Checkpoint proven:** multiclass with combined pools + jutsu-known; multiclass
+prereq educational rejection; the 112-feat catalog loads; take_feat applies an
+ability increase + validates prereqs; ASI. 45 tests pass.
+
+**Next:** Phase 6 — Standing / RPP (standing_manage).

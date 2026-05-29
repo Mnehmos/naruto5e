@@ -1,0 +1,2263 @@
+[
+  {
+    "id": "acrobat",
+    "name": "Acrobat",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Dexterity score by 1, to a maximum of \n20.",
+      "You gain p roficiency in the Acrobatics skill. If you are \nalready proficient in it, you instead gain expertise in it.",
+      "As a bonus action, you can make a DC 15 Dexterity \n(Acrobatics) check. If you s ucceed, d ifficult terrain \ndoesn't cost you extra movement un til the en d of your \nnext turn."
+    ],
+    "description": "You become nimbler, gaining the following benefits : • Increase your Dexterity score by 1, to a maximum of 20. • You gain p roficiency in the Acrobatics skill. If you are already proficient in it, you instead gain expertise in it. • As a bonus action, you can make a DC 15 Dexterity (Acrobatics) check. If you s ucceed, d ifficult terrain doesn't cost you extra movement un til the en d of your next turn.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "actor",
+    "name": "Actor",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Charisma score by 1, to a maximum of \n20.",
+      "You have advantage on Charis ma (Deception) and \nCharisma (Performance) checks wh en trying to pass \nyourself off as a different person.",
+      "You can mimic the speech of another person or the \nsounds made by other creatures. You must have heard \nthe person speaking, or heard the creatu re make t he \nsound, for at least 1 minute. A successful Wisdo m \n(Insight) check contested by your Charisma \n(Deception) check allows a listener to determine that \nthe effect is faked."
+    ],
+    "description": "Skilled at mimicry and dramatics, you gain the following benefits: • Increase your Charisma score by 1, to a maximum of 20. • You have advantage on Charis ma (Deception) and Charisma (Performance) checks wh en trying to pass yourself off as a different person. • You can mimic the speech of another person or the sounds made by other creatures. You must have heard the person speaking, or heard the creatu re make t he sound, for at least 1 minute. A successful Wisdo m (Insight) check contested by your Charisma (Deception) check allows a listener to determine that the effect is faked.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "advanced-study",
+    "name": "Advanced Study",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Strength, Intelligence or Wisdom score \nby 1, to a maximum of 20",
+      "You learn an additional Jutsu that is 1 Rank above what \nyou currently can learn. This does not count against \nyour Jutsu Known.",
+      "The next time you would hit 4th, 8th, 12th and 16th \nlevels, you learn one additional Jutsu of 1 rank higher \nthan your highest known jutsu rank."
+    ],
+    "description": "You are an advanced learner and capable stu dent. You generally excel at grasping concepts far above you r skill set with amazing potential. • Increase your Strength, Intelligence or Wisdom score by 1, to a maximum of 20 • You learn an additional Jutsu that is 1 Rank above what you currently can learn. This does not count against your Jutsu Known. • The next time you would hit 4th, 8th, 12th and 16th levels, you learn one additional Jutsu of 1 rank higher than your highest known jutsu rank.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "agile-feint",
+    "name": "Agile Feint",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "As a bonus action you make an acrobatics (Dex) ability \ncheck against a target creatures Armor Cl ass. On a \nsuccess your next melee attack against that creature is \nat advantage an d the Next attack the creature makes \nagainst you is at disadv antage.",
+      "When a Creature Misses you with a Melee Attack you \nCan use your reaction to make a single melee weapon \nattack against the creature.",
+      "You may take additional reactions only for th e purpose \nof making additional attacks of opportunity equal to \nyour dexterity bonus"
+    ],
+    "description": "You know how to use your agility to grant yo u advantage and your opponent's disadvantage. You g ain the following benefits: • As a bonus action you make an acrobatics (Dex) ability check against a target creatures Armor Cl ass. On a success your next melee attack against that creature is at advantage an d the Next attack the creature makes against you is at disadv antage. • When a Creature Misses you with a Melee Attack you Can use your reaction to make a single melee weapon attack against the creature. • You may take additional reactions only for th e purpose of making additional attacks of ",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "alchemist",
+    "name": "Alchemist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1 , to a ma ximum of \n20.",
+      "You gain proficiency with Poisoner Kit . If you a re \nalready proficient with them, you double your \nproficiency bonus to checks you make with them.",
+      "As an action, you can identify one potion within 5 feet \nof you, as if you had tasted it. You must see the liquid \nfor this benefit to work.",
+      "Over the course of a ny short rest, you can temporarily \nimprove the potency of one potion of healing of any \nrarity. To use this benefit , you must have alchemist's \nsupplies with you, and the potion must be wi thin \nreach. If the potion is drunk no more than 1 hour after \nthe short rest ends, the creature drinking the potion \ncan forgo the potion's die roll and regains the \nmaximum number of hit points that the potion can \nrestore."
+    ],
+    "description": "You have studied the secrets of alchemy and are an expert in its practic e, gaining the following benefits: • Increase your Intelligence score by 1 , to a ma ximum of 20. • You gain proficiency with Poisoner Kit . If you a re already proficient with them, you double your proficiency bonus to checks you make with them. • As an action, you can identify one potion within 5 feet of you, as if you had tasted it. You must see the liquid for this benefit to work. • Over the course of a ny short rest, you can temporarily improve the potency of one potion of healing of any rarity. To use this benefit ,",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "alert",
+    "name": "Alert",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You Gain a +5 bonus to Initiative",
+      "You may add your Wisdom instead of Dexterity to your \nInitiative bonus.",
+      "You can't be surprised while you are conscious",
+      "Other Creatures do not gain advantage on attack rolls \nagainst you as a result of being hidden from you."
+    ],
+    "description": "Always on t he Lookou t for Danger, you gain the following benefits: • You Gain a +5 bonus to Initiative • You may add your Wisdom instead of Dexterity to your Initiative bonus. • You can't be surprised while you are conscious • Other Creatures do not gain advantage on attack rolls against you as a result of being hidden from you.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "animal-handler",
+    "name": "Animal Handler",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20.",
+      "You gain proficie ncy in th e Animal Handling skill. If \nyou are already proficient in it, you instead gain \nexpertise in it.",
+      "You can use a bonus action on your turn to command \none friendly beast within 60 feet of you that can hear \nyou and that isn't currently following the co mmand of \nsomeone else. You decide now what act ion the beast \nwill take and where it will move during its next turn, \nor you issue a general command that lasts for 1 \nminute, such as to gu ard a particular area ."
+    ],
+    "description": "You master the techniques needed to train and handle animals. You gain the following benefits : • Increase your Wisdom score by 1, to a maximum of 20. • You gain proficie ncy in th e Animal Handling skill. If you are already proficient in it, you instead gain expertise in it. • You can use a bonus action on your turn to command one friendly beast within 60 feet of you that can hear you and that isn't currently following the co mmand of someone else. You decide now what act ion the beast will take and where it will move during its next turn, or you issue a general command that lasts for 1 minut",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 317
+    }
+  },
+  {
+    "id": "apex-heritage",
+    "name": "Apex Heritage",
+    "category": "Clan",
+    "prerequisite": {
+      "level": 4,
+      "clan": "Hebi",
+      "text": "Hebi Clan, Level 4+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Strength or Cons titution score by 1, to a \nmaximum of 20.",
+      "Your tremor sense ra nge is increased to 45 feet.",
+      "Your Regeneration now costs 4 Chakra instead of 5.",
+      "When you deal poison damage to a creature, they \ncannot regain hit points while under the poisoned \ncondition."
+    ],
+    "description": "You consumed the knowledge passe d down by your ancestors about the truth of your blood right. The superior nature of your clan is now known to you and you have learned se cret techniques to enhance your current abilities. • Increase your Strength or Cons titution score by 1, to a maximum of 20. • Your tremor sense ra nge is increased to 45 feet. • Your Regeneration now costs 4 Chakra instead of 5. • When you deal poison damage to a creature, they cannot regain hit points while under the poisoned condition.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "athlete",
+    "name": "Athlete",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Strength or Dexterity score by 1, to a \nmaximum of 20.",
+      "When you are prone, standing up uses only 5 feet of \nyour movement.",
+      "Climbing or w all runni ng doesn't halve your speed."
+    ],
+    "description": "You have undergone extensive physical tra ining to gain the following benefits: • Increase your Strength or Dexterity score by 1, to a maximum of 20. • When you are prone, standing up uses only 5 feet of your movement. • Climbing or w all runni ng doesn't halve your speed.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "blinding-agility",
+    "name": "Blinding Agility",
+    "category": "General",
+    "prerequisite": {
+      "abilities": {
+        "dex": 20
+      },
+      "level": 10,
+      "text": "Dexterity 20, Level 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in Dexterity saving thr ows. If you \nare already proficient, yo u add double your proficiency \nbonus to Dexterity saving throws you make",
+      "Weapons that lack the two -handed, heavy, or special \nproperties are conside red to have the finesse property \nfor you.",
+      "When you take the Dodge Action , roll 1 additional 1d20 \nto a creature 's attack, forcing them to take the lowest \nof all the rolls.",
+      "Opportunity attacks made against you have \ndisadvantage."
+    ],
+    "description": "You have the reflexes of one who can see things before they happen, grant ing the following benefits: • You gain proficiency in Dexterity saving thr ows. If you are already proficient, yo u add double your proficiency bonus to Dexterity saving throws you make • Weapons that lack the two -handed, heavy, or special properties are conside red to have the finesse property for you. • When you take the Dodge Action , roll 1 additional 1d20 to a creature 's attack, forcing them to take the lowest of all the rolls. • Opportunity attacks made against you have disadvantage.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "bloodline-latent",
+    "name": "Bloodline, Latent",
+    "category": "Clan",
+    "prerequisite": {
+      "level": 4,
+      "text": "Level 4+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Select any one Clan except your current Clan & Non-\nClan.",
+      "You gain access to the clans Jutsu list up to C-Rank \nJutsu.",
+      "You gain latent clan features as shown on the \nBloodline chart.",
+      "This feature does not allow you to take Features with a \nPrerequisite of your selected Clan."
+    ],
+    "description": "You have the Blood of a Famous Clan, granting you fleeting usage of their secret techniques. You gain the following Benefits: • Select any one Clan except your current Clan & Non- Clan. • You gain access to the clans Jutsu list up to C-Rank Jutsu. • You gain latent clan features as shown on the Bloodline chart. • This feature does not allow you to take Features with a Prerequisite of your selected Clan.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "bloodline-realized",
+    "name": "Bloodline, Realized",
+    "category": "Clan",
+    "prerequisite": {
+      "level": 12,
+      "text": "Bloodline, Latent, Level 12+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain access to the clans Jutsu list up to A-Rank \nJutsu.",
+      "You gain Realized clan features as shown on the \nBloodline chart.",
+      "This feat allows you to take other feats with a \nPrerequisite of your selec ted Clan."
+    ],
+    "description": "You have the Blood of a Famous Clan, and continued use of it begins to grant yo u an evol ving usage of their secret Techniques and access to more of t heir bloodline traits . You gain the following Benefits: • You gain access to the clans Jutsu list up to A-Rank Jutsu. • You gain Realized clan features as shown on the Bloodline chart. • This feat allows you to take other feats with a Prerequisite of your selec ted Clan.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "bloodthirsty",
+    "name": "Bloodthirsty",
+    "category": "Critical",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When a creature within 5 feet of you misses you with a \nmelee attack, you can use your reaction to cause the \nattack to hit you . You can immediately make a melee \nweapon attack wi th advantage against that creature. \nOn a success, treat the hit as a critical.",
+      "When a creature scores a critical hit against you, you \nhave advantage on the next attack you make against \nthat creature, until the end of your next turn."
+    ],
+    "description": "You fight with reckless abandon, caring not of your own safety. You use your pain to fuel your attacks, causing your enemies even greater pain. You may d ie one day - but that day will come earlier for your enemies. You gain the following benefits: • When a creature within 5 feet of you misses you with a melee attack, you can use your reaction to cause the attack to hit you . You can immediately make a melee weapon attack wi th advantage against that creature. On a success, treat the hit as a critical. • When a creature scores a critical hit against you, you have advantage on the next attack y",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "branch-family-training",
+    "name": "Branch Family Training",
+    "category": "Clan",
+    "prerequisite": {
+      "text": "Hyūga Clan"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "dex",
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Dexterity or Wisdom score by 1, to a \nMaximum of 20.",
+      "You can learn Jutsu from the Opposit e Branch. If you \nare a main branch you can learn side branch Hyūga \nJutsu. If you are a side branch you can learn main \nbranch Hy ūga Jutsu.",
+      "You learn one additional Hyūga Clan Hijutsu th at you \nqualify for."
+    ],
+    "description": "You train with members of the other branch of your clan, you gain the following benefits: • Increase your Dexterity or Wisdom score by 1, to a Maximum of 20. • You can learn Jutsu from the Opposit e Branch. If you are a main branch you can learn side branch Hyūga Jutsu. If you are a side branch you can learn main branch Hy ūga Jutsu. • You learn one additional Hyūga Clan Hijutsu th at you qualify for.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "brawny",
+    "name": "Brawny",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str"
+      ]
+    },
+    "benefits": [
+      "Increase your Strength score by 1, to a m aximum of 20.",
+      "You gain proficiency in the Athletics skill. If you are \nalready proficient in it, you instead gain e xpertise in it.",
+      "You double your carrying capacity."
+    ],
+    "description": "You've become stronger, gai ning the following benef its: • Increase your Strength score by 1, to a m aximum of 20. • You gain proficiency in the Athletics skill. If you are already proficient in it, you instead gain e xpertise in it. • You double your carrying capacity.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "bukijutsu-archivist",
+    "name": "Bukijutsu Archivist",
+    "category": "Bukijutsu",
+    "prerequisite": {
+      "level": 4,
+      "text": "Level 4+"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Strength or Dexterity score by 1, to a \nmaximum of 20",
+      "You learn an additional bukijutsu that you qualify for. \nThis does not count against your Jutsu Known.",
+      "The next time you would hit 5th, 9th, or 13th level, you \nlearn one additio nal bukijutsu of 1 rank lower than \nyour highest known jutsu rank.",
+      "If you take this feat after you have passed the \npreviously stated levels, yo u instead gain 1 additional \nD-Rank if passed 5 th level, 1 additional C -Rank if \npassed 9 th level, and one additiona l B-Rank if passed \n13th level. \n \n \n \n \n \n \n \n \nBLOODLINE , LATENT CHART \nLatent \nBloodline' s Latent Feature Latent Feature effect \nAburame Latent Insect \nControl \nYou have learned to call upon insects, like a pure blooded Aburame. You gain the Chakra C onsumption & Chakra Sense \nClan feature. When you would use Chakra Consumption you instead only can reduce a target creatures chakra by half \nof the damage dealt, and gain that result. \nAkimichi Latent Calorie \nControl \nYou gain Calories as if you had the Calories clan feature. You have a number of calories equal to Half your Level + Your \nconstitution Modifier. You can spend these calories to use Clan Jutsu. You regain spent calories after a long rest. You \nalso gain the Food Pills Clan feature. You gain the Yel low Curry Pill at 11th level, and the Red Chili Pill at 18th. \nFuma Latent Accuracy You have picked up on your innate ability to tap into a latent sense of superior skill. When making a ranged attack with \nShuriken's, Fuma Shuriken's and Monster Shuriken or Fuma Clan Bukijut su, you gain a +1 Bonus to attack and damage \nrolls. This bonus increases to +2 at 11th, and +3 at 18th. You also gain the benefits of the Working the Angles Clan \nFeature that only works with Shuriken's, Fuma Shuriken's and Monster Shurike n's. \nHatake Latent White \nChakra \nYou have begun to manifest White Chakra. You gain White chakra as if you had the White Chakra clan feature. You have \na number of white chakra equal to your character level which you can only spend on Jutsu with the Lightnin g Release \nKeyword. You also gain the benefits of Lightning Release Adept . You reduce the cost of Ninjutsu with the lightning \nrelease keyword by 1 if you use White chakra to pay the cost of the jutsu. This reduction increases to 2 at 11th level and \n3 at 18th level. \nHebi Latent \nRegeneration \nYou gain 30 feet of Darkvision. As a bonus action, you begin to focus on self -regeneration. At the start of each of your \nturns, you spend 8 chakra to regain Hit points equal to your Proficiency Bonus. This counts as conc entrating on a Juts u. \nBeginning at 11th level you can inste ad regain twice your constitution modifier in hit points (whichever is higher). At \n18th level you regain additional Hit points equal to 1d4. \nHoshigaki Latent Shark Tooth You gain the Aquatic Adapt ation & the Shark T ooth Clan Feature. \nHyūga Latent Byakugan You have unlocked a dulled version of the Legendary Byakugan. You are treated as a Side Branch member for the \npurpose of Jutsu selection. You can spend 10 Chakra to activate your Latent Byakugan as a bonus action f or up to 10 \nminutes. You gain 200 feet of chakra sight. You gain the ability to see a creature's chakra nature, if any. Creatures \ncannot be obscured to you in any way if you can see through the obstruction . You can see in a 360 -degree fi eld around \nyou equal to your chakra sigh t range. \nInuzuka Latent Beast Master You have learned to befriend canine's and partner with them developing an unbreakable Kinship. You gain a Canine \nCompanion using the Young Kugsha Stat block. You gain the Beast M aster clan feature. Your Nin -Dog is alwa ys equal to \nhalf your level, and gains ability score increases at 4th, 6th & 8th levels. You Also gain the Feral Ability Clan Feature. \nKaguya Latent Bone \nWeapons \nYou have learned to manipulate parts of your bone str ucture. You gain th e Bone Weapons and Battle Hungry clan \nfeatures. You gain the Battle Hungry clan feature improvements at 11th and 18th levels. \nKurama Latent Genjutsu \nMolding \n. You learn one of the Mo lding Techniques at twice the cost from the Genjutsu Molding clan featur e. You gain a second \none at 11th level and a third at 18th. \nKuru Latent Kurugan One of your eyes have begun to cloud over, losing your natural eye color as it becomes pitch black. You have attained a \ndulled version of the Kurugan. You c an spend 10 chakra to activate your Late nt Kurugan for 1 minute as a Standard \naction. You can use the Standard Action and Bonus Action abilities of the Kurugan a number of times equal to half your \nProficiency Bonus. \nNara Latent Tactician You have begun to think 2 or 3 steps ahead almost innatel y. You gain the benefits of the Coordinate Clan feature. \nRyu Latent Dragons \nBlood \nYou gain the Blood of the Dragon clan feature. You have learned how to call upon the boiling rage of a dragon. As an \naction you unlea sh wrathful energy. You gain the benefit s of the 3rd level Dragon Rage Clan feature at 7 th level. \nSarutobi Latent Chakra \nControl \nYou gain the Advanced Nature Transformation selecting one nature release & Advanced Nature Proficiency clan \nfeatures. You gain your additional C -Rank Jutsu at 7 th level and B-Rank at 11th. (You do not gain additional B or A -\nRank's.) \nTsuchigumo Latent Third Eye You have manifested your third eye. Though not as potent as a full -blooded clansman. As a Standard action, for the \nnext minute you open yo ur 3rd eye. You gain a +5 to Perception checks and your Passive Perception. Attacks with ranged \nweapons you are proficient i n can be made at twice the range. At the end of this feature's duration, you cannot use this \nfeature again until you finish a short or long rest. Beginni ng at 15th level when making ranged weapon attacks you may \nadd your Wisdom modifier to your weapon atta ck rolls. \nUchiha Latent Sharingan You have manifested your Sharingan, opening up a world of potential for yours elf. You gain the Sharingan Clan \nFeature. Activating your Sharingan Costs 10 Chakra, and remains active for 1 minute. \nUzumaki Latent Wellsprin g of \nChakra \nYou have discovered a massive reserve of chakra within yourself. Increase your chakra point total by an amount equal \nto your level. Increase your chakra point total by 1, thereafter, each time you gain a level. Beginning at 11 th level, you \ngain Proficiency in Constitution saving throws. If you are already Proficiency, add an additional 1d4 to your saving \nthrow. \nYamanaka Latent Boons You have d iscovered Mental technique that put you one step above the rest. You gain 1 Mental Boon of your choice \nfrom the Yamanaka Boons clan table. You gain an additional Boon at 11th and 18th level. Beginning at 7th level, y ou \nhave Advantage o n insight checks to s ee through Deception. \nYuki Latent Ice Release You have begun to tap into your latent Nature Release Affinities. Choose to gain either Water or Wind Nature Release \naffinity. Beginning at 7th level, when casting a jut su with either Wind or Water Release key words, you can change the \ndamage type to Cold a nd increase the damage by 1 damage die. At 15th level when you deal cold damage, increase the \ndamage by your Intelligence Modifier. \n \n \n \nBLOODLINE , REALIZED CHART \nRealized \nBloodline's Realized Feature Realized F eature effect \nAburame Realized Insect \nControl \nWhen you would use Chakra Consumption you become able to reduce a target chakra but the total damage dealt \ninstead of half. You gain the Insect Focus Clan feature. Selec t one type of Insec t. \nAkimichi Realized Calorie \nControl \nYou gain additional Ca lories equal to half your level. You gain an additional calorie every level. You also gain the Fat \nConversion Clan feature. \nFuma Realized Accuracy You gain the Fuma Shuriken Master clan feature. You also, beginning a t 15th level gain the benefits of the Lethal \nPrecision Clan Feature that only works with Shuriken's, Fuma Shuriken's and Monster Shuriken's. Your weapon \nattacks score a critical on a roll of 19 -20. \nHatake Realized W hite \nChakra \nYou gai n additional White Ch akra equal to your character level divided by 4 . You further reduce the cost of Lightning \nRelease Ninjutsu when using White Chakra by an additional 1. \nHebi Realized \nRegeneration \nReduce the cost of Activating and Mai ntaining Regenerati on by half, you also gain the poison Potency clan feature up \nto 7th level. \nHoshigaki Realized Shark \nTooth \nYou gain the Water Release Affinity, and the Amphibious Clan Feature. You can now use Constitution, instead of \nDexterity to calcul ate your Armor Clas s. \nHyūga Realized By akugan You have trained and l earned the Gentle Fist Stance. Your Gentle Fist uses a D6 Damage die. And if you strike a \ncreature while in this stance that has 0 chakra, you instead deal double damage to the targets hit points . If the target \nis a construct o r undead, you instead deal ha lf damage \nInuzuka Realized Beast \nMaster \nAfter training with your Nin -Dog, you have gained the Bestial Fury and Nin-Dog Sage attack clan features. \nKaguya Realized Bone \nWeapons \nYou have learned the Shikotsumyak u Stance up to 7t he level. \nKurama Realized Genjutsu \nMolding \nYou have gained the Genjutsu Resistance clan feature using a D6 Die. You also learn one additional Molding option. \nKuru Realized Kurugan You have begun to develop as a Yin Chakra Adept gaining i ts clan feature u p to 1st level. Al l Nature release jutsu, now \ndeals necrotic damage that you cast. \nNara Realized Tactician You have gained the Master Tactician clan feature using a d4. You also select two skills, gaining proficiency in those \nskills. \nRyu Realized Dragon s \nBlood \nYou gain t he benefits of the 7th level of Dragons Rage . You gain the 11th level feature at 15th level and the 15th level \nfeature at 18th. \nSarutobi Realized Chakra \nControl \nYou gain the Advanced Chakra Control clan feature up to 11t h level. \nTsuchigumo Realized Third Eye When you would make a ranged weapon attack, you may add your wisdom modifier to your weapon attack rolls. You \nalso gain the Exoskeleton clan feature, which you can activate for 10 Chakra \nUchiha Realized Sharingan You gain the Advanced Adaptation clan feature up making a selection when you gain this feat, and again at 15th level. \nUzumaki Realized Wellspring \nof Chakra \nYou gain the Fuinjutsu master clan feature. You also gain the Incomprehensible fortitude clan featu re, being able to \nuse it once per long rest. \nYamanaka Realized Boons You gain an additional Mental Boon . Beginning at 15 th level, you gain the 15 th level feature of Mental Clarity . You can \nuse that twice per long rest. Beginning at 18 th Level, you gain t he Master of Ment al Alteration clan feature adding 1d6 \npsychic damage instead. \nYuki Realized Ice \nRelease \nYou gain the second Nature release, you didn't choose . You gain the Chilled Body clan feature up to 11th level. You \nalso gain the Frigid Cold Clan feature."
+    ],
+    "description": "Your Focus in the heat of Co mbat and mastery of bukijutsu, allow you weave weapon arts together with much greater skill. You gain the followin g benefits: • Increase your Strength or Dexterity score by 1, to a maximum of 20 • You learn an additional bukijutsu that you qualify for. This does not count against your Jutsu Known. • The next time you would hit 5th, 9th, or 13th level, you learn one additio nal bukijutsu of 1 rank lower than your highest known jutsu rank. • If you take this feat after you have passed the previously stated levels, yo u instead gain 1 additional D-Rank if passed 5 th",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 318
+    }
+  },
+  {
+    "id": "burglar",
+    "name": "Burglar",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Dexterity score by 1, to a maximum of \n20.",
+      "You gain proficiency with Security Kit. If you are \nalready proficient with them , you add double your \nproficiency bonus to checks you make with them.",
+      "As an action, you can attempt to pickpock et a creature \nwho is unaware of your presence so long as they are \nwithin 5 feet of you."
+    ],
+    "description": "You pride yourself on your quickness and your close study of certain clande stine activities. You gain the following benefits: • Increase your Dexterity score by 1, to a maximum of 20. • You gain proficiency with Security Kit. If you are already proficient with them , you add double your proficiency bonus to checks you make with them. • As an action, you can attempt to pickpock et a creature who is unaware of your presence so long as they are within 5 feet of you.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "chakra-guidance",
+    "name": "Chakra Guidance",
+    "category": "Chakra",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis",
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom or Charisma score by 1, to a \nmaximum of 20.",
+      "Choose a skill in which you are prof icient. When you \nmake an ability check with the chosen skill, you can \nadd half your Wisdom or Charisma modifier (your \nchoice, rounded down, mi nimum of one) to the check \nif it doesn't already include that modifier. You can use \nthis feat a number of times eq ual to the chosen ability \nscores modifier (a minimum of once).",
+      "You regain all ex pended uses of this feat when you \ncomplete a long rest."
+    ],
+    "description": "You've learned to utiliz e your gi ft with Chakra in a specific unique way. You gain the followi ng benefits. • Increase your Wisdom or Charisma score by 1, to a maximum of 20. • Choose a skill in which you are prof icient. When you make an ability check with the chosen skill, you can add half your Wisdom or Charisma modifier (your choice, rounded down, mi nimum of one) to the check if it doesn't already include that modifier. You can use this feat a number of times eq ual to the chosen ability scores modifier (a minimum of once). • You regain all ex pended uses of this feat when you complete ",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "chakra-pressure",
+    "name": "Chakra Pressure",
+    "category": "Chakra",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your c onstitution score by 1, to a maximum of \n20.",
+      "Jutsu you use that require a Creature make a Saving \nthrow against it, DC is increased by 1.",
+      "You release an aura of chakra indicative of your \ncombat ability. When making a Charisma \n(Intimidation ) check, you may in stead roll your \nConstitution (Chakra Control ) bonus instead."
+    ],
+    "description": "You have a very powerful Chakra aura. You gain the following benefits: • Increase your c onstitution score by 1, to a maximum of 20. • Jutsu you use that require a Creature make a Saving throw against it, DC is increased by 1. • You release an aura of chakra indicative of your combat ability. When making a Charisma (Intimidation ) check, you may in stead roll your Constitution (Chakra Control ) bonus instead.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "charming-persona",
+    "name": "Charming Persona",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in the Persuasion skill. If you are \nalready proficie nt in it, you instead gain expertise in it.",
+      "If you spend 1 minute talkin g to some one who can \nunderstand what you say, you can make a Charisma \n(Persuasion) check contested by the c reature's \nWisdom (Insight) check. If you or your companions \nare fighting the creature, your check automatically \nfails. If your check succeeds, the ta rget is charmed by \nyou as long as it remains within 60 feet of you for 1 \nminute."
+    ],
+    "description": "You've mastered the art of charming those aro und you, gaining the following benefi ts: • You gain proficiency in the Persuasion skill. If you are already proficie nt in it, you instead gain expertise in it. • If you spend 1 minute talkin g to some one who can understand what you say, you can make a Charisma (Persuasion) check contested by the c reature's Wisdom (Insight) check. If you or your companions are fighting the creature, your check automatically fails. If your check succeeds, the ta rget is charmed by you as long as it remains within 60 feet of you for 1 minute.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "chef",
+    "name": "Chef",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "con",
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Constitution or Wisdom score by 1, to a \nmaximum of 20.",
+      "You gain proficiency with Cooking Kit if you don't \nalready have it.",
+      "As part of a short rest, you can cook special food, \nprovided you have ingredients and cook's utensils on \nhand. You can prepare enough of this food for a \nnumber of creatures e qual to y our proficiency bonus. \nAt the end of the short rest, any crea ture who eats the \nfood and spends one or more Hit Dice to regain hit \npoints regains an extra 1d8 hit points.",
+      "With one hour of work or when you finish along rest, \nyou can cook a number of treats equal to your \nproficiency bonus. These special treats last 8 h ours \nafter being made. A creature can use a bonus action to \neat one of those treats to gain temporary hit points \nequal to your proficiency bonus."
+    ],
+    "description": "Time and effort spent mastering the culinary arts has paid off. You gain the fol lowing benefits: • Increase your Constitution or Wisdom score by 1, to a maximum of 20. • You gain proficiency with Cooking Kit if you don't already have it. • As part of a short rest, you can cook special food, provided you have ingredients and cook's utensils on hand. You can prepare enough of this food for a number of creatures e qual to y our proficiency bonus. At the end of the short rest, any crea ture who eats the food and spends one or more Hit Dice to regain hit points regains an extra 1d8 hit points. • W",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "chemist",
+    "name": "Chemist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20.",
+      "You gain proficiency with the Forensics or Poison kit. \nIf you are already proficient with it, you inst ead gain \nexpertise with it.",
+      "As an action, you can identify one liquid substance \nwithin 5 feet o f you, as if you had tasted it. You must \nsee the liquid for this benefit to work.",
+      "Over the course of a short or long rest, you can \ntemporarily improve the potenc y of one Blood \nIncreasing Pill. To use this benefit, you must have a \nPoison kit with you, and t he Blood Pill must be within \nreach. If the Blood Pill is consumed before the end of \nyour next short or long rest, when a creature uses this \nBlood Pill, they take the maxi mum instead of rolling."
+    ],
+    "description": "You have studi ed the se crets of chemistry and are an expert in its practice, gaining the following benefits: • Increase your Intelligence score by 1, to a maximum of 20. • You gain proficiency with the Forensics or Poison kit. If you are already proficient with it, you inst ead gain expertise with it. • As an action, you can identify one liquid substance within 5 feet o f you, as if you had tasted it. You must see the liquid for this benefit to work. • Over the course of a short or long rest, you can temporarily improve the potenc y of one Blood Increasing Pill. To use this benefit, you must",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "clone-adept",
+    "name": "Clone Adept",
+    "category": "Ninjutsu",
+    "prerequisite": {
+      "text": "Shadow Clone Tech nique, Multi -Shadow"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Clones you Summon using any of the Prerequisite \nJutsu, can move up to twice the distanc e away from \nyou and not disperse.",
+      "You can summon twice the number of clo nes you \ncould normally summon.",
+      "You can now command your clones to take separate \nactions from on e another instead of them all following \nthe same command.",
+      "Clones can use the Help action with each other and \nother creatures instead of only with their summoner."
+    ],
+    "description": "Clone Technique, Insect Clone, Earth Clone, Explosive Clone, Water Cl one or Lightning Clone. Level 4+ You've become adept at summoning clones , and wit h the advanced techniques you've learned along the way you gain the following benefits : • Clones you Summon using any of the Prerequisite Jutsu, can move up to twice the distanc e away from you and not disperse. • You can summon twice the number of clo nes you could normally summon. • You can now command your clones to take separate actions from on e another instead of them all following the same command. • Clones can use the Help action with",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "clone-expert",
+    "name": "Clone Expert",
+    "category": "Ninjutsu",
+    "prerequisite": {
+      "level": 8,
+      "text": "Clone Adept , Level 8+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Clones you summon can now use your class features \n(Features the y use count against any limitations you \nhave in regards to th e class features used.)",
+      "Clones you summon can use a bonus action now.",
+      "Clones can not use Jutsu with the Combinatio n \nKeyword.",
+      "Clones deal full damage with jutsu they cast."
+    ],
+    "description": "You've become an expert at summoning clones, commanding them, and utilizing them to maximum effect. You gain the fo llowing benefits: • Clones you summon can now use your class features (Features the y use count against any limitations you have in regards to th e class features used.) • Clones you summon can use a bonus action now. • Clones can not use Jutsu with the Combinatio n Keyword. • Clones deal full damage with jutsu they cast.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 321
+    }
+  },
+  {
+    "id": "clone-master",
+    "name": "Clone Master",
+    "category": "Ninjutsu",
+    "prerequisite": {
+      "level": 12,
+      "text": "Clone Expert , Level 12+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Clones you summon gain twice the amount of chakra \nthey norma lly would , if they gain chakra at all when \nyou summon them.",
+      "Clones you summon can now use your clan features. \n(Clan Features they use count against any limitations \nyou have in regards to the clan features used. )",
+      "Clones you summon can use a reactio n."
+    ],
+    "description": "You've become a master of clone jutsu and have found a way to maximize the usage of the clones in and out of Battle. You gain the following benefits: • Clones you summon gain twice the amount of chakra they norma lly would , if they gain chakra at all when you summon them. • Clones you summon can now use your clan features. (Clan Features they use count against any limitations you have in regards to the clan features used. ) • Clones you summon can use a reactio n.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "combat-seal-weaver",
+    "name": "Combat Seal Weaver",
+    "category": "Critical",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When a creature rolls a 1 on the d20 roll of a saving \nthrow against a Jutsu you cast that deals damage, t hey \ninstead take the highest number possible for the \ndamage d ie.",
+      "As a bonus action you can double the cost of a Jutsu \nthat targets an area and requires a saving thro w that \nyou cast. When you do you give a ll creature s within \nrange disadvantage on t he save."
+    ],
+    "description": "You've practiced making your Jutsu more difficult to avoid, learning techniques that grant you the following benefits: • When a creature rolls a 1 on the d20 roll of a saving throw against a Jutsu you cast that deals damage, t hey instead take the highest number possible for the damage d ie. • As a bonus action you can double the cost of a Jutsu that targets an area and requires a saving thro w that you cast. When you do you give a ll creature s within range disadvantage on t he save.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "constant-progression",
+    "name": "Constant Progression",
+    "category": "Clan",
+    "prerequisite": {
+      "text": "Uchiha Cla n"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20.",
+      "You gain a n additio nal feature from either 1-Tomoe \nSharingan, 2 -Tomoe Sharingan, or 3-Tomoe Sharingan \nClass features that you qualify for.",
+      "You can take this feat multiple times."
+    ],
+    "description": "You've trained your Sharingan to constantly evolve past your current limitations, you gain the following benefit s: • Increase your Intelligence score by 1, to a maximum of 20. • You gain a n additio nal feature from either 1-Tomoe Sharingan, 2 -Tomoe Sharingan, or 3-Tomoe Sharingan Class features that you qualify for. • You can take this feat multiple times.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "crafter",
+    "name": "Crafter",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Strength or Intelligence score by 1, to a \nmaximum o f 20.",
+      "You gain proficiency with either Weaponsmiths or \nArmorsmith Kit. If you ar e already proficient with it, \nyou instead gain expertise with it.",
+      "When you craft something, the total market value you \ncan craft increases by 75 Ryo per Week. If you have \nexpertise with them, the market value instead \nincreases by 1 50 Ryo per Week."
+    ],
+    "description": "You have a knack for crafting; you work with greater efficienc y and produce goods of higher quality. Select one type of Ninja tool. You gain th e following benefits whilst using it: • Increase your Strength or Intelligence score by 1, to a maximum o f 20. • You gain proficiency with either Weaponsmiths or Armorsmith Kit. If you ar e already proficient with it, you instead gain expertise with it. • When you craft something, the total market value you can craft increases by 75 Ryo per Week. If you have expertise with them, the market value instead increases by 1 50 Ryo per Week.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "cunning-intellect",
+    "name": "Cunning Intellect",
+    "category": "General",
+    "prerequisite": {
+      "abilities": {
+        "int": 20
+      },
+      "text": "Intelligence 20, Lev el 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency i n Intelligence saving throws. If \nyou are already proficient, you add do uble your \nproficiency bonus to Intelligence saving throws you \nmake.",
+      "You can learn new languages and tools over the course \nof 4 weeks of training, instead of the 25-week \nstandard.",
+      "Whenever you make an ability check that uses your \nIntelligence, you can add h alf your proficiency bonus \n(rounded down) if it doesn't already include your \nproficiency bonus.",
+      "Additionally, if you roll lower than half your level \n(rounded down) on an Intelligence ch eck, you can \ninstead use your level for the d20 roll."
+    ],
+    "description": "You have the cunning of the most prolific scholars, granting the following benefits: • You gain proficiency i n Intelligence saving throws. If you are already proficient, you add do uble your proficiency bonus to Intelligence saving throws you make. • You can learn new languages and tools over the course of 4 weeks of training, instead of the 25-week standard. • Whenever you make an ability check that uses your Intelligence, you can add h alf your proficiency bonus (rounded down) if it doesn't already include your proficiency bonus. • Additionally, if you roll lower than half your level (round",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "defense-mastery",
+    "name": "Defense Mastery",
+    "category": "General",
+    "prerequisite": {
+      "abilities": {
+        "con": 20
+      },
+      "level": 10,
+      "text": "Constitution 20, Level 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Critical hits made against you are treated as normal \nhits.",
+      "When a creature makes a melee attack against yo u and \nmisses, you can use your reaction to attempt to shove \nthat creatu re up to 10 feet directly away from you."
+    ],
+    "description": "While you are wearing armor with which you are proficient, you gain the following benefits: • Critical hits made against you are treated as normal hits. • When a creature makes a melee attack against yo u and misses, you can use your reaction to attempt to shove that creatu re up to 10 feet directly away from you.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "dungeon-delver",
+    "name": "Dungeon Delver",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase yo ur Intelligence or Wisdom scor e by 1, to a \nmaximum of 20.",
+      "You have adva ntage on Wisdom (Perception) and \nIntelligence (Investigation) checks made to detect the \npresence of secret doors.",
+      "You have advantage on saving throws made to avoid or \nresist traps.",
+      "You have resistance to the damage dealt by traps.",
+      "You can search for traps while traveling at a normal \npace, instead of only at a slow pace."
+    ],
+    "description": "Alert to the hidden traps and secret doo rs found in many dungeons, you gain the following benefits: • Increase yo ur Intelligence or Wisdom scor e by 1, to a maximum of 20. • You have adva ntage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doors. • You have advantage on saving throws made to avoid or resist traps. • You have resistance to the damage dealt by traps. • You can search for traps while traveling at a normal pace, instead of only at a slow pace.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "durable",
+    "name": "Durable",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "con"
+      ]
+    },
+    "benefits": [
+      "Increase your Constitution score by 1, to a maximum \nof 20.",
+      "When you roll a Hit Die to regain hit points, the \nminimum number of hit points you can regain from \nthe roll equals twice your Constitution modifier \n(minimum of 2).",
+      "Your hit points maximum increases by an amount \nequal to twice your leve l when yo u gain this feat.",
+      "Whenever you gain a level thereafter, your h it points \nmaximum increases by an additional 2 hit points."
+    ],
+    "description": "Hardy and resilient, you gain the following benefits: • Increase your Constitution score by 1, to a maximum of 20. • When you roll a Hit Die to regain hit points, the minimum number of hit points you can regain from the roll equals twice your Constitution modifier (minimum of 2). • Your hit points maximum increases by an amount equal to twice your leve l when yo u gain this feat. • Whenever you gain a level thereafter, your h it points maximum increases by an additional 2 hit points.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "enhanced-coordination",
+    "name": "Enhanced Coordination",
+    "category": "Clan",
+    "prerequisite": {
+      "clan": "Nara",
+      "text": "Nara Clan"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a Maximum of \n20",
+      "When you use the Coordinate Nara clan feature, you \ngrant a bonus to your allies equ al to your Intelligence \nModifier instead of a +1."
+    ],
+    "description": "You've trained to coordinate your allies in the more dire of circumstances , you gain the follow ing benefits: • Increase your Intelligence score by 1, to a Maximum of 20 • When you use the Coordinate Nara clan feature, you grant a bonus to your allies equ al to your Intelligence Modifier instead of a +1.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 322
+    }
+  },
+  {
+    "id": "elemental-chakra-penetration",
+    "name": "Elemental Chakra Penetration",
+    "category": "Ninjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [],
+    "description": "When you gain this feat, choose one of t he following damage types: Earth, Wind, Fire, Cold, Lightning. Ninjutsu you cast ignore resistance to damage of th e chosen type. In addition, when you roll damage for a jutsu you cast t hat deals damage of t hat type, you can reroll 1's and 2's and keep the result, even if it is a 1 or 2 . You can select this feat multiple times. Each time you do so, you must choose a di fferent damage type.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "elemental-specialization",
+    "name": "Elemental Specialization",
+    "category": "Ninjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You may ignore Hand Seal (HS) requirement for \nNinjutsu of C -Rank of lower with your chose n nature \nrelease keyword (Earth, Wind, Fire, Water, Lightning).",
+      "Also reduce the chakra cost of the chosen nature \nrelease Ninjutsu of C -Rank or lower by 1 .",
+      "You can take this feat multiple times, each time \nselecting a different element."
+    ],
+    "description": "You have begun to specializ e in a particular element of your choice. You gain the following benefits: • You may ignore Hand Seal (HS) requirement for Ninjutsu of C -Rank of lower with your chose n nature release keyword (Earth, Wind, Fire, Water, Lightning). • Also reduce the chakra cost of the chosen nature release Ninjutsu of C -Rank or lower by 1 . • You can take this feat multiple times, each time selecting a different element.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "elusive-target",
+    "name": "Elusive Target",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain a + 5 Bonus to your AC, while you are Hidden.",
+      "If you are subjected to an attack or Jutsu that requires \na Dexterity save. On a successful save you take no \nDamage and suffer no effect.",
+      "When you would take the Hide action , you may do so \neven when lightly obscured.",
+      "You may take the Hide action as a bonus action."
+    ],
+    "description": "Your far too agile to ever be caught off guard or be pushed into a corner. You gain the following Benefits: • You gain a + 5 Bonus to your AC, while you are Hidden. • If you are subjected to an attack or Jutsu that requires a Dexterity save. On a successful save you take no Damage and suffer no effect. • When you would take the Hide action , you may do so even when lightly obscured. • You may take the Hide action as a bonus action.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "empathic",
+    "name": "Empathic",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Wisdo m score by 1, to a maximum 20.",
+      "You gain proficiency in the Insight skil l. If you are \nalready proficient in it, you instead gain expertise in it.",
+      "You can use your action to try to get un canny insight \nabout one humanoid you can see within 30 feet of you. \nMake a Wisdo m (Insight ) check contested by the \ntarget's Charisma (Deceptio n) check. On a success, \nyou have advantage on attack rolls and ability checks \nagainst the target until the end of your next turn."
+    ],
+    "description": "You possess keen insight into how other peop le think and feel. You gain the following benefits: • Increase your Wisdo m score by 1, to a maximum 20. • You gain proficiency in the Insight skil l. If you are already proficient in it, you instead gain expertise in it. • You can use your action to try to get un canny insight about one humanoid you can see within 30 feet of you. Make a Wisdo m (Insight ) check contested by the target's Charisma (Deceptio n) check. On a success, you have advantage on attack rolls and ability checks against the target until the end of your next turn.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "empowered-genjutsu",
+    "name": "Empowered Genjutsu",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You have advantage on Chakra Control checks that you \nmake to maintain concentration on a Genjutsu when \nyou take damage.",
+      "When a creature attempts a saving throw to end the \neffect of a genjutsu you cast on the m, you ma y as a \nreaction, increase the save DC by your Charisma \nModifier. You may use this feat a number of times \nequal to your Charisma modifier."
+    ],
+    "description": "You learn to empo wer your Genjutsu with more elaborate illusions: • You have advantage on Chakra Control checks that you make to maintain concentration on a Genjutsu when you take damage. • When a creature attempts a saving throw to end the effect of a genjutsu you cast on the m, you ma y as a reaction, increase the save DC by your Charisma Modifier. You may use this feat a number of times equal to your Charisma modifier.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "empowered-ninjutsu",
+    "name": "Empowered Ninjutsu",
+    "category": "Ninjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you make an attack with a ninjutsu you may \nchoose to spend 10 chakra & ro ll at disadvantage from \nthe amount of force behind the attack . On a successful \nhit, you may double the jutsu's dam age die and add \nyour Ninjutsu ability modifier to the attack. You can \nuse this feature once per long rest.",
+      "You have advantage on Chakra Contro l checks that you \nmake to maintain concentration on a Ninjutsu when \nyou take damage."
+    ],
+    "description": "You learn to empower your Ninjutsu with more precise chakra • When you make an attack with a ninjutsu you may choose to spend 10 chakra & ro ll at disadvantage from the amount of force behind the attack . On a successful hit, you may double the jutsu's dam age die and add your Ninjutsu ability modifier to the attack. You can use this feature once per long rest. • You have advantage on Chakra Contro l checks that you make to maintain concentration on a Ninjutsu when you take damage.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "empowered-taijutsu",
+    "name": "Empowered Taijutsu",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When attacking with a Taijutsu witho ut the “Finisher” \nkeyword, you may increase the cost of the taijutsu by \n10 before the results of the attack roll i s revealed. On a \nsuccessful hit, you may add twice your proficiency to \nthe damag e roll.",
+      "You have advantage on Chakra Control checks saves \nthat you make to maintain concentration on Taijutsu \nwhen you take damage."
+    ],
+    "description": "You Learn to empower your Taijutsu with more elegant technique , you gai n the following benefits: • When attacking with a Taijutsu witho ut the “Finisher” keyword, you may increase the cost of the taijutsu by 10 before the results of the attack roll i s revealed. On a successful hit, you may add twice your proficiency to the damag e roll. • You have advantage on Chakra Control checks saves that you make to maintain concentration on Taijutsu when you take damage.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "endurance",
+    "name": "Endurance",
+    "category": "Chakra",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "con"
+      ]
+    },
+    "benefits": [
+      "Increase your Constitution score by 1, to a maximum \nof 20",
+      "When you roll a Chakra Die to regain chakra points, \nthe minimum number of chakra points you can regain \nfrom the roll equ als twice your Constitution modifier \n(minimum of 2)",
+      "Your chakra poin t maximum in creases by an amount \nequal to your level when you gain this fe at. Whenever \nyou gain a level thereafter, your chakra points \nmaximum increases by an additional 1 chakra points"
+    ],
+    "description": "You have a great deal of chakra within you ready to come out. You gain the following benefits; • Increase your Constitution score by 1, to a maximum of 20 • When you roll a Chakra Die to regain chakra points, the minimum number of chakra points you can regain from the roll equ als twice your Constitution modifier (minimum of 2) • Your chakra poin t maximum in creases by an amount equal to your level when you gain this fe at. Whenever you gain a level thereafter, your chakra points maximum increases by an additional 1 chakra points",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "enhanced-attack",
+    "name": "Enhanced Attack",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you take the Attack action you \nmay take a penalty up to -2 on your \nattack roll. You add the same \nnumber to your AC until the start \nof your next turn.",
+      "When you take the attac k \naction you may take a penalty \nup to -2 to your attack roll. You \nadd two times the same number \nto your damage until the start \nof your next turn.",
+      "When you make an attack \naction and you hav e \ndisadvantage. You may \ninstead take a -5 penalty to \nyour roll."
+    ],
+    "description": "You learn how to control the flow of battle bo th offensively and defensively. You gain the following benefits: • When you take the Attack action you may take a penalty up to -2 on your attack roll. You add the same number to your AC until the start of your next turn. • When you take the attac k action you may take a penalty up to -2 to your attack roll. You add two times the same number to your damage until the start of your next turn. • When you make an attack action and you hav e disadvantage. You may instead take a -5 penalty to your roll.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 323
+    }
+  },
+  {
+    "id": "exalted-awareness",
+    "name": "Exalted Awareness",
+    "category": "General",
+    "prerequisite": {
+      "abilities": {
+        "wis": 20
+      },
+      "level": 10,
+      "text": "Wisdom 20, Level 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain p roficiency in Wisdom saving throws. If you \nare already proficient i n them, you a dd double your \nproficiency bonus to Wisdom saving throws you m ake.",
+      "Creatures within 30 feet of you have disadvantage on \nDexterity (Stealth) checks made to hide from you.",
+      "As an action, you can sense the presence of illusions \nand other effects d esigned to de ceive the senses within \n30 feet of you, provided that you aren 't blinded or \ndeafened. You sense that an effect is trying to trick \nyou, but you gain no insight into what is hidd en or its \ntrue nature. Once you've used this feat, you must \ncomplete a short or long rest before you can use it \nagain."
+    ],
+    "description": "You have the wisdom associated with the most renowned masters of Ninjutsu, granting the following benefits: • You gain p roficiency in Wisdom saving throws. If you are already proficient i n them, you a dd double your proficiency bonus to Wisdom saving throws you m ake. • Creatures within 30 feet of you have disadvantage on Dexterity (Stealth) checks made to hide from you. • As an action, you can sense the presence of illusions and other effects d esigned to de ceive the senses within 30 feet of you, provided that you aren 't blinded or deafened. You sense that an effect is trying to trick you",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "fanatic",
+    "name": "Fanatic",
+    "category": "Critical",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you score a critical hit with an attack roll or \nreduce a creature to 0 hit points, you can take the \nattack action a s a bonus action.",
+      "Whenever a creature you can see within 30 feet is \nreduce to 0 hit points, you go into a fervor g aining \ntemporary hit points equal to 1d4 + your constitution \nmodifier."
+    ],
+    "description": "Every blow that hits your enemies make you feel closer to victory, making you shake in excitement. You gain th e following benefits: • When you score a critical hit with an attack roll or reduce a creature to 0 hit points, you can take the attack action a s a bonus action. • Whenever a creature you can see within 30 feet is reduce to 0 hit points, you go into a fervor g aining temporary hit points equal to 1d4 + your constitution modifier.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "feigned-confidence",
+    "name": "Feigned Confidence",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your charisma score by 1, to a maximum of 20",
+      "You gain proficiency in Deception. If you are already \nproficient you instead gain expertise.",
+      "When you would make an ability check that d oesn't \nadd your proficiency bonus, you can first make a DC 15 \n(Charisma) Deception check. On a success, you can ad d \nyour proficiency bonus to the check. You can use this \nfeat a number o f times e qual to your Charisma \nmodifier (a minimum of once). You regain all \nexpended uses when you finish a short or long rest."
+    ],
+    "description": "You've spent years prete nding you know what you're doing, gaining the following benefits: • Increase your charisma score by 1, to a maximum of 20 • You gain proficiency in Deception. If you are already proficient you instead gain expertise. • When you would make an ability check that d oesn't add your proficiency bonus, you can first make a DC 15 (Charisma) Deception check. On a success, you can ad d your proficiency bonus to the check. You can use this feat a number o f times e qual to your Charisma modifier (a minimum of once). You regain all expended uses when you finish a short or long re",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "fighting-stylist",
+    "name": "Fighting Stylist",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Strength, Dexterity, or Constitution \nscore by 1, to a max imum of 20.",
+      "Choose one of the Fighting Style s from Chapter 13.",
+      "You can select this feat multiple times. You can't take \na Fighting Style option more than once, even if you \nlater get to c hoose aga in."
+    ],
+    "description": "You adopt a particula r style of fighting as your specialty, gaining the following benefits: • Increase your Strength, Dexterity, or Constitution score by 1, to a max imum of 20. • Choose one of the Fighting Style s from Chapter 13. • You can select this feat multiple times. You can't take a Fighting Style option more than once, even if you later get to c hoose aga in.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "food-born-hardiness",
+    "name": "Food Born Hardiness",
+    "category": "Clan",
+    "prerequisite": {
+      "text": "Akimichi"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "con"
+      ]
+    },
+    "benefits": [
+      "Increase your Constitution score by 1, to a Maximum \nof 20.",
+      "Increase your Calorie count by Half you r character \nlevel. Increase your calorie count by an additional +1 \nevery level thereafter."
+    ],
+    "description": "You learn to store more calories in your fat, you gain the following benefits: • Increase your Constitution score by 1, to a Maximum of 20. • Increase your Calorie count by Half you r character level. Increase your calorie count by an additional +1 every level thereafter.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "force-of-personality",
+    "name": "Force Of Personality",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Your Charisma score increase by 1, to a maximum of \n20.",
+      "You can use your Charisma modifier instead of your \nWisdom m odifier when making Insight checks.",
+      "When you would make a Wisdom saving throw, y ou \ncan instead make a Charisma saving throw. You can \nuse this feat a number of times equal to your Charisma \nmodifier. You regain all expended uses of this feat \nwhen you complet e a long rest."
+    ],
+    "description": "Rooms never go unalerted to your presence, and the strength of your personality make others lose focus on their own social ga me. Power s and other effects infrequently override your force of will. • Your Charisma score increase by 1, to a maximum of 20. • You can use your Charisma modifier instead of your Wisdom m odifier when making Insight checks. • When you would make a Wisdom saving throw, y ou can instead make a Charisma saving throw. You can use this feat a number of times equal to your Charisma modifier. You regain all expended uses of this feat when you complet e a long rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "genius-crafter",
+    "name": "Genius Crafter",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase you r Intelligence by 1, to a maximum of 20.",
+      "You gain proficiency with either the Weaponsmith or \nArmorsmith kit. If yo u are already proficient with it, \nyou instead gain expertise with it.",
+      "Whenever y ou make an Intelligence ( Armorsmith or \nWeaponsmith ) check to m ake a repair, you can treat a \nd20 roll of 9 or lower as a 10, as long as you spend at \nleast ten minutes repairing it.",
+      "Whenever you make an Intelligence (Invest igation) or \nWisdom (Percep tion) che ck to find a construct's \nweakness, you are considered to have expertise in the \nInvestigation or Perception skill."
+    ],
+    "description": "You have spent prolonge d use wit h a Crafting kit, gaining the following benefits: • Increase you r Intelligence by 1, to a maximum of 20. • You gain proficiency with either the Weaponsmith or Armorsmith kit. If yo u are already proficient with it, you instead gain expertise with it. • Whenever y ou make an Intelligence ( Armorsmith or Weaponsmith ) check to m ake a repair, you can treat a d20 roll of 9 or lower as a 10, as long as you spend at least ten minutes repairing it. • Whenever you make an Intelligence (Invest igation) or Wisdom (Percep tion) che ck to find a construct's weakness, yo",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "genjutsu-expertise",
+    "name": "Genjutsu Expertise",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Charisma score by 1, to a maximum of \n20.",
+      "You may instead use Charisma instead of Wisdom as \nyour Genjutsu Modifier."
+    ],
+    "description": "Your mastery of the Illu sionary Arts, allow you to weave together Gen jutsu with much greater ef ficiency. You gain the following benefits: • Increase your Charisma score by 1, to a maximum of 20. • You may instead use Charisma instead of Wisdom as your Genjutsu Modifier.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "genjutsu-archivist",
+    "name": "Genjutsu Archivist",
+    "category": "Genjutsu",
+    "prerequisite": {
+      "level": 4,
+      "text": "Level 4+"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20.",
+      "You learn an additional genjutsu that you qualify for. \nThis does not count against your Jutsu Known.",
+      "The next time you would hit 5th, 9th, or 13th level, you \nlearn one addi tional Genjutsu of 1 rank lower than \nyour highest known jutsu rank.",
+      "If you take this feat after you have passed th e \npreviously stated level s, you instead gain 1 additional \nD-Rank if pas sed 5th level, 1 additional C -Rank if \npassed 9 th level, and one additio nal B-Rank is passed \n13th level."
+    ],
+    "description": "Your encyclopedic knowl edge of G enjutsu allows you to learn far more Genjutsu than normal. You gain the following benefits: • Increase your Wisdom score by 1, to a maximum of 20. • You learn an additional genjutsu that you qualify for. This does not count against your Jutsu Known. • The next time you would hit 5th, 9th, or 13th level, you learn one addi tional Genjutsu of 1 rank lower than your highest known jutsu rank. • If you take this feat after you have passed th e previously stated level s, you instead gain 1 additional D-Rank if pas sed 5th level, 1 additional C -Rank if passed 9 th l",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 324
+    }
+  },
+  {
+    "id": "gourmand",
+    "name": "Gourmand",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency with the chef's kit. If you are \nalready proficient with it, you instead gain expertise \nwith it.",
+      "As an action, you can inspect a drink or plate of foo d \nwithin 5 feet of you and determine whether it is \npoisoned, provided t hat you c an see and smell it.",
+      "During a long rest, you can prepare and s erve a meal \nthat helps you and your allies recover from the rigors \nof adventuring, provided you have suitable food , \nchef's kit, and other supplies on hand. The meal serves \nup to six peo ple, and each person who eats it regains \ntwo additional Hit Dice at the end of the long rest. In \naddition, those who partake of the meal have \nadvantage on Constitution saving throws aga inst \ndisease for t he next 24 hours."
+    ],
+    "description": "You have mastered a variety of special recipes, allowi ng you to prepare exotic dishes with useful effects. You gain the following bene fits: • You gain proficiency with the chef's kit. If you are already proficient with it, you instead gain expertise with it. • As an action, you can inspect a drink or plate of foo d within 5 feet of you and determine whether it is poisoned, provided t hat you c an see and smell it. • During a long rest, you can prepare and s erve a meal that helps you and your allies recover from the rigors of adventuring, provided you have suitable food , chef's kit, and oth",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "hand-seal-expert",
+    "name": "Hand Seal Expert",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When making a ranged Ninjutsu or Genjutsu attack \nwhile you a re within 5 feet o f a hostile creature, you do \nnot have disadvantage on the attack roll.",
+      "Your ranged Ninjutsu or Genjutsu attacks ignore half \ncover and three -quarters cover against targets within \n30 feet of you."
+    ],
+    "description": "You've practiced utilizing Ninjutsu & Genjutsu in close quarters, learn ing techniques that grant you the following benefits: • When making a ranged Ninjutsu or Genjutsu attack while you a re within 5 feet o f a hostile creature, you do not have disadvantage on the attack roll. • Your ranged Ninjutsu or Genjutsu attacks ignore half cover and three -quarters cover against targets within 30 feet of you.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "healer",
+    "name": "Healer",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int",
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence or Wisdom score by 1, to a \nmaximum of 20.",
+      "When you use a medicine to stabilize a dying creature, \nthat creature also r egains 1 hit point.",
+      "As an action, you can spend one use of a medicine k it \nto tend to a creature and restore 1d6 + 4 hit points to \nit, plus add itional hit points equal to the creature's \nmaximum number of Hit Dice. The creature can't \nregain hit points again in this way u ntil it finishes a \nshort or long rest."
+    ],
+    "description": "You are an able med ic, allowing you t o mend wounds quickly and get your allies back in the fight. You gain the following benefits: • Increase your Intelligence or Wisdom score by 1, to a maximum of 20. • When you use a medicine to stabilize a dying creature, that creature also r egains 1 hit point. • As an action, you can spend one use of a medicine k it to tend to a creature and restore 1d6 + 4 hit points to it, plus add itional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points again in this way u ntil it finishes a short or long rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "heavily-armored",
+    "name": "Heavily Armored",
+    "category": "General",
+    "prerequisite": {
+      "text": "Proficiency with Medium Armor"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency with heavy armor. If y ou are \nalready proficient with heavy armor, instead increase \nyour Stren gth score by 1, to a maximum of 20.",
+      "While you are wearing heavy armor, Slashing, \nbludgeoning & piercing damage that you take from \nunenhanced weapons is reduced by an amount equal \nto your proficiency bonus."
+    ],
+    "description": "You have tra ined to master the use of heavy armor, gaining the following benefits: • You gain proficiency with heavy armor. If y ou are already proficient with heavy armor, instead increase your Stren gth score by 1, to a maximum of 20. • While you are wearing heavy armor, Slashing, bludgeoning & piercing damage that you take from unenhanced weapons is reduced by an amount equal to your proficiency bonus.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "herbalist",
+    "name": "Herbalist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int",
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence or Wisdom score by 1, to a \nmaximum of 20.",
+      "You gain proficiency with th e Poison kit. If you are \nalready proficient with it, you instead gain e xpertise \nwith it.",
+      "As an action, you can inspect a plant within 5 feet o f \nyou and determine whether it is edible or poisonous, \nprovided that you can see and smell it.",
+      "You can apply herba l remedies to help yourself or your \nallies recover from Poisons. Over t he course of a short \nrest, you can remove one poison or disease from a \nfriendly creature within reach. You must have a Poison \nkit and access to local herbs to use this benefit."
+    ],
+    "description": "You are adept at harne ssing the useful properties of herbs and other plants. You gain the fol lowing benefits: • Increase your Intelligence or Wisdom score by 1, to a maximum of 20. • You gain proficiency with th e Poison kit. If you are already proficient with it, you instead gain e xpertise with it. • As an action, you can inspect a plant within 5 feet o f you and determine whether it is edible or poisonous, provided that you can see and smell it. • You can apply herba l remedies to help yourself or your allies recover from Poisons. Over t he course of a short rest, you can remove one poiso",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "historian",
+    "name": "Historian",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20.",
+      "You gain proficiency in the History skill. If you are \nalready proficient in the skill, you add double your \nproficiency bonus to checks you make with it.",
+      "When you take the Help action to aid anot her \ncreature's ability check, you can make a DC 15 \nIntelligenc e (History) check. On a success, that \ncreature's check gains a bonus equal to your \nproficiency bonus, as you share pertinent ad vice and \nhistorical examples. To receive this bonus, the \ncreature m ust be able to understand what you're \nsaying."
+    ],
+    "description": "Your study of history rewards you with the followin g benefits: • Increase your Intelligence score by 1, to a maximum of 20. • You gain proficiency in the History skill. If you are already proficient in the skill, you add double your proficiency bonus to checks you make with it. • When you take the Help action to aid anot her creature's ability check, you can make a DC 15 Intelligenc e (History) check. On a success, that creature's check gains a bonus equal to your proficiency bonus, as you share pertinent ad vice and historical examples. To receive this bonus, the creature m ust be able to un",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "improved-chakra-efficiency",
+    "name": "Improved Chakra Efficiency",
+    "category": "Chakra",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Con stitution score by 1, to a maximum \nof 20.",
+      "You may select 1 Jutsu yo u currently have. That jutsu \nnow costs 2 less Chakra to use (Min 1). You may Switch \nthe target of this feat once per full rest .",
+      "When you use a jutsu that requires concentration . You \nmay reduce the chakra cost per round by 1. (Min 1)"
+    ],
+    "description": "You have gained greater control over your chakra, gaining the following benefits: • Increase your Con stitution score by 1, to a maximum of 20. • You may select 1 Jutsu yo u currently have. That jutsu now costs 2 less Chakra to use (Min 1). You may Switch the target of this feat once per full rest . • When you use a jutsu that requires concentration . You may reduce the chakra cost per round by 1. (Min 1)",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "improved-critical",
+    "name": "Improved Critical",
+    "category": "Critical",
+    "prerequisite": {
+      "level": 10,
+      "text": "Level 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Select one of the following of attack types; Ninjutsu, \nTaijutsu, Genjutsu, Melee Weapo ns, or Ranged \nWeapons. Attacks made with the selected attack t ype \nscore a critical hit on a roll of 19 or 20. Based on the \nselection you gain the corresponding ext ra Effect.",
+      "When you score a critical on a ninjutsu that you cast, \nyou may add 1 addi tional da mage die to the damage \nroll.",
+      "When a creature rolls a 1 or 2 on a saving throw of a \nGenjutsu you cast, they do not get another saving \nthrow for the duration.",
+      "When you score a cr itical on a Taijutsu or Bukijutsu \nthat you cast, reduce the Chakra cost of the Taijutsu by \nhalf.",
+      "When you score a critical hit with melee or r anged \nweapon, you may add 1 additional damage die to the \ndamage roll.",
+      "You can take this feat more tha n once, each time \nselecting a different attack type"
+    ],
+    "description": "You learn how to capital ize on the faults in your opponent's guard and control the flow of combat. You gain the following ben efits: • Select one of the following of attack types; Ninjutsu, Taijutsu, Genjutsu, Melee Weapo ns, or Ranged Weapons. Attacks made with the selected attack t ype score a critical hit on a roll of 19 or 20. Based on the selection you gain the corresponding ext ra Effect. • When you score a critical on a ninjutsu that you cast, you may add 1 addi tional da mage die to the damage roll. • When a creature rolls a 1 or 2 on a saving throw of a Genjutsu you cast, they do not",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 325
+    }
+  },
+  {
+    "id": "insect-nest-integrity",
+    "name": "Insect Nest Integrity",
+    "category": "Clan",
+    "prerequisite": {
+      "clan": "Aburame",
+      "text": "Aburame Clan"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20.",
+      "You can use your Wisdom Modifier for Aburame Jutsu, \nAttack modifiers and save DC's regardless of your \nclass.",
+      "You learn one additional Aburame Clan Jutsu that you \nqualify for."
+    ],
+    "description": "You learn to utilize the hive mind inte grity of your insects to cast and maintain Ninjutsu, you gain the following benefits: • Increase your Wisdom score by 1, to a maximum of 20. • You can use your Wisdom Modifier for Aburame Jutsu, Attack modifiers and save DC's regardless of your class. • You learn one additional Aburame Clan Jutsu that you qualify for.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "inspiring-leader",
+    "name": "Inspiring Leader",
+    "category": "General",
+    "prerequisite": {
+      "text": "Charism a 13"
+    },
+    "abilityIncrease": null,
+    "benefits": [],
+    "description": "You can spend 10 minutes inspiring your companions, shoring up t heir resolv e to fight. When you do so, choose up to six friendly creature s (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each crea ture can gain temporary hit points equal to your level + your Charism a modifier. A creature can't gain temporary hit points from this feat again until it has finished a short or long rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "inspiring-presence",
+    "name": "Inspiring Presence",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Ch arisma score by 1, to a maximum of \n20.",
+      "As a bonus action, you let out a rallying war cry, \nending the frightened or charmed condition on \nyourself and a number of allies that can hear you equal \nto your Charisma modifier (minimum of one). Once \nyou've used thi s ability, you must complete a short or \nlong rest before you c an use it again."
+    ],
+    "description": "Your presence on the battlefie ld is a source of inspiration. You gain the following benefits: • Increase your Ch arisma score by 1, to a maximum of 20. • As a bonus action, you let out a rallying war cry, ending the frightened or charmed condition on yourself and a number of allies that can hear you equal to your Charisma modifier (minimum of one). Once you've used thi s ability, you must complete a short or long rest before you c an use it again.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "investigator",
+    "name": "Investigator",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maxim um of \n20.",
+      "You gain proficiency in the Investigation skill. If you \nare already proficient in it, you instead gain expertise \nin it.",
+      "You can take the Sear ch action as a bonus acti on."
+    ],
+    "description": "You have an eye for detail and can pick o ut the smallest clues. You gain the following benefits: • Increase your Intelligence score by 1, to a maxim um of 20. • You gain proficiency in the Investigation skill. If you are already proficient in it, you instead gain expertise in it. • You can take the Sear ch action as a bonus acti on.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "keen-mind",
+    "name": "Keen Mind",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20.",
+      "You always know which way is north.",
+      "You always know the number of hours left before the \nnext sunrise or sunset .",
+      "You can accurately recall anything you have seen or \nheard within the p ast month."
+    ],
+    "description": "You have a mind that can trac k time, di rection, and detail with uncanny precision. You gain the follo wing benefits. • Increase your Intelligence score by 1, to a maximum of 20. • You always know which way is north. • You always know the number of hours left before the next sunrise or sunset . • You can accurately recall anything you have seen or heard within the p ast month.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "light-step-mastery",
+    "name": "Light Step Mastery",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain a +1 bonus to damage rolls you make with \nunarmed strikes and weapon attacks.",
+      "When a creature makes an attack ro ll against you, you \ncan use your react ion to impose disadvantage on the \nroll. You can choose to use this fea t after the creature \nmakes its attack roll, but before the GM determines \nwhether the attack hits. You can use this reaction once \nper short rest."
+    ],
+    "description": "You've mastered the art of fighting while minimally armored, trea ting combat as an elegant dance. While you are wearing no armor, you g ain the fo llowing benefits: • You gain a +1 bonus to damage rolls you make with unarmed strikes and weapon attacks. • When a creature makes an attack ro ll against you, you can use your react ion to impose disadvantage on the roll. You can choose to use this fea t after the creature makes its attack roll, but before the GM determines whether the attack hits. You can use this reaction once per short rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "lightly-armored",
+    "name": "Lightly Armored",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "You gain proficiency with light armor. If you are \nalready proficie nt with light armor, instead increase \nyour Strength or Dexterity score by 1, to a maximum of \n20.",
+      "While you are we aring light armor, your speed \nincreases by 10 feet."
+    ],
+    "description": "You have trained to master the use of light armor, gaining the following bene fits: • You gain proficiency with light armor. If you are already proficie nt with light armor, instead increase your Strength or Dexterity score by 1, to a maximum of 20. • While you are we aring light armor, your speed increases by 10 feet.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 326
+    }
+  },
+  {
+    "id": "maneuverable",
+    "name": "Maneuverable",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Your speed increases by 10 feet.",
+      "When you hit a creature with a mele e attack, you can \nmove 5 feet at no mo vement cost as part of the attack.",
+      "When you hit a creature with a mel ee attack that you \nhave not already attacked on your current turn, you \ngain a +2 bonus to the damage roll."
+    ],
+    "description": "You've learned that you are at your best when you're on the move. • Your speed increases by 10 feet. • When you hit a creature with a mele e attack, you can move 5 feet at no mo vement cost as part of the attack. • When you hit a creature with a mel ee attack that you have not already attacked on your current turn, you gain a +2 bonus to the damage roll.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "master-of-disguise",
+    "name": "Master Of Disguise",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency with the disguise kit. If you are \nalready proficient with it, you instead gain expertise \nwith it.",
+      "When you are mimicking a creature, you have \nadvantage on performance and Deception checks \nmade to impersonate that creatu re.",
+      "If you spend 1 hour observing a creature, you can then \nspend 8 hours crafting a disguise you can quickly don \nto mimic that creature. Making the disguise requires a \ndisguise kit. You must make checks as normal to \ndisguise yourself, but you can assume th e disguise as \nan action."
+    ],
+    "description": "You have honed your ability to shape your personality and to read the personalities of others. You gain the following bene fits: • You gain proficiency with the disguise kit. If you are already proficient with it, you instead gain expertise with it. • When you are mimicking a creature, you have advantage on performance and Deception checks made to impersonate that creatu re. • If you spend 1 hour observing a creature, you can then spend 8 hours crafting a disguise you can quickly don to mimic that creature. Making the disguise requires a disguise kit. You must make checks as normal to disguise",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "master-weaver",
+    "name": "Master Weaver",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You have advantage on Constitution Ability Checks \nthat you make to maintain your concentration on \nJutsu when you are maintaini ng two of them at the \nsame time .",
+      "Select one jutsu you know of C -Rank or lower that you \nmust concentrate on. When y ou cast this jutsu at its \nbase rank, you do not need to spend the chak ra cost to \nmaintain the jutsu at the beginning of each of your \nturns.",
+      "When a hostile creature's movement provokes an \nopportunity attack from you, you can use your \nreaction to cast a ninjutsu or Genjutsu at the creature, \nrather than making an opportunity at tack. The Jutsu \nmust have a casting time of 1 act ion, must require a \nNinjutsu or Genjutsu attack roll and must target only \nthat creature ."
+    ],
+    "description": "You have practiced casting Ninjutsu or Genjutsu in the midst of combat, learning techniques that grant you the following benefits: • You have advantage on Constitution Ability Checks that you make to maintain your concentration on Jutsu when you are maintaini ng two of them at the same time . • Select one jutsu you know of C -Rank or lower that you must concentrate on. When y ou cast this jutsu at its base rank, you do not need to spend the chak ra cost to maintain the jutsu at the beginning of each of your turns. • When a hostile creature's movement provokes an opportunity attack from you, yo",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "medic",
+    "name": "Medic",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You can add jutsu with the Me dical Keyw ord to your \nJutsu list.",
+      "You gain profic iency in the Medicine s kill. If you are \nalready proficient in it, you instead gain expertise in it.",
+      "During a short rest, you can clean an d bind the wounds \nof up to six willing beasts and humanoids. Make a DC \n15 Wisdom (Medicine) check for each creature. On a \nsuccess, if a creatu re spends a Hit Die during this rest, \nthat creature can forgo the roll and instead regain the \nmaximum number of hi ts points the die can restore. A \ncreature can do so only once per rest , regardle ss of \nhow many Hit Dice it spends."
+    ],
+    "description": "You master the physician 's arts, gaining the following benefits: • You can add jutsu with the Me dical Keyw ord to your Jutsu list. • You gain profic iency in the Medicine s kill. If you are already proficient in it, you instead gain expertise in it. • During a short rest, you can clean an d bind the wounds of up to six willing beasts and humanoids. Make a DC 15 Wisdom (Medicine) check for each creature. On a success, if a creatu re spends a Hit Die during this rest, that creature can forgo the roll and instead regain the maximum number of hi ts points the die can restore. A creature can do s",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "menacing",
+    "name": "Menacing",
+    "category": "Genjutsu",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Charisma score by 1, to a maximum of \n20.",
+      "You gain proficiency in the Intimidation skill. If you \nare alread y proficie ncy in the skill, you add double \nyour proficiency bonus to che cks you make with it.",
+      "When you take the Attack action on your turn, you can \nreplace one attack with an attempt to demoralize one \nhumanoid you can see within 30 feet of you that can \nsee and hear you. Make a Charisma (Intimidation) \ncheck contested by the tar get's Wisdom (Insight) \ncheck. If your check succeeds, the target is frightened \nuntil the end of your next turn. If your check fails, the \ntarget can't be frightened by you in this way f or 1 hour."
+    ],
+    "description": "You become fearsome to others, gaining the following benefits: • Increase your Charisma score by 1, to a maximum of 20. • You gain proficiency in the Intimidation skill. If you are alread y proficie ncy in the skill, you add double your proficiency bonus to che cks you make with it. • When you take the Attack action on your turn, you can replace one attack with an attempt to demoralize one humanoid you can see within 30 feet of you that can see and hear you. Make a Charisma (Intimidation) check contested by the tar get's Wisdom (Insight) check. If your check succeeds, the target is frightened ",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "mental-boons",
+    "name": "Mental Boons",
+    "category": "Clan",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Charisma by 1, to a maximum of 20.",
+      "You may use your Charisma inst ead of Wis dom for \nyour Genjutsu Attack Bonus and Save DC instead of \nwhatever your Class dictates.",
+      "You gain a Yamanaka Boon that you qualify for."
+    ],
+    "description": "Prerequisi te: Yamanaka Clan You've learned to adapt your mental acuity to keep your opponent's guessing, you gain the following benefits: • Increase your Charisma by 1, to a maximum of 20. • You may use your Charisma inst ead of Wis dom for your Genjutsu Attack Bonus and Save DC instead of whatever your Class dictates. • You gain a Yamanaka Boon that you qualify for.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 327
+    }
+  },
+  {
+    "id": "mobile",
+    "name": "Mobile",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Your speed i ncreases b y 10 feet.",
+      "You can use the Dash action as a Bonus action.",
+      "When you encounter difficult terrain , you can as a \nbonus make a DC 15 Acrobatics check . On a success it \ndoesn't cost you extra movement on that turn.",
+      "When you make a melee attack against a creature, you \ndon't provoke opportunity attacks from that creature \nfor the rest of the turn, whether you hit or not."
+    ],
+    "description": "You are excepti onally speedy and agile. You gain the following benefits: • Your speed i ncreases b y 10 feet. • You can use the Dash action as a Bonus action. • When you encounter difficult terrain , you can as a bonus make a DC 15 Acrobatics check . On a success it doesn't cost you extra movement on that turn. • When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "moderately-armored",
+    "name": "Moderately Armored",
+    "category": "General",
+    "prerequisite": {
+      "text": "Proficienc y with Light Armor"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "You gain proficiency with medium armor. If you are \nalready proficient with medium armor, instead \nincrease your Strength or Dexterity score by 1, to a \nmaximum of 20.",
+      "While you are wearing medium armor, you can add 3, \nrather than 2, to your AC if you have a Dexterity of 16 \nor higher."
+    ],
+    "description": "You have trained to master the use of medium armor, gaining the foll owing benefits: • You gain proficiency with medium armor. If you are already proficient with medium armor, instead increase your Strength or Dexterity score by 1, to a maximum of 20. • While you are wearing medium armor, you can add 3, rather than 2, to your AC if you have a Dexterity of 16 or higher.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "monstrous-reserves",
+    "name": "Monstrous Reserves",
+    "category": "Clan",
+    "prerequisite": {
+      "level": 12,
+      "clan": "Uzumaki",
+      "text": "Uzumaki Clan , Level 12+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Const itution sc ore by 1, to a maximum \nof 20.",
+      "Your chakra point maximum increa ses by an amount \nequal to twice your level.",
+      "When you gain a level and you benefit from the \nWellspring of Ch akra Clan feat ure, you double the \nbonus to your total chakra ."
+    ],
+    "description": "You've conditioned your body to generate more chakra as your push your limits, you gain the following benefits: • Increase your Const itution sc ore by 1, to a maximum of 20. • Your chakra point maximum increa ses by an amount equal to twice your level. • When you gain a level and you benefit from the Wellspring of Ch akra Clan feat ure, you double the bonus to your total chakra .",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "naturalist",
+    "name": "Naturalist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20.",
+      "You gain proficiency in the Nature skill. If you are \nalready proficient in it, you instead gain expertise in it .",
+      "You learn the whereabouts of most herbal ingredients \nand the condition s needed to culture them yourself."
+    ],
+    "description": "Your extensive study of nature rewards you with the following benefits: • Increase your Intelligence score by 1, to a maximum of 20. • You gain proficiency in the Nature skill. If you are already proficient in it, you instead gain expertise in it . • You learn the whereabouts of most herbal ingredients and the condition s needed to culture them yourself.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "nature-release",
+    "name": "Nature Release",
+    "category": "Chakra",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence Score by 1 , to a Maximum of \n20.",
+      "You select one of the 5 Following Nature Releases. \nFire, Water, Lightning, Wind, Earth. You are now able \nto add jutsu with the corresponding Keyword to yo ur \njutsu list.",
+      "You learn one Ninjutsu of the corresponding Nature \nRelease that y ou selected, that you qualify for.",
+      "You can take this feat more than once, each time \nselecting a different nature release."
+    ],
+    "description": "You learn how to mold chakra into one of the 5 Elements, you gain the following benefits: • Increase your Intelligence Score by 1 , to a Maximum of 20. • You select one of the 5 Following Nature Releases. Fire, Water, Lightning, Wind, Earth. You are now able to add jutsu with the corresponding Keyword to yo ur jutsu list. • You learn one Ninjutsu of the corresponding Nature Release that y ou selected, that you qualify for. • You can take this feat more than once, each time selecting a different nature release.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "nin-dog-training",
+    "name": "Nin-Dog Training",
+    "category": "Clan",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase Your Strength or Wisdom score by 1, to a \nMaximum of 20.",
+      "Increase your Nin -Dogs ability score of your choice by \n1, to a maximum of 20.",
+      "Your Nin-Dog's Hit Point and Chakra Point maximu m \nincreases by Twice your level.",
+      "Whenever you gain a level thereafter, its hit points and \nchakra point maximum increases by an additional 2 ."
+    ],
+    "description": "Prerequisit e: Inuzuka Clan You Train with your Nin -Dog enhancing its potential and allowing it to last longer in a fight, you gain the following benefits: • Increase Your Strength or Wisdom score by 1, to a Maximum of 20. • Increase your Nin -Dogs ability score of your choice by 1, to a maximum of 20. • Your Nin-Dog's Hit Point and Chakra Point maximu m increases by Twice your level. • Whenever you gain a level thereafter, its hit points and chakra point maximum increases by an additional 2 .",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "ninja-slayer",
+    "name": "Ninja Slayer",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When a creature withi n 5 feet of you casts a Ninjutsu \nor Genjutsu, you can use your reaction to make a \nmelee attack agai nst that creatu re at advantage before \nthe effects of their jutsu take place.",
+      "When you damage a cr eature tha t is concentrating on \na Jutsu, that creature has d isadvantage on the saving \nthrow it makes to maintain its concentration.",
+      "You have advantage on saving throws agains t Ninjutsu \n& Genjutsu cast by creatures within 5 feet of you."
+    ],
+    "description": "You have practiced techniques useful in melee combat against Shinobi Ninjutsu & Gen jutsu, gai ning the following benefits: • When a creature withi n 5 feet of you casts a Ninjutsu or Genjutsu, you can use your reaction to make a melee attack agai nst that creatu re at advantage before the effects of their jutsu take place. • When you damage a cr eature tha t is concentrating on a Jutsu, that creature has d isadvantage on the saving throw it makes to maintain its concentration. • You have advantage on saving throws agains t Ninjutsu & Genjutsu cast by creatures within 5 feet of you.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "ninjutsu-archivist",
+    "name": "Ninjutsu Archivist",
+    "category": "Ninjutsu",
+    "prerequisite": {
+      "level": 4,
+      "text": "Level 4+"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "int"
+      ]
+    },
+    "benefits": [
+      "Increase your Intelligence score by 1, to a maximum of \n20",
+      "You learn an additio nal ninjutsu that you qualify for. \nThis does not c ount against your Jutsu Known.",
+      "The next time you would hit 5th, 9th, or 13th level, you \nlearn one additional Ninj utsu of 1 rank lower than your \nhighest known jutsu rank.",
+      "If you take this feat af ter you ha ve passed the \npreviously stated levels, you instea d gain 1 additional \nD-Rank if passed 5 th level, 1 additional C -Rank if \npassed 9 th level, and one additional B -Rank is passed \n13th level"
+    ],
+    "description": "Your Focus in the h eat of Combat and mastery of Handseals, allow you weave ninjutsu with much greater efficiency. You gain the follow ing benefits: • Increase your Intelligence score by 1, to a maximum of 20 • You learn an additio nal ninjutsu that you qualify for. This does not c ount against your Jutsu Known. • The next time you would hit 5th, 9th, or 13th level, you learn one additional Ninj utsu of 1 rank lower than your highest known jutsu rank. • If you take this feat af ter you ha ve passed the previously stated levels, you instea d gain 1 additional D-Rank if passed 5 th level, 1 addi",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "ninjutsu-sniper",
+    "name": "Ninjutsu Sniper",
+    "category": "Ninjutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you cast a Ninjutsu that requires you to make an \nattack roll, the Jutsu's rang e is doubled.",
+      "Your ranged ninjutsu attacks ignore half cover and \nthree-quarters co ver."
+    ],
+    "description": "You have learned techniqu es to enha nce your attacks with certain kinds of Ninjutsu, g aining the following benefits: • When you cast a Ninjutsu that requires you to make an attack roll, the Jutsu's rang e is doubled. • Your ranged ninjutsu attacks ignore half cover and three-quarters co ver.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "ninjutsu-theorist",
+    "name": "Ninjutsu Theorist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in the Ninshou skill. If you are \nalready proficient in the skill, you add double your \nproficiency bonus to checks you make with it.",
+      "You learn th e Sensing Technique Jutsu, this does not \ncount aga inst your Jutsu Known.",
+      "When you initiate a clash with a Ninjutsu that does not \nhave a Nature release keyword, you gain advantage on \nyour contested check vs the opposing jutsu."
+    ],
+    "description": "You study the Ninsh ou arts, gaining the following benefits: • You gain proficiency in the Ninshou skill. If you are already proficient in the skill, you add double your proficiency bonus to checks you make with it. • You learn th e Sensing Technique Jutsu, this does not count aga inst your Jutsu Known. • When you initiate a clash with a Ninjutsu that does not have a Nature release keyword, you gain advantage on your contested check vs the opposing jutsu.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 328
+    }
+  },
+  {
+    "id": "observant",
+    "name": "Observant",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20.",
+      "If you can see a creature's mouth w hile it is speaking a \nlanguage you understand, you can interpret what it's \nsaying by reading its lips.",
+      "You have a +5 bonus to your passive Wis dom \n(Perception) and passive Intelligence (Investigation) \nscores."
+    ],
+    "description": "Quick to notice details of your environment, you gai n the following benefits: • Increase your Wisdom score by 1, to a maximum of 20. • If you can see a creature's mouth w hile it is speaking a language you understand, you can interpret what it's saying by reading its lips. • You have a +5 bonus to your passive Wis dom (Perception) and passive Intelligence (Investigation) scores.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "overwhelming-presence",
+    "name": "Overwhelming Presence",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in C harisma saving throws. If you \nare already proficient in them, you add double your \nproficiency bonus to Charisma sa ving throws you \nmake.",
+      "While you are conscious, up to five friendly creatures \nwithin 30 feet of you who can see or hear you and who \ncan underst and you can gain a bonus to one \nIntelligence, Wisdom, or Chari sma saving throw they \nmake equal to your Charisma mo difier. Once they've \ndone so, they can't do so again until they finish a short \nor long rest.",
+      "As an action, you can attempt to distract up to f ive \ncreatures you can see within 30 feet of you. Each \ncreature must make a Wisdom saving throw (DC = 8 + \nyour prof iciency bonus + your Charisma modifier). \nAny creature immune to being charmed is u naffected. \nIf you or your companions are fighting a creature , it \nhas advantage on the saving throw. On a failed save, \nfor the next minute, a creature has disadvantage on \nWisdom (Perception) checks made to perceive any \ncreature other than you until the effe ct ends or until \nthe target can no longer see or hear you. T he feat ends \nearly if you are incapacitated."
+    ],
+    "description": "Prerequi site: Charisma 20, Level 10+ You have the presence of the most affluent of leaders , granting the following benefits: • You gain proficiency in C harisma saving throws. If you are already proficient in them, you add double your proficiency bonus to Charisma sa ving throws you make. • While you are conscious, up to five friendly creatures within 30 feet of you who can see or hear you and who can underst and you can gain a bonus to one Intelligence, Wisdom, or Chari sma saving throw they make equal to your Charisma mo difier. Once they've done so, they can't do so again until they finis",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "perceptive",
+    "name": "Perceptive",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum o f 20.",
+      "You gain proficiency in the Perception skill . If you are \nalready proficient in it, you instead gain expert ise in it.",
+      "Being in a lightly obscured area doesn't impose \ndisadvantage on your Wisdom (Perception) checks if \nyou can both see and hea r."
+    ],
+    "description": "You hone your senses until they become r azor sharp. You gain the following benefits: • Increase your Wisdom score by 1, to a maximum o f 20. • You gain proficiency in the Perception skill . If you are already proficient in it, you instead gain expert ise in it. • Being in a lightly obscured area doesn't impose disadvantage on your Wisdom (Perception) checks if you can both see and hea r.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "performer",
+    "name": "Performer",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Charisma score by 1, to a maximum of \n20.",
+      "You gain proficiency in the Performance skill. If you \nare already proficient in it, you i nstead gain expertise \nin it.",
+      "While performing, you can try to distract one \nhumanoid you can see who can see and hear you. Make \na Charisma (Performance) check contes ted by the \nhumanoid's Wisdom (Insight) check. If your check \nsucceeds, you grab the humanoid' s attention enough \nthat it makes Wisdom (Perceptio n) and Intelligence \n(Investigation) checks with disadvantage u ntil you \nstop performing."
+    ],
+    "description": "You master performance so tha t you can command any stage. You gain the following benefits: • Increase your Charisma score by 1, to a maximum of 20. • You gain proficiency in the Performance skill. If you are already proficient in it, you i nstead gain expertise in it. • While performing, you can try to distract one humanoid you can see who can see and hear you. Make a Charisma (Performance) check contes ted by the humanoid's Wisdom (Insight) check. If your check succeeds, you grab the humanoid' s attention enough that it makes Wisdom (Perceptio n) and Intelligence (Investigation) checks with ",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "planning-adept",
+    "name": "Planning Adept",
+    "category": "General",
+    "prerequisite": {
+      "text": "Studying tactics, strategy and how to"
+    },
+    "abilityIncrease": null,
+    "benefits": [],
+    "description": "exploit your enemies yo u've learn ed to implement it into your battles. You learn 2 Plans from the Intelligence Operatives Plan List. You also gai n 1 Brave Order . If you have class Levels in Intelli gence Operative, you instead gain 1 Plan.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "poisoner",
+    "name": "Poisoner",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Intelligence by 1, to a maximum of 20.",
+      "You gain proficiency with the poisoner's kit , if you \nalready have proficiency in this kit, you instead gain \nexpertise.",
+      "As an action, you can i dentify one poison within 5 feet \nof you. You must see the poison or the effects of said \npoison for this benefit to work.",
+      "During a short rest, you can improve the po tency of a \nsingle dose of poison. To use this benefit, you must \nhave a poisoner's kit & have a poison of any type. If the \npoison is applied be fore to a weapon the end of your \nnext short or lo ng rest, you use your Ninjutsu Save DC, \nand it deals extra poison damage equal to your \nIntelligence modifier."
+    ],
+    "description": "You have stud ied the se crets of poisons and toxins, gaining the following benefits: • Increase your Intelligence by 1, to a maximum of 20. • You gain proficiency with the poisoner's kit , if you already have proficiency in this kit, you instead gain expertise. • As an action, you can i dentify one poison within 5 feet of you. You must see the poison or the effects of said poison for this benefit to work. • During a short rest, you can improve the po tency of a single dose of poison. To use this benefit, you must have a poisoner's kit & have a poison of any type. If the poison is applied be f",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "powerful-critical",
+    "name": "Powerful Critical",
+    "category": "Critical",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you score a critical on Melee attack, the creature \ngains the Dazed condition until th e end of its next \nturn.",
+      "When you score a critical on a Ranged attack, the \ncreature gains the slowed condition until the end of its \nnext turn."
+    ],
+    "description": "You abuse the gaps in your targets fighting style. You gain the following benefits: • When you score a critical on Melee attack, the creature gains the Dazed condition until th e end of its next turn. • When you score a critical on a Ranged attack, the creature gains the slowed condition until the end of its next turn.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "practiced-adept",
+    "name": "Practiced Adept",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase an ability score of your choice by 1, to a \nmaximum of 20.",
+      "You gain proficienc y in any c ombination of three skills \nor tools of your choice .",
+      "You can take this feat multiple times."
+    ],
+    "description": "You have acquired skills over your career, gaining the following benefits: • Increase an ability score of your choice by 1, to a maximum of 20. • You gain proficienc y in any c ombination of three skills or tools of your choice . • You can take this feat multiple times.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "practiced-expert",
+    "name": "Practiced Expert",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase an ability sco re of your choice by 1, to a \nmaximum of 20.",
+      "You gain profic iency in one skill or tool of your choice.",
+      "Choose one skill or tool you are proficient in . Your \nproficiency bonus is doubled for any ability check you \nmake that uses the chosen proficiency.",
+      "You can take thi s feat multiple times."
+    ],
+    "description": "You have honed your proficiency with p articular skills or tools, gaining the following benefits: • Increase an ability sco re of your choice by 1, to a maximum of 20. • You gain profic iency in one skill or tool of your choice. • Choose one skill or tool you are proficient in . Your proficiency bonus is doubled for any ability check you make that uses the chosen proficiency. • You can take thi s feat multiple times.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 329
+    }
+  },
+  {
+    "id": "promising-leader",
+    "name": "Promising Leader",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "cha"
+      ]
+    },
+    "benefits": [
+      "Increase your Charisma score by 1, to a maximum of \n20.",
+      "As an action, you can gain tact ical insig ht. For one \nminute, once per turn you can utter a special \ncommand or warning whenever a n ally you can see \nwithin 30 feet makes an attack roll or saving throw. \nThis creature can add a d 6 to the roll provided it can \nhear and understand you. A creat ure can on ly benefit \nfrom one such die at a time. Once you'v e used this feat, \nyou must complete a short or long rest before you can \nuse it again."
+    ],
+    "description": "You've trained relentless to lead your allies on the field of battle, gaining the following benefits: • Increase your Charisma score by 1, to a maximum of 20. • As an action, you can gain tact ical insig ht. For one minute, once per turn you can utter a special command or warning whenever a n ally you can see within 30 feet makes an attack roll or saving throw. This creature can add a d 6 to the roll provided it can hear and understand you. A creat ure can on ly benefit from one such die at a time. Once you'v e used this feat, you must complete a short or long rest before you can use it again.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "quick-fingered",
+    "name": "Quick Fingered",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Dexterity score by 1, to a maximum of \n20.",
+      "You gain proficiency in the Sleight of Hand skill. If you \nare already proficient in it, you inste ad gain expertise \nin it.",
+      "As a bonus action, you can make a Dexterity (Sleight of \nHand) check to plant something on someone else, \nconceal an ob ject on a creature, lift a purse, or take \nsomething from a pocket."
+    ],
+    "description": "Your nimble fingers and agility let you perform sleight of hand. You gain the following benefits: • Increase your Dexterity score by 1, to a maximum of 20. • You gain proficiency in the Sleight of Hand skill. If you are already proficient in it, you inste ad gain expertise in it. • As a bonus action, you can make a Dexterity (Sleight of Hand) check to plant something on someone else, conceal an ob ject on a creature, lift a purse, or take something from a pocket.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "quick-witted",
+    "name": "Quick Witted",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase the Intelligence ability score by 1, to a \nmaximum of 20.",
+      "You can use your Intelligence modifier instead of you r \nDexterity modifier when making Initiative checks.",
+      "When you would make a Dexterit y saving t hrow, you \ncan instead make an Intelligence saving throw. You \ncan use this feat a number of times equal to your \nIntelligence modifier. You regain all expended uses o f \nthis feat when you complete a long rest."
+    ],
+    "description": "Great ideas come to you naturally, often when your life depends on it. You always have a plan, or at least p arts of it. You gain the following benefits: • Increase the Intelligence ability score by 1, to a maximum of 20. • You can use your Intelligence modifier instead of you r Dexterity modifier when making Initiative checks. • When you would make a Dexterit y saving t hrow, you can instead make an Intelligence saving throw. You can use this feat a number of times equal to your Intelligence modifier. You regain all expended uses o f this feat when you complete a long rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "resilient",
+    "name": "Resilient",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase the chosen ability score by 1, to a maximum \nof 20.",
+      "You gain proficiency in saving throws using the \nchosen ability.",
+      "You can take this feat multiple times."
+    ],
+    "description": "Choose one ability sc ore. You gain the following benefits: • Increase the chosen ability score by 1, to a maximum of 20. • You gain proficiency in saving throws using the chosen ability. • You can take this feat multiple times.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "scouting-adept",
+    "name": "Scouting Adept",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You learn two maneuvers of your choice from among \nthose available to the S cout-Nin class.",
+      "If you already have superiority dice, you gain one \nmore; otherwise , you have two superiority dice, which \nare d4s. These dice a re used to fuel your maneuvers. A \nsuperiority die is expended when you use it. You regain \nall of your expended sup eriority dice when you finish a \nshort or long rest."
+    ],
+    "description": "You have mar tial training that allows you to perform special combat mane uvers. You gain the following benefits: • You learn two maneuvers of your choice from among those available to the S cout-Nin class. • If you already have superiority dice, you gain one more; otherwise , you have two superiority dice, which are d4s. These dice a re used to fuel your maneuvers. A superiority die is expended when you use it. You regain all of your expended sup eriority dice when you finish a short or long rest.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "seal-weaver",
+    "name": "Seal Weaver",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you cast a Ninjutsu or Genjutsu with a casting \ntime of a n action, you may use your bonus action to \ncast a jutsu of the same type with the sa me casting \ntime.",
+      "When you cast a Ninjutsu or Genjutsu with a casting \ntime of a b onus action, you can reduce the cost by half \nas long as it is no higher level than your highes t rank \nknown.",
+      "Once you've used either effects of this feat twice, you \nmust complet e a long r est before you can use it again."
+    ],
+    "description": "You've pra cticed casting Jutsu in quick succession, learning techniques that gra nt you the following benefits: • When you cast a Ninjutsu or Genjutsu with a casting time of a n action, you may use your bonus action to cast a jutsu of the same type with the sa me casting time. • When you cast a Ninjutsu or Genjutsu with a casting time of a b onus action, you can reduce the cost by half as long as it is no higher level than your highes t rank known. • Once you've used either effects of this feat twice, you must complet e a long r est before you can use it again.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "shinobi-sentinel",
+    "name": "Shinobi Sentinel",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When you hit a creature wi th an opportunity attack, \nthe creature's speed becomes 0 for the rest of the turn.",
+      "Creatures w ithin 5 feet of you provoke opportunity \nattacks from you even if they take the Dis engage \naction before leaving your reach.",
+      "If a creature makes an attack of opport unity against \nyou, you can as a reaction, make a melee weapon \nattack against them."
+    ],
+    "description": "You've mastered techniques to take advantage of every drop in any enemy's guard; in tight spaces you are indomitable. While you are wielding a melee weapon with which you are p roficient, you gain the following benefits: • When you hit a creature wi th an opportunity attack, the creature's speed becomes 0 for the rest of the turn. • Creatures w ithin 5 feet of you provoke opportunity attacks from you even if they take the Dis engage action before leaving your reach. • If a creature makes an attack of opport unity against you, you can as a reaction, make a melee weapon attack against them.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "silver-tongued",
+    "name": "Silver Tongued",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency i n the Deception skill. If you are \nalready proficient in it, you instead gain expertise in it.",
+      "When you take the At tack action, you can replace one \nattack with an attempt to deceive one humanoid yo u \ncan see within 30 feet of you that can see and hear you. \nMake a Charisma (Deception) check contested by the \ntarget's Wisdom (Insight) check. If your check \nsucceeds, your mo vement doesn't provoke \nopportunity attacks from the target and your attack \nrolls against it have advantage; both benefits last \nuntil the end o f your next turn or until you \nuse this ability on a different target. If your \ncheck fails, the target can't be dec eived by \nyou in this way for 1 hour."
+    ],
+    "description": "You develop your conversational skill to better deceive others. You ga in the following benefits: • You gain proficiency i n the Deception skill. If you are already proficient in it, you instead gain expertise in it. • When you take the At tack action, you can replace one attack with an attempt to deceive one humanoid yo u can see within 30 feet of you that can see and hear you. Make a Charisma (Deception) check contested by the target's Wisdom (Insight) check. If your check succeeds, your mo vement doesn't provoke opportunity attacks from the target and your attack rolls against it have advan",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "skulker",
+    "name": "Skulker",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You can try to hide when you are lightly \nobscured from the creature from which you \nare hiding.",
+      "When you are hidden f rom a creature and miss it with \na ranged weapon attack, making the attack doesn't \nreveal you r position.",
+      "Dim light doesn't impose disadvantage on your \nWisdom (Perception) checks relying on sight."
+    ],
+    "description": "You are expert at s linking th rough shadows. You gain the following benefits: • You can try to hide when you are lightly obscured from the creature from which you are hiding. • When you are hidden f rom a creature and miss it with a ranged weapon attack, making the attack doesn't reveal you r position. • Dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 330
+    }
+  },
+  {
+    "id": "snappy-interjection",
+    "name": "Snappy Interjection",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "When an al ly makes an attack roll, an ability c heck or a \nsaving throw, you may spend your reaction to give \nthem advantage on the roll. Once you use this ability, \nyou can't us e it again until you finish a short or long \nrest.",
+      "You can as a reaction to an ally within 30 feet of you , \nbeing hit with an attac k, interpose , switching the \ntarget of the attack to yourself taking the damage \ninstead."
+    ],
+    "description": "You've mastered a quick tongue and quicker reaction to aid your allies. You gain the following benefits: • When an al ly makes an attack roll, an ability c heck or a saving throw, you may spend your reaction to give them advantage on the roll. Once you use this ability, you can't us e it again until you finish a short or long rest. • You can as a reaction to an ally within 30 feet of you , being hit with an attac k, interpose , switching the target of the attack to yourself taking the damage instead.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "stealthy",
+    "name": "Stealthy",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "Increase your Dexterity by 1, to a maximum o f 20.",
+      "You can perform the Hide action as a bonus a ction.",
+      "You gain proficiency in the Stealth skill. If you are \nalready proficient in it, you instead gain expertise in it.",
+      "If you are hidden, you can move up to 10 feet in the \nopen without revealing yourself if you end the move in \na position whe re you're not clearly visible."
+    ],
+    "description": "You know how best to hide. You gain the following benefits: • Increase your Dexterity by 1, to a maximum o f 20. • You can perform the Hide action as a bonus a ction. • You gain proficiency in the Stealth skill. If you are already proficient in it, you instead gain expertise in it. • If you are hidden, you can move up to 10 feet in the open without revealing yourself if you end the move in a position whe re you're not clearly visible.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "survivalist",
+    "name": "Survivalist",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20.",
+      "You gain proficiency in the Surviva l skill. I f you are \nalready proficient in it, y ou instead ga in expertise in it.",
+      "When in a hostile environment, you gain advantage on \nConstitution saving throw to resist Exhau stion caused \nby hot or cold environments."
+    ],
+    "description": "You master wilderness lore, gaining the following benefits: • Increase your Wisdom score by 1, to a maximum of 20. • You gain proficiency in the Surviva l skill. I f you are already proficient in it, y ou instead ga in expertise in it. • When in a hostile environment, you gain advantage on Constitution saving throw to resist Exhau stion caused by hot or cold environments.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "taijutsu-archivist",
+    "name": "Taijutsu Archivist",
+    "category": "Taijutsu",
+    "prerequisite": {
+      "level": 4,
+      "text": "Level 4+"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Strength or Dexterity score by 1, to a \nmaximum of 20",
+      "You learn an a dditional taijutsu without the bukijutsu \nkeyword that you qu alify for. This does not count \nagainst your Jutsu Known.",
+      "The next time you would hit 5th, 9th, or 13th level, you \nlearn one additional Taijutsu without the bukijutsu \nkeyword of 1 rank lower than your highe st known \njutsu rank",
+      "If you take this feat after yo u have passed the \npreviously stated levels, you instead gain 1 additional \nD-Rank if passed 5 th level, 1 additional C-Rank if \npassed 9 th level, and one additional B -Rank if passed \n13th level"
+    ],
+    "description": "Your Focus in the heat of Combat and ma stery of Martial arts, allow you weave taijutsu together with much greater skill. You gain the following benefits: • Increase your Strength or Dexterity score by 1, to a maximum of 20 • You learn an a dditional taijutsu without the bukijutsu keyword that you qu alify for. This does not count against your Jutsu Known. • The next time you would hit 5th, 9th, or 13th level, you learn one additional Taijutsu without the bukijutsu keyword of 1 rank lower than your highe st known jutsu rank • If you take this feat after yo u have passed the previously stated l",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "taijutsu-expertise",
+    "name": "Taijutsu Expertise",
+    "category": "Taijutsu",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "dex"
+      ]
+    },
+    "benefits": [
+      "Increase your Dexterity score by 1, to a maximum of \n20.",
+      "You may instead us e Dexterit y instead of Strength as \nyour Taijutsu Modifier .",
+      "You may use Dexterity instead of Strength for your \nUnarmed Attack and damage rolls."
+    ],
+    "description": "Your Focus in the heat of Combat and mastery of the martial arts, allow you to fight with much greater efficiency. You gain the following be nefits: • Increase your Dexterity score by 1, to a maximum of 20. • You may instead us e Dexterit y instead of Strength as your Taijutsu Modifier . • You may use Dexterity instead of Strength for your Unarmed Attack and damage rolls.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "tandem-tactician",
+    "name": "Tandem Tactician",
+    "category": "General",
+    "prerequisite": null,
+    "abilityIncrease": null,
+    "benefits": [
+      "You can use the Help action as a bonus action.",
+      "When you use the Help action to aid an ally in \nattacking a creature, increase the range of the Help \naction by 10 fe et. Additionally, you can help two allies \ntargeting the same creat ure within range when you \nuse the Help action this way."
+    ],
+    "description": "Your presence in a scrap tends to elevate your comrades. You gain the followin g benefits : • You can use the Help action as a bonus action. • When you use the Help action to aid an ally in attacking a creature, increase the range of the Help action by 10 fe et. Additionally, you can help two allies targeting the same creat ure within range when you use the Help action this way.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "titans-power",
+    "name": "Titans Power",
+    "category": "Bukijutsu",
+    "prerequisite": {
+      "abilities": {
+        "str": 20
+      },
+      "level": 10,
+      "text": "Strength 20, Level 10"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in Strength saving throws. If you \nare already pro ficient in them, you add double your \nproficiency bonus to St rength saving throws you \nmake.",
+      "You ignore the two -handed & heavy property of \nweapons with which you are proficient .",
+      "When you miss with a melee weapon attack, the \ncreature takes dam age equal to you r Strength \nmodifier. This damage is of the same type as the \nweapon's damage."
+    ],
+    "description": "You have the strength that legends tell of, granting the followin g benefits: • You gain proficiency in Strength saving throws. If you are already pro ficient in them, you add double your proficiency bonus to St rength saving throws you make. • You ignore the two -handed & heavy property of weapons with which you are proficient . • When you miss with a melee weapon attack, the creature takes dam age equal to you r Strength modifier. This damage is of the same type as the weapon's damage.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "tough",
+    "name": "Tough",
+    "category": "General",
+    "prerequisite": {
+      "text": "Durable Feat"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "con"
+      ]
+    },
+    "benefits": [
+      "Increase your Constitution score by 1, to a maxi mum \nof 20.",
+      "Whenever you take the Dodge action in c ombat, you \ncan spend one Hit Die to heal yourself. Roll the die, add \nyour Constitution modifier, and regain a numb er of hit \npoints equal to the total (minimum of one)."
+    ],
+    "description": "You have the blood of heroes flowing through y our veins. You gain the following benefits: • Increase your Constitution score by 1, to a maxi mum of 20. • Whenever you take the Dodge action in c ombat, you can spend one Hit Die to heal yourself. Roll the die, add your Constitution modifier, and regain a numb er of hit points equal to the total (minimum of one).",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "unnatural-resilience",
+    "name": "Unnatural Resilience",
+    "category": "General",
+    "prerequisite": {
+      "abilities": {
+        "con": 20
+      },
+      "level": 10,
+      "text": "Constitution 20, Level 10+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain proficiency in Constitution sav ing throws. If \nyou are already proficient in them, you add double \nyour proficiency bonus to saving throws you make.",
+      "Restoration effects, such as Healing Jutsu or Military \nRation pills, that would restore hit points to you can't \nrestore an amount less than half your level + your \nConstitution modifier. If this amou nt would exceed \nthat max imum amoun t of hit points that effect could \nrestore, you ins tead take that effect's maximum.",
+      "You can add your Constitution modifier to death \nsaving throws you make ."
+    ],
+    "description": "You have the fortitude often attributed to gods, granting the following benefits: • You gain proficiency in Constitution sav ing throws. If you are already proficient in them, you add double your proficiency bonus to saving throws you make. • Restoration effects, such as Healing Jutsu or Military Ration pills, that would restore hit points to you can't restore an amount less than half your level + your Constitution modifier. If this amou nt would exceed that max imum amoun t of hit points that effect could restore, you ins tead take that effect's maximum. • You can add your Constitution modifi",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 331
+    }
+  },
+  {
+    "id": "weapon-expert",
+    "name": "Weapon Expert",
+    "category": "Bukijutsu",
+    "prerequisite": null,
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "str",
+        "dex"
+      ]
+    },
+    "benefits": [
+      "You gain proficiency with a ll Martial Weapons. If you \nare already proficient with them, instead increase your \nStrength or Dexterity score by 1, to a maximum of 20.",
+      "Once per turn when yo u roll damage for a weapon \nattack usin g a weapon with which you are proficient, \nyou can reroll the weapon's damage dice and use \neither total."
+    ],
+    "description": "You have practiced extensively with a variety of weapons, gaining t he following benefits: • You gain proficiency with a ll Martial Weapons. If you are already proficient with them, instead increase your Strength or Dexterity score by 1, to a maximum of 20. • Once per turn when yo u roll damage for a weapon attack usin g a weapon with which you are proficient, you can reroll the weapon's damage dice and use either total.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 332
+    }
+  },
+  {
+    "id": "white-chakra-surge",
+    "name": "White Chakra Surge",
+    "category": "Clan",
+    "prerequisite": {
+      "level": 4,
+      "clan": "Hatake",
+      "text": "Hatake Clan, Level 4+"
+    },
+    "abilityIncrease": null,
+    "benefits": [
+      "You gain additional White chakra equal to your \ncharacter level.",
+      "For every level here after, you gain an additional +1 \nwhite chakr a."
+    ],
+    "description": "You have begun to master your White chakra , increasing your potential with Lightni ng Release Techniques , gaining the following benefits: • You gain additional White chakra equal to your character level. • For every level here after, you gain an additional +1 white chakr a.",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 332
+    }
+  },
+  {
+    "id": "yin-chakra-mastery",
+    "name": "Yin Chakra Mastery",
+    "category": "Clan",
+    "prerequisite": {
+      "clan": "Kuru",
+      "text": "Kuru Clan"
+    },
+    "abilityIncrease": {
+      "amount": 1,
+      "options": [
+        "wis"
+      ]
+    },
+    "benefits": [
+      "Increase your Wisdom score by 1, to a maximum of 20",
+      "Choose on e of the 5 nature releases: Earth, Wind , Fire, \nWater, Lightning. You can add jutsu of t he \ncorresponding Keyword to your jutsu list. However, \nwhen you do so, the jutsu loses the nature release \nkeyword, gaining the Hijutsu keyword. If the jutsu \nwould deal da mage of the nature release, it instead \ndeals necrotic damage. \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n\n \nCHAPTER 14: ALLIES & ADVERSARIES \nhe World of Naruto is full of unique characters. \nFriends and Foes if you will. These characters \nfill the world with uniq ue perspectives and \ntraits. Below we will detail how this game \ndifferentiates both Friends and Foes. \nWhile we gene rally differentiate between the types of \nNPC's the players will encounter, it is also beneficial to \nset expectations in how the rest of the wo rld is \nstructured. \nEVERY DAY NPC'S \nWhile within the world of Naruto, there are high flying \nshinobi and s amurai per forming world altering attac ks, \nbreathing fire, calling on lightning and creating \ntornados. There are many more civilians, guar dsman, \nbakers. Nobles, merchants and everyday people who \ncannot fathom the power that such grand Shinobi hold. \nWhen creating a su pporting cast of NPC's remem ber \nthat the Players characters are meant to be \nextraordinary, their growth rate will dwarf a signi ficant \nvolume of the population. To better demonstrate this \nhere are a few key things to keep in mind.",
+      "An ability score of 8 is a bsolutely average within the \nworld, with most common people never exceeding a 12 \nin 2 or more scores.",
+      "Most civilians, guards, merchants etc. w ill never reach \nbeyond level 4.",
+      "The Average Genin ranges between Levels 1 -4.",
+      "The Average Chunin ranges between le vels 5-8",
+      "The Average Jonin r anges between levels 9 -12",
+      "Most Kage with some notable exceptions range \nbetween 13 -15",
+      "Most Legendary shinobi and sa murai with world \naltering techniques range between 16 -20 \nWhile this Is a general guide to follow you can stretch t he \nboundaries as much as you want. \nALLIES \nAllies are a classification most people call Non -Hostile \nor Friendly NPC's. While they exist within the world as \nthe characters the DM will act on the behalf of and the \nplayers will interact with for most of your c ampaign, \nthey can be given S tats, abilities, and even a character \nsheet unique to them. \nCharacters whom you designat e to be friends have two \ndifferent avenues towards character creation. \nIf you want your Non -Hostile/Friendly NPCs to have \ncombat abilitie s similar to a Player then I t is suggested \nto build them as a PC but with Average Hit points/Chakra \nPoints. They also do not follow the normal Highest \nRanked Jutsu known limitations. \nIf you want your Non -Hostile/Friendly NPCs to have \ntraits that are simple r to keep track of, you can build \nthem as an “Adversary” the official name for this \nConversions “Monsters”. Building F riendly/Non -Hostile \nNPCs as adversaries will follow the same rules listed in \nthe “Adversary” Section. \n \nADVERSARY \n“Adversaries” are a clas sification of hostile or \npotentially non -friendly NPCs that the players have \nchances and the option of fighting. Unlik e in normal \nDungeons and Dragons 5e we will not be using combat \nrating (cr) instead we will go with a totally different \nsystem that equate s monsters challenge level t o players \nlevels, and introducing a system that does the following \n(All Credit goes to Giffy Glyph for laying the \ngroundwork for this system rework):",
+      "Adversaries no longer have c r, replace d by Levels.",
+      "Adversaries are now classed into different Ranks \n“Minions, Standard, Elite, Solo”",
+      "Adversaries now have ro les that define their pl ay style \nand encourages group combat.",
+      "Adversaries now have “Standard” Stat lines that can \nbe applied for generatin g strengths and weaknesses \non the fly.",
+      "Adversaries now have a pool of predesigned features, \ntraits and abilities they can be given to create u nique \nmechanics.",
+      "Adversaries now provide standard XP values.",
+      "Adversaries now have different Attack categ ories that \ncan be applied: “Common Att acks, Uncommon \nAttacks, Power Attacks, Jutsu Attacks, Condition \nAttacks, Overkill Attacks, & Recharge Attacks” \nTHE ADVERSARY PROFILE \nWhen creating an Adversary, you will go down this list of \nstats which can be customi zed as you go along each step:",
+      "Level: A one to one match for players character levels \nto adjust appropriate challenge levels.",
+      "Role: Every Adversary has a role in combat which \ndescribes their focus on the battlefield.",
+      "Clan: Every Adversary has a clan they w ould belon g \ntoo, which helps define th em.",
+      "Rank: Describes the class of adversary this is ranging \nfrom Minion up to Solo.",
+      "Armor Class (AC): This represen ts how hard the \nadversary is to hit with an attack, whether due to \narmor, agility, Jutsu, training, or s ome other \nsignificant feature unique t o them.",
+      "Hit Points: The amount of damage that the adversary \ncan endure before it dies.",
+      "Chakra Points: The amount of energy the adversary \nhas to perform its Abilities or Jutsu before it no longer \ncan.",
+      "Speed: The adver saries mov ement speed.",
+      "Attack Bonus: This Represents the adversary's ability \nto make successful attacks - Melee, Ranged, Jutsu.",
+      "Damage: This is the amou nt of damage an adversary \ncan cause with a successful attack with melee, ranged \nor jutsu. This is by no means a ha rd number and \nshould be foll owed verbatim, instead view this as an \naverage amount of damage an adversary should be \nable to output per round on successful attacks.",
+      "Jutsu DCs: This shows the primary, secondary and \nweakest DCs of each of the 3 Jutsu types tha t the \nadversary may use.",
+      "Ability Modifiers: These are the Adversaries ability \nmodifiers. These can be arranged howev er you see fit. \nUnlike pla yer characters, adversaries can have \nbonuses naturally up to +10",
+      "Saving Throws: These come in 3 grades. Best, Aver age, \nWorst. Use the highest for the adversaries best stat the \nAverage for the 2nd and 3rd stats and worst for the la st \n3 stats.",
+      "Initiative: Your Adversaries combat reaction speed. \nT"
+    ],
+    "description": "You've mast ered the imitation of nature release jutsu with your Yin chakra. You gain the following Benefits: • Increase your Wisdom score by 1, to a maximum of 20 • Choose on e of the 5 nature releases: Earth, Wind , Fire, Water, Lightning. You can add jutsu of t he corresponding Keyword to your jutsu list. However, when you do so, the jutsu loses the nature release keyword, gaining the Hijutsu keyword. If the jutsu would deal da mage of the nature release, it instead deals necrotic damage. CHAPTER 14: ALLIES & ADVERSARIES he World of Naruto is full of unique characters. Friends and Foes if y",
+    "source": {
+      "document": "Naruto 5e - Full Document.pdf",
+      "page": 332
+    }
+  }
+]

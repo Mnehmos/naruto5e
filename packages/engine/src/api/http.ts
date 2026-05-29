@@ -123,6 +123,13 @@ export function buildServer(engine: Engine): BuiltServer {
   app.get("/v1/content/clans", (_req, res) => res.json({ clans: engine.content.clans }));
   app.get("/v1/content/classes", (_req, res) => res.json({ classes: engine.content.classes }));
   app.get("/v1/content/backgrounds", (_req, res) => res.json({ backgrounds: engine.content.backgrounds }));
+  app.get("/v1/content/feats", (req, res) => {
+    const q = (req.query.q as string)?.toLowerCase();
+    const list = q ? engine.content.feats.filter((f: any) => f.name.toLowerCase().includes(q)) : engine.content.feats;
+    res.json({ count: list.length, feats: list });
+  });
+  app.get("/v1/content/bingo", (_req, res) => res.json({ bingoBook: engine.content.bingoBook }));
+  app.get("/v1/content/equipment", (_req, res) => res.json({ equipment: engine.content.equipment }));
 
   // Generic scoped entity read (§9.4 — each read is a bounded request).
   app.get("/v1/entities/:coll/:id", (req, res) => {

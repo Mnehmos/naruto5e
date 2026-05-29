@@ -110,6 +110,11 @@ export class ContentPack {
     return this.bingoBook.find((b) => String(b.name).toLowerCase() === name.toLowerCase());
   }
 
+  getFeat(idOrName: string): any | undefined {
+    const k = idOrName.toLowerCase();
+    return this.feats.find((f) => String(f.id).toLowerCase() === k || String(f.name).toLowerCase() === k);
+  }
+
   getJutsu(idOrName: string): JutsuRecord | undefined {
     return this.jutsuById.get(idOrName) ?? this.jutsuByName.get(idOrName.toLowerCase());
   }

@@ -8,6 +8,7 @@ import { registerMissionIntents } from "./mission.js";
 import { registerRestIntents } from "./rest.js";
 import { registerEquipmentIntents } from "./equipment.js";
 import { registerAdversaryIntents } from "./adversary.js";
+import { registerCustomizationIntents } from "./customization.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -23,4 +24,5 @@ export function registerAllHandlers(engine: Engine): void {
   registerRestIntents(engine); // Phase 3 (Ch.7 rest + downtime)
   registerEquipmentIntents(engine); // Phase 3 (Ch.5 equipment + economy)
   registerAdversaryIntents(engine); // Phase 4 (Ch.14 adversaries)
+  registerCustomizationIntents(engine); // Phase 5 (Ch.13 multiclass + feats)
 }
