@@ -173,4 +173,31 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "Read the active encounter (order, round, active turn).", inputSchema: { roomId: z.string() } },
     async ({ roomId }) => ok(await client.getEncounter(roomId)),
   );
+
+  // ---- Phase 3: missions, rest, equipment -----------------------------
+  server.registerTool(
+    "post_mission",
+    { description: "Post a ranked (D-S) mission to the board (rewards default by rank).", inputSchema: { roomId: z.string(), title: z.string(), rank: z.string(), rewardRyo: z.number().optional(), rewardMissionPoints: z.number().optional(), brief: z.string().optional() } },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "mission_post", params })),
+  );
+  server.registerTool(
+    "resolve_mission",
+    { description: "Resolve a mission (pays Ryo + mission points to the squad on success).", inputSchema: { roomId: z.string(), missionId: z.string(), outcome: z.enum(["success", "failure"]).optional(), bonusMultiplier: z.number().optional() } },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "mission_resolve", params })),
+  );
+  server.registerTool(
+    "rest",
+    { description: "Rest a character (short: spend Hit/Chakra Dice; long: full pools + dice recovery + WoF on a mission boundary).", inputSchema: { roomId: z.string(), actorId: z.string(), type: z.enum(["short", "long"]), spendHitDice: z.number().optional(), spendChakraDice: z.number().optional(), missionBoundary: z.boolean().optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "rest", params })),
+  );
+  server.registerTool(
+    "buy_item",
+    { description: "Buy an item with Ryo (educational rejection if unaffordable).", inputSchema: { roomId: z.string(), actorId: z.string(), item: z.string(), qty: z.number().optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "buy", params })),
+  );
+  server.registerTool(
+    "equip_item",
+    { description: "Equip a carried weapon/armor (recomputes AC).", inputSchema: { roomId: z.string(), actorId: z.string(), item: z.string() } },
+    async ({ roomId, actorId, item }) => ok(await client.submitIntent({ roomId, actorId, type: "equip", params: { item } })),
+  );
 }

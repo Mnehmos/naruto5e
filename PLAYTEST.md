@@ -99,13 +99,37 @@ damage → down → advance). Two jutsu can collide via `jutsu_clash`.
   - conditions, death saves (auto on a downed PC's turn), clashing jutsu.
   - batch turns emitting ordered IR; educational rejection on unaffordable actions.
 
+## The mission loop (Phase 3)
+
+```bash
+# post a mission, accept it with a squad, resolve for rewards:
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"type":"mission_post","params":{"title":"Find Tora","rank":"D"}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"mission_accept","params":{"missionId":"<mid>"}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"type":"mission_resolve","params":{"missionId":"<mid>","outcome":"success"}}' -H 'content-type: application/json'
+# rest, shop, equip:
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"rest","params":{"type":"long","missionBoundary":true}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"buy","params":{"item":"flak-jacket"}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"equip","params":{"item":"flak-jacket"}}' -H 'content-type: application/json'
+```
+
+## What's playable now (through Phase 3)
+
+- Everything in Phases 1–2, plus:
+  - the **mission board**: post (ranked D–S), accept (rank-gated), resolve (Ryo +
+    mission-point rewards), fail, rank-up.
+  - **rest**: short (spend Hit/Chakra Dice) and long (full pools + dice recovery +
+    Will of Fire refresh); downtime (train/research/recuperate/shop).
+  - **equipment & Ryo economy**: 21 weapons / 6 armor tiers / consumables, buy/sell,
+    equip/unequip with armor-aware AC, consumable effects, equipment packs.
+
 ## Current limits
 
-- Enemies are currently characters on the "enemy" team; the tiered adversary
-  engine + Bingo Book arrive in Phase 4. Missions/rest/economy in Phase 3.
+- Enemies are still characters on the "enemy" team; the tiered adversary engine +
+  Bingo Book arrive in Phase 4. Standing-gated stock + the world tick come later.
 - Renderers and the DM-brain harness come in Phases 10–11.
 
 ## What's next
 
-Phase 3: missions (ranked D–S, rewards), rest (dual-pool recovery) + downtime,
-equipment & the Ryo economy.
+Phase 4: adversaries — tier baselines (L1–30), Minion/Elite/Solo modifiers
+(Elite Actions/Tenacity; Solo Legendary Actions/Resistance/Phase Transitions), and
+the Bingo Book roster.

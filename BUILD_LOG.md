@@ -203,3 +203,43 @@ and verifies WS IR == intent-response IR.** 26 tests pass.
   Phase 4); being characters, they roll death saves rather than dying outright.
 
 **Next:** Phase 3 — missions/rest/downtime + equipment/economy.
+
+---
+
+## Phase 3 — Missions/rest/downtime + equipment/economy ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Ch.7 (mission_manage + rest + downtime), Ch.5 (equipment_manage + Ryo).
+
+**Built (real):**
+- `domain/mission.ts` + `intents/mission.ts`: the mission board — mission_post
+  (ranked D–S, default reward bands), mission_list, mission_accept (rank gate via
+  the rank ladder), mission_resolve (pays Ryo + mission points to the squad, with
+  an over-rank bonus multiplier), mission_fail, rank_up (promotion ladder).
+- `intents/rest.ts`: `rest` — short (spend Hit/Chakra Dice, roll die + CON each)
+  and long (pools to full, recover half the dice, WoF refresh on a mission
+  boundary). Returns a three-layer-ready `restResult` (tick + playerDigest embed
+  in Phase 9). Downtime: downtime_train (25 wks × 50 Ryo → feat/tool/weapon/
+  language), downtime_research, downtime_recuperate (DC 15 CON), downtime_shop
+  (5d4% discount).
+- `content/equipment.json` (Ch.5 sample data: 21 weapons w/ damage+properties+Ryo,
+  6 armor tiers Padded→Shinobi Battle Armor w/ AC rules, 5 consumables w/ onUse,
+  gear) + `intents/equipment.ts`: item_give/remove, equip/unequip (armor-aware AC
+  recompute in deriveCharacter: light=base+DEX, medium=base+min(DEX,2), heavy=base),
+  use_consumable (soldier/blood pill restore rolls), buy/sell (Ryo, discounts,
+  sellRate), grant_starting_wealth (by archetype), choose_pack.
+- MCP tools: post_mission, resolve_mission, rest, buy_item, equip_item.
+
+**Fix:** `MemoryStore.get` now clones on read (matching `SqliteStore`) so reads
+can't alias/mutate stored state — a real correctness fix surfaced by the tests.
+
+**Checkpoint proven:** a full mission loop (post → accept w/ rank gate → resolve →
+Ryo + mission-point rewards), rank-too-low educational rejection, rank_up; short
++ long rest dual-pool recovery; buy → equip → AC recompute; unaffordable-buy
+educational failure; consumable chakra restore. 33 tests pass.
+
+**Logged defaults:** mission reward bands, starting-wealth by archetype, and some
+armor AC values are rules-faithful defaults (the source tables flatten in
+extraction — flagged). Standing-gated stock + vendor heat + the full economy_manage
+land in Phase 7; the embedded rest tick in Phase 9.
+
+**Next:** Phase 4 — adversaries (tier baselines, Minion/Elite/Solo, Bingo Book).

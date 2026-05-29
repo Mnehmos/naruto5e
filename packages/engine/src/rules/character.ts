@@ -273,9 +273,19 @@ export function deriveCharacter(char: Character): Character {
   char.hp = { current: wasUnbuilt ? hpMax : Math.min(char.hp.current, hpMax), max: hpMax, temp: char.hp.temp ?? 0 };
   char.chakra = { current: wasUnbuilt ? ckMax : Math.min(char.chakra.current, ckMax), max: ckMax, temp: char.chakra.temp ?? 0 };
 
-  // AC: Taijutsu Unarmored Defense = 10 + DEX + CON; else 10 + DEX (armor added in equipment phase)
+  // AC: equipped armor (light = base+DEX, medium = base+min(DEX,2), heavy = base) wins;
+  // else Taijutsu Unarmored Defense = 10 + DEX + CON; else 10 + DEX.
+  const armor = (char.equipment ?? []).find((e: any) => e?.equipped && e?.type === "armor") as any;
   const hasUnarmored = char.classFeatures.some((f) => f.name === "Unarmored Defense");
-  char.ac = hasUnarmored ? 10 + dexMod + conMod : 10 + dexMod;
+  if (armor) {
+    if (armor.acRule === "medium") char.ac = armor.acBase + Math.min(dexMod, 2);
+    else if (armor.acRule === "heavy") char.ac = armor.acBase;
+    else char.ac = armor.acBase + dexMod; // light
+  } else if (hasUnarmored) {
+    char.ac = 10 + dexMod + conMod;
+  } else {
+    char.ac = 10 + dexMod;
+  }
 
   // casting tracks (type-keyed). Taijutsu uses the better of STR/DEX (STR/DEX physical).
   const taiMod = Math.max(strMod, dexMod);

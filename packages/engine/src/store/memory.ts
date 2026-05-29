@@ -51,7 +51,11 @@ export class MemoryStore implements Store {
   collection<T extends Doc = Doc>(name: string): Collection<T> {
     const self = this;
     return {
-      get: (id) => self.map(name).get(id) as T | undefined,
+      // clone on read so callers can't alias/mutate stored state (matches SqliteStore)
+      get: (id) => {
+        const d = self.map(name).get(id);
+        return d ? (structuredClone(d) as T) : undefined;
+      },
       put: (doc) => {
         self.map(name).set(doc.id, structuredClone(doc));
         self.markDirty();

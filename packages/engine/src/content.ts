@@ -65,6 +65,7 @@ export class ContentPack {
   private clanByName = new Map<string, any>();
   private classByName = new Map<string, any>();
   private backgroundByName = new Map<string, any>();
+  private itemByKey = new Map<string, any>();
 
   constructor(dir: string) {
     this.dir = dir;
@@ -94,6 +95,15 @@ export class ContentPack {
     for (const c of this.classes) this.classByName.set(String(c.name).toLowerCase(), c);
     this.backgroundByName.clear();
     for (const b of this.backgrounds) this.backgroundByName.set(String(b.name).toLowerCase(), b);
+    this.itemByKey.clear();
+    for (const it of this.equipment) {
+      if (it.id) this.itemByKey.set(String(it.id).toLowerCase(), it);
+      if (it.name) this.itemByKey.set(String(it.name).toLowerCase(), it);
+    }
+  }
+
+  getItem(idOrName: string): any | undefined {
+    return this.itemByKey.get(idOrName.toLowerCase());
   }
 
   getJutsu(idOrName: string): JutsuRecord | undefined {
