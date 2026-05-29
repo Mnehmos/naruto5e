@@ -94,6 +94,90 @@ def parse_components(raw: str):
     return comps
 
 
+SAVE_ABILITY = {
+    "strength": "str", "dexterity": "dex", "constitution": "con",
+    "intelligence": "int", "wisdom": "wis", "charisma": "cha",
+}
+DAMAGE_TYPES = [
+    "fire", "water", "wind", "earth", "lightning", "ice", "cold", "slashing",
+    "piercing", "bludgeoning", "force", "psychic", "acid", "poison", "necrotic",
+    "radiant", "thunder", "fall",
+]
+CONDITIONS = [
+    "Blinded", "Charmed", "Deafened", "Frightened", "Grappled", "Incapacitated",
+    "Invisible", "Paralyzed", "Petrified", "Poisoned", "Prone", "Restrained",
+    "Stunned", "Unconscious",
+]
+
+
+def derive_effect(rec: dict) -> dict:
+    """Heuristic structured effect from the free-text description, so the engine
+    can resolve the mechanical 90% of a cast (attack/save + damage + condition).
+    Utility jutsu that don't parse get delivery 'utility' (DM narrates)."""
+    desc = re.sub(r"\s+", " ", (rec.get("description") or ""))
+    low = desc.lower()
+    effect: dict = {"delivery": "utility"}
+
+    # base damage: first "<X>d<Y> ... damage" occurrence
+    dmg = None
+    for m in re.finditer(r"(\d+d\d+)\s*(?:\+\s*[A-Za-z ]+?)?\s*(\w+)?\s*damage", desc, re.I):
+        dice = m.group(1)
+        type_word = (m.group(2) or "").lower()
+        dtype = type_word if type_word in DAMAGE_TYPES else None
+        if dtype is None:
+            # look in a small window before "damage" for a type keyword
+            window = low[max(0, m.start() - 40): m.end()]
+            for t in DAMAGE_TYPES:
+                if t in window:
+                    dtype = t
+                    break
+        dmg = {"dice": dice, "type": dtype or "force"}
+        break
+    if dmg:
+        effect["damage"] = dmg
+
+    # healing
+    hm = re.search(r"(?:regains?|heals?|restore[sd]?)\s*(?:up to\s*)?(\d+d\d+|\d+)\s*(?:hit points|hp|health)", low)
+    if hm:
+        effect["healing"] = {"dice": hm.group(1)}
+
+    # delivery
+    save_m = re.search(r"(strength|dexterity|constitution|intelligence|wisdom|charisma)\s+saving throw", low)
+    attack_m = re.search(r"(?:make|making)\s+(?:a|an)\s+(?:ranged\s+|melee\s+)?[\w ]*?attack|attack roll", low)
+    if save_m:
+        effect["delivery"] = "save"
+        effect["saveAbility"] = SAVE_ABILITY[save_m.group(1)]
+        if re.search(r"half(?:\s+as\s+much)?(?:\s+the)?\s+damage|half\s+damage", low):
+            effect["halfOnSave"] = True
+    elif attack_m:
+        effect["delivery"] = "attack"
+    elif dmg:
+        effect["delivery"] = "auto"  # "each creature ... takes" with no save
+
+    # conditions (attach the save ability if there is one)
+    conds = []
+    for c in CONDITIONS:
+        if re.search(r"\b" + c.lower() + r"\b", low):
+            conds.append({"name": c, "save": effect.get("saveAbility")})
+    if conds:
+        effect["conditions"] = conds
+
+    # area shape from range/duration text (for the visualizer + AoE)
+    rng = (rec.get("range") or "")
+    area = None
+    am = re.search(r"(\d+)\s*-?\s*foot\s*(sphere|radius|cone|line|cube|square)", (rng + " " + desc), re.I)
+    if am:
+        area = {"size": int(am.group(1)), "shape": am.group(2).lower()}
+    if area:
+        effect["area"] = area
+
+    # concentration flag
+    if "concentration" in (rec.get("duration") or "").lower():
+        effect["concentration"] = True
+
+    return effect
+
+
 def slugify(name: str, idx: int) -> str:
     base = re.sub(r"[^a-z0-9]+", "-", (name or f"jutsu-{idx}").lower()).strip("-")
     return base or f"jutsu-{idx}"
@@ -205,7 +289,7 @@ def main():
         if keywords:
             keyword_list = [clean(x) for x in re.split(r"[,/;]", keywords) if clean(x)]
 
-        records.append({
+        rec = {
             "id": slug,
             "name": normalize_name(name) if name else None,
             "classification": cls_norm,
@@ -225,7 +309,9 @@ def main():
             "costVerified": cost is not None,
             "classificationVerified": True,
             "componentsVerified": bool(components),
-        })
+        }
+        rec["effect"] = derive_effect(rec)
+        records.append(rec)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(records, indent=2, ensure_ascii=False), encoding="utf-8")

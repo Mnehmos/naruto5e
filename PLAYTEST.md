@@ -71,23 +71,41 @@ curl -s localhost:8787/v1/content/classes   # the 8 classes
 
 A skill check: `{"type":"skill_check","actorId":"<charId>","params":{"skill":"Stealth","dc":15}}`.
 
-## What's playable now (through Phase 1)
+## Run a fight (Phase 2)
 
-- The full intent pipeline + batch + educational failures over REST and WS.
-- **Build any legal character** end-to-end: 20 clans, 8 classes + subclasses, 10
-  backgrounds, dual HP/Chakra pools, six abilities (4 generation methods), the
-  three type-keyed casting mods (Nin=INT / Gen=WIS / Tai=STR-DEX), skills, saves,
-  rank, proficiency, Will of Fire (grant/spend/gift), level-up.
-- Deterministic d20 checks (skill / save / ability). Queryable jutsu catalog.
+```bash
+# build two characters (see above), then teach one a jutsu and fight:
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' \
+  -d '{"actorId":"<casterId>","type":"jutsu_learn","params":{"jutsu":"chakra-pulse"}}'
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' \
+  -d '{"type":"combat_start","params":{"combatants":[{"actorId":"<a>","team":"pc"},{"actorId":"<b>","team":"enemy"}]}}'
+# on the caster's turn:
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' \
+  -d '{"actorId":"<casterId>","type":"cast","params":{"jutsu":"chakra-pulse","targets":["<b>"]}}'
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' \
+  -d '{"type":"advance"}'
+```
+
+Watch the IR live on `ws://localhost:8787/v1/rooms/demo/stream` (cast → save →
+damage → down → advance). Two jutsu can collide via `jutsu_clash`.
+
+## What's playable now (through Phase 2)
+
+- Everything in Phase 1, plus a **full combat encounter with jutsu**:
+  - initiative as the turn authority; TurnBudget action economy; off-turn lockout.
+  - jutsu casting: chakra cost + components + budget gate, then attack/save/auto
+    delivery, type-keyed casting (Nin/Gen/Tai), elemental advantage, upcast,
+    conditions, healing, ≤2 concentration slots, concentration-break checks.
+  - conditions, death saves (auto on a downed PC's turn), clashing jutsu.
+  - batch turns emitting ordered IR; educational rejection on unaffordable actions.
 
 ## Current limits
 
-- No combat / jutsu casting yet (Phase 2). Clan-jutsu trees and unique-resource
-  mechanics (Calories, dojutsu, ninken) are descriptors until later phases.
+- Enemies are currently characters on the "enemy" team; the tiered adversary
+  engine + Bingo Book arrive in Phase 4. Missions/rest/economy in Phase 3.
 - Renderers and the DM-brain harness come in Phases 10–11.
 
 ## What's next
 
-Phase 2: jutsu casting (chakra cost, components, ranks E–S, attack/save, upcast,
-concentration) + combat (initiative, TurnBudget, conditions, death saves, clashing
-jutsu) — run a full encounter with jutsu.
+Phase 3: missions (ranked D–S, rewards), rest (dual-pool recovery) + downtime,
+equipment & the Ryo economy.

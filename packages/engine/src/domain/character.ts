@@ -89,6 +89,22 @@ export const CharacterSchema = z.object({
   // combat fields (Phase 2)
   position: z.object({ x: z.number(), y: z.number() }).optional(),
   team: z.string().optional(),
+  initiative: z.number().optional(),
+  turnBudget: z
+    .object({
+      action: z.number(),
+      bonus: z.number(),
+      reaction: z.number(),
+      movement: z.number(),
+      freeInteraction: z.number(),
+    })
+    .optional(),
+  /** up to TWO concentration jutsu at once (divergence from 5e). */
+  concentration: z.array(z.object({ jutsuId: z.string(), name: z.string(), targets: z.array(z.string()).default([]) })).default([]),
+  deathSaves: z.object({ successes: z.number(), failures: z.number(), stable: z.boolean() }).default({ successes: 0, failures: 0, stable: false }),
+  dead: z.boolean().default(false),
+  readied: z.object({ trigger: z.string(), op: z.any() }).optional(),
+  dodging: z.boolean().default(false),
 
   built: z.boolean().default(false),
 });

@@ -133,4 +133,44 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     },
     async (args) => ok(await client.listJutsu(args)),
   );
+
+  // ---- Phase 2: jutsu + combat ----------------------------------------
+  server.registerTool(
+    "learn_jutsu",
+    { description: "Teach a character a jutsu (validates the Jutsu Known cap + keyword gates).", inputSchema: { roomId: z.string(), actorId: z.string(), jutsu: z.string() } },
+    async ({ roomId, actorId, jutsu }) => ok(await client.submitIntent({ roomId, actorId, type: "jutsu_learn", params: { jutsu } })),
+  );
+
+  server.registerTool(
+    "cast_jutsu",
+    {
+      description: "Cast a jutsu (gates chakra + components + TurnBudget, then resolves attack/save/damage/conditions, upcast, concentration).",
+      inputSchema: { roomId: z.string(), actorId: z.string(), jutsu: z.string(), targets: z.array(z.string()).optional(), atRank: z.string().optional() },
+    },
+    async ({ roomId, actorId, jutsu, targets, atRank }) => ok(await client.submitIntent({ roomId, actorId, type: "cast", params: { jutsu, targets, atRank } })),
+  );
+
+  server.registerTool(
+    "attack",
+    { description: "Make a weapon/taijutsu attack against a target.", inputSchema: { roomId: z.string(), actorId: z.string(), target: z.string(), damage: z.string().optional(), ability: z.string().optional() } },
+    async ({ roomId, actorId, target, damage, ability }) => ok(await client.submitIntent({ roomId, actorId, type: "attack", params: { target, damage, ability } })),
+  );
+
+  server.registerTool(
+    "start_combat",
+    { description: "Roll initiative and begin an encounter (combatants default to all characters in the room).", inputSchema: { roomId: z.string(), combatants: z.array(z.object({ actorId: z.string(), team: z.string().optional() })).optional() } },
+    async ({ roomId, combatants }) => ok(await client.submitIntent({ roomId, type: "combat_start", params: { combatants } })),
+  );
+
+  server.registerTool(
+    "advance_turn",
+    { description: "Advance to the next combatant (the turn authority; auto-rolls death saves for the downed).", inputSchema: { roomId: z.string() } },
+    async ({ roomId }) => ok(await client.submitIntent({ roomId, type: "advance" })),
+  );
+
+  server.registerTool(
+    "get_encounter",
+    { description: "Read the active encounter (order, round, active turn).", inputSchema: { roomId: z.string() } },
+    async ({ roomId }) => ok(await client.getEncounter(roomId)),
+  );
 }

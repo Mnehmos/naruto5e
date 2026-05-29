@@ -24,7 +24,20 @@ export interface JutsuRecord {
   description: string | null;
   atHigherRanks: string | null;
   source?: { document: string; page: number };
+  effect?: JutsuEffect;
   [k: string]: unknown;
+}
+
+/** Structured combat effect derived from the description (the resolvable 90%). */
+export interface JutsuEffect {
+  delivery: "attack" | "save" | "auto" | "utility";
+  saveAbility?: "str" | "dex" | "con" | "int" | "wis" | "cha";
+  damage?: { dice: string; type: string };
+  healing?: { dice: string };
+  halfOnSave?: boolean;
+  conditions?: { name: string; save?: string }[];
+  area?: { size: number; shape: string };
+  concentration?: boolean;
 }
 
 function readJson<T>(file: string, fallback: T): T {
@@ -85,6 +98,18 @@ export class ContentPack {
 
   getJutsu(idOrName: string): JutsuRecord | undefined {
     return this.jutsuById.get(idOrName) ?? this.jutsuByName.get(idOrName.toLowerCase());
+  }
+
+  /** Register/replace a jutsu at runtime (jutsu_manage.define / jutsu_build.commit). */
+  addJutsu(rec: JutsuRecord): void {
+    const existing = this.jutsuById.get(rec.id);
+    if (existing) {
+      Object.assign(existing, rec);
+    } else {
+      this.jutsu.push(rec);
+    }
+    this.jutsuById.set(rec.id, rec);
+    if (rec.name) this.jutsuByName.set(rec.name.toLowerCase(), rec);
   }
 
   getClan(name: string): any | undefined {

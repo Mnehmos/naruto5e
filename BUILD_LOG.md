@@ -139,3 +139,67 @@ dojutsu activation, ninken) are stored as descriptors; their active mechanics la
 with combat/jutsu (Phase 2+). Subclass feature sets are descriptive.
 
 **Next:** Phase 2 — jutsu casting + combat.
+
+---
+
+## Phase 2 — Jutsu casting + combat ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Ch.8 (combat_manage + combat_action), Ch.9 (jutsu_manage — the
+keystone), Action Economy (TurnBudget), clash_resolve + elemental_advantage_resolve.
+
+**Built (real):**
+- **Structured jutsu effects.** Extended `tools/extract_jutsu.py` to derive a
+  structured `effect` per jutsu from the description (the resolvable 90%):
+  delivery (attack/save/auto/utility), saveAbility, damage {dice,type},
+  halfOnSave, conditions, area {size,shape}, concentration. Re-extracted: of 399
+  jutsu, **149 save / 69 attack / 24 auto / 157 utility**, 127 with damage, 95
+  with conditions, 85 with area — so casts resolve deterministically.
+- `rules/turnBudget.ts`: TurnBudget {action,bonus,reaction,movement,
+  freeInteraction}; cost-from-casting-time; the affordability gate (canAfford/
+  spend) — action economy + chakra + components unified, checked BEFORE any dice.
+- `rules/conditions.ts`: the Ch.8 condition list; incapacitating set; component
+  blocking (Restrained/Grappled block mobility).
+- `rules/combat.ts`: `elementalAdvantage` (Fire>Wind>Lightning>Earth>Water>Fire),
+  `clashResolve` (opposed = casting mod + rank value + d20, advantage to the
+  superior element, half on a close call / tie), crit-doubles-dice damage roll.
+- `rules/actor.ts`: a unified actor view over characters (and adversaries in
+  Phase 4) — casting tracks, AC, ability mods, affinity.
+- `rules/resolve.ts`: pure damage application — temp HP, downed (PC -> death
+  saves) vs. dead (NPC at 0 / PC overkill >= max HP), heal/revive.
+- `domain/encounter.ts` + character combat fields (turnBudget, deathSaves,
+  ≤2 concentration slots, dead, dodging).
+- `intents/jutsu.ts` (**the keystone `castJutsu`**): known-check, component gate,
+  chakra gate, off-turn lockout + budget gate (in combat), concentration cap (≤2),
+  upcast/level-scaled damage (parses atHigherRanks), attack/save/auto delivery
+  with type-keyed casting + elemental advantage, conditions, healing,
+  concentration-break checks. Plus jutsu_learn (cap + keyword gates), forget,
+  list_known, check_castable, concentration, define, and `jutsu_clash`.
+- `intents/combat.ts`: combat_start (roll initiative -> turn authority), advance/
+  end_turn (resets budget, auto death-saves the downed), combat_end, combat_add/
+  remove; combat_action family — attack, move (grid Chebyshev + movement pool),
+  dash, dodge, disengage, help/hide/search/use_object, ready, cast (delegates to
+  the keystone), death_save, condition.
+- MCP tools: learn_jutsu, cast_jutsu, attack, start_combat, advance_turn,
+  get_encounter.
+
+**Checkpoint proven:** a full encounter with jutsu — initiative order, a
+chakra-deducted dice-resolved save-jutsu cast, an unaffordable cast rejected with
+an educational `chakra_affordability` failure (required/available/shortfall +
+suggestions), off-turn lockout, a batch turn emitting ordered (monotonic-seq) IR,
+auto death saves, clash + elemental advantage. **The living E2E
+(`tests/playable-loop.test.ts`) drives the whole loop through the MCP controller
+and verifies WS IR == intent-response IR.** 26 tests pass.
+
+**Logged decisions / defaults:**
+- Jutsu effects are heuristically parsed from free text (the spec's "structure
+  transfers, labels need a cleanup pass"). Utility jutsu with no parseable effect
+  emit a `cast` IR for the DM to narrate (the exotic 10%). Damage type defaults to
+  "force" when unstated near the dice.
+- Upcast: explicit `atRank` adds +3 chakra/rank step and (if atHigherRanks names
+  "rank") extra dice; "At Higher Levels" clauses scale damage by caster level
+  thresholds (5/11/17).
+- Concentration check on damage: CON save DC max(10, ⌊dealt/2⌋).
+- Enemies in Phase 2 are characters on the "enemy" team (real adversaries land in
+  Phase 4); being characters, they roll death saves rather than dying outright.
+
+**Next:** Phase 3 — missions/rest/downtime + equipment/economy.

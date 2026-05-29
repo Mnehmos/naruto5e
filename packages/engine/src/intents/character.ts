@@ -109,8 +109,9 @@ export function registerCharacterIntents(engine: Engine): void {
     // 4) class
     if (cls) applyClass(char, cls, sel);
 
-    char.built = true;
+    // derive while still "unbuilt" so pools fill to max, then mark built
     char = deriveCharacter(char);
+    char.built = true;
     chars(ctx).put(char);
 
     ctx.ir.emit("character_created", {
@@ -161,8 +162,8 @@ export function registerCharacterIntents(engine: Engine): void {
 
   engine.registerHandler("character_finalize", (ctx) => {
     const char = loadChar(ctx, ctx.op.actorId);
+    deriveCharacter(char); // fill pools to max while still unbuilt
     char.built = true;
-    deriveCharacter(char);
     chars(ctx).put(char);
     ctx.ir.emit("character_created", { actor: char.id, data: { character: summary(char) }, narration: `${char.name} is ready.` });
   });
