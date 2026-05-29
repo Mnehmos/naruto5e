@@ -155,12 +155,26 @@ curl -s "localhost:8787/v1/content/feats?q=alert"   # browse the 112-feat catalo
   + jutsu-known, ability prereqs) and the **112-feat catalog** (take_feat with
   prereq validation + ability increases; ASI).
 
+## Standing / RPP (Phase 6)
+
+```bash
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"grant_reputation","params":{"authorityId":"leaf_village","amount":50}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"check_access","params":{"authorityId":"leaf_village","minReputation":40,"what":"Chunin exam"}}' -H 'content-type: application/json'
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"defect","params":{"fromAuthority":"leaf_village","toAuthority":"orochimaru"}}' -H 'content-type: application/json'
+```
+
+## What's playable now (through Phase 6)
+
+- Everything in Phases 1–5, plus **Standing / RPP**: per-authority reputation
+  (gates access) + capped favor (spent to be taught gated content), obligations,
+  and the rogue **defect** path (ledger swap → missing-nin).
+
 ## Current limits
 
-- Standing/RPP gating, the world-consequence systems, content tools, the world
-  tick, renderers, and the DM-brain harness arrive in Phases 6–11.
+- The world-consequence systems, content tools, the world tick, renderers, and
+  the DM-brain harness arrive in Phases 7–11.
 
 ## What's next
 
-Phase 6: Standing / RPP — per-authority reputation + favor, gating, the rogue
-defect path.
+Phase 7: world-consequence — NPC memory, economy (gated stock), theft (heat +
+rogue trigger), corpse (KKG/secret harvest vs recovery), all moving Standing.

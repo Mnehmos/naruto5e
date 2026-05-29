@@ -318,3 +318,30 @@ prereq educational rejection; the 112-feat catalog loads; take_feat applies an
 ability increase + validates prereqs; ASI. 45 tests pass.
 
 **Next:** Phase 6 — Standing / RPP (standing_manage).
+
+---
+
+## Phase 6 — Standing / RPP ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** The Merit Economy — standing_manage (per-authority reputation + favor,
+gating, the rogue defect path).
+
+**Built (real):**
+- `domain/standing.ts`: per-authority `StandingLedger` (reputation threshold +
+  capped spendable favor + obligations + hostile flag) and a `softDescriptor`
+  (hard number, in-fiction presentation).
+- `rules/standing.ts`: `applyStandingDelta` (the shared spine Phase 7 routes
+  through — favor clamped to cap, hostility on negative rep), ensure/get helpers.
+- `intents/standing.ts`: grant_reputation, grant_favor (respects favorCap),
+  spend_favor (educational insufficient_favor), check_access (reputation
+  threshold → offered?), add_obligation/discharge_obligation, **defect** (the
+  rogue path = a ledger swap: old village craters to hostile, a patron ledger
+  opens), get_ledgers (with descriptors).
+- MCP tools: grant_standing, spend_favor, check_access, defect, get_ledgers.
+
+**Checkpoint proven:** reputation gates access (offered vs not), favor is capped
++ spendable with educational over-spend rejection, the rogue defect swaps ledgers.
+47 tests pass.
+
+**Next:** Phase 7 — world-consequence systems (npc/economy/theft/corpse), all
+routing deltas through standing_manage.

@@ -242,4 +242,36 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "Browse the feat catalog (optionally filter by name).", inputSchema: { q: z.string().optional() } },
     async ({ q }) => ok(await client.listContentQuery("feats", q)),
   );
+
+  // ---- Phase 6: Standing / RPP ----------------------------------------
+  server.registerTool(
+    "grant_standing",
+    { description: "Award reputation (threshold: what's offered) or favor (spendable, capped) with an authority.", inputSchema: { roomId: z.string(), actorId: z.string(), authorityId: z.string(), reputation: z.number().optional(), favor: z.number().optional(), authorityType: z.string().optional(), reason: z.string().optional() } },
+    async ({ roomId, actorId, authorityId, reputation, favor, authorityType, reason }) => {
+      const out: any[] = [];
+      if (reputation) out.push(await client.submitIntent({ roomId, actorId, type: "grant_reputation", params: { authorityId, amount: reputation, authorityType, reason } }));
+      if (favor) out.push(await client.submitIntent({ roomId, actorId, type: "grant_favor", params: { authorityId, amount: favor, authorityType } }));
+      return ok(out);
+    },
+  );
+  server.registerTool(
+    "spend_favor",
+    { description: "Cash favor to be taught/granted a gated thing.", inputSchema: { roomId: z.string(), actorId: z.string(), authorityId: z.string(), amount: z.number(), on: z.string() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "spend_favor", params })),
+  );
+  server.registerTool(
+    "check_access",
+    { description: "Does the character's reputation meet the threshold to be OFFERED gated content?", inputSchema: { roomId: z.string(), actorId: z.string(), authorityId: z.string(), minReputation: z.number(), what: z.string().optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "check_access", params })),
+  );
+  server.registerTool(
+    "defect",
+    { description: "The rogue path — crater the old authority's ledger and open a patron's (a missing-nin).", inputSchema: { roomId: z.string(), actorId: z.string(), fromAuthority: z.string(), toAuthority: z.string() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "defect", params })),
+  );
+  server.registerTool(
+    "get_ledgers",
+    { description: "Read all of a character's per-authority Standing ledgers (with soft descriptors).", inputSchema: { roomId: z.string(), actorId: z.string() } },
+    async ({ roomId, actorId }) => ok(await client.submitIntent({ roomId, actorId, type: "get_ledgers" })),
+  );
 }
