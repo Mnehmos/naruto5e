@@ -1,0 +1,11 @@
+node_modules/
+dist/
+data/
+*.db
+*.db-*
+*.tsbuildinfo
+.DS_Store
+# Large source PDF (32MB) — local content pack, not committed (Architecture: content is local-only)
+Naruto 5e - Full Document.pdf
+.approval_tests_temp/
+*.log
