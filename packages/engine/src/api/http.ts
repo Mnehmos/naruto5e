@@ -72,6 +72,23 @@ export function buildServer(engine: Engine): BuiltServer {
     res.json({ encounter: enc ?? null });
   });
 
+  // Convenience: create/build a character (wraps a character_create intent, §2.2).
+  app.post("/v1/characters", (req, res) => {
+    const roomId = req.body?.roomId;
+    if (!roomId) {
+      res.status(400).json({ status: "rejected", reason: { rule: "room_required", explain: "POST /v1/characters requires body.roomId." } });
+      return;
+    }
+    const result = engine.resolveIntent({
+      intentId: newId("intent"),
+      roomId,
+      submittedBy: req.body?.submittedBy ?? { clientType: "ui", role: "dm" },
+      type: "character_create",
+      params: req.body ?? {},
+    } as any);
+    res.json(result);
+  });
+
   app.get("/v1/characters/:id", (req, res) => {
     const c = engine.getEntity("characters", req.params.id);
     if (!c) {
@@ -101,6 +118,11 @@ export function buildServer(engine: Engine): BuiltServer {
     }
     res.json(j);
   });
+
+  // Content reads (clan/class/background rosters, for build planning).
+  app.get("/v1/content/clans", (_req, res) => res.json({ clans: engine.content.clans }));
+  app.get("/v1/content/classes", (_req, res) => res.json({ classes: engine.content.classes }));
+  app.get("/v1/content/backgrounds", (_req, res) => res.json({ backgrounds: engine.content.backgrounds }));
 
   // Generic scoped entity read (§9.4 — each read is a bounded request).
   app.get("/v1/entities/:coll/:id", (req, res) => {

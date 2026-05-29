@@ -1,0 +1,222 @@
+[
+  {
+    "name": "Aburame",
+    "abilityIncrease": { "fixed": { "int": 2, "wis": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Nature", "Animal Handling"] },
+    "signatureTrait": "Creepy Crawly",
+    "features": ["Insect symbiosis: host a kikaichu colony that can drain chakra and scout."],
+    "uniqueResource": { "key": "kikaichu", "type": "pool", "description": "Insect colony charges, spent on drain/scout effects." },
+    "affinity": []
+  },
+  {
+    "name": "Akimichi",
+    "abilityIncrease": { "fixed": { "con": 2, "str": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Athletics", "Survival"] },
+    "signatureTrait": "Big Appetite",
+    "features": ["Calorie-fueled body-expansion jutsu (size and strength scaling)."],
+    "uniqueResource": { "key": "calories", "type": "pool", "description": "Calories spent to fuel Akimichi expansion jutsu." },
+    "affinity": []
+  },
+  {
+    "name": "Fuma",
+    "abilityIncrease": { "fixed": { "dex": 2, "wis": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Perception", "Martial Arts"] },
+    "signatureTrait": "We Never Miss",
+    "features": ["Mastery of thrown and wire weapons (giant shuriken, wire traps)."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Hatake",
+    "abilityIncrease": { "fixed": { "int": 2, "cha": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Ninshou", "Perception"] },
+    "signatureTrait": "Baring White Fangs",
+    "features": ["Versatile copy-ninja adaptability; affinity for Lightning."],
+    "uniqueResource": null,
+    "affinity": ["Lightning"]
+  },
+  {
+    "name": "Hebi",
+    "abilityIncrease": { "fixed": { "str": 2, "con": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Survival", "Animal Handling"] },
+    "signatureTrait": "Adaptive Camouflage",
+    "features": ["Snake-based jutsu; shed skin to escape grapples/conditions."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Hoshigaki",
+    "abilityIncrease": { "fixed": { "con": 2, "str": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Animal Handling", "Athletics"] },
+    "signatureTrait": "The Tailless Beast",
+    "features": ["Enormous chakra reserves; water affinity; gill-breathing.", "Bonus to maximum Chakra."],
+    "uniqueResource": { "key": "chakraBonus", "type": "chakraBonus", "perLevel": 1, "flat": 0, "description": "Bonus to maximum Chakra (huge reserves)." },
+    "affinity": ["Water"]
+  },
+  {
+    "name": "Hyuga",
+    "abilityIncrease": { "fixed": { "dex": 2, "wis": 1 } },
+    "abilityVerified": false,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Perception", "Martial Arts"] },
+    "signatureTrait": "The Village's Strongest",
+    "features": ["Byakugan: 360-degree chakra sight, see chakra points.", "Gentle Fist (Juken): strikes close chakra points, hindering casting."],
+    "uniqueResource": { "key": "byakugan", "type": "dojutsu", "states": ["inactive", "active"], "description": "Byakugan activation: chakra sight + Gentle Fist precision." },
+    "affinity": []
+  },
+  {
+    "name": "Inuzuka",
+    "abilityIncrease": { "fixed": { "wis": 2 }, "choices": [{ "amount": 1, "options": ["str", "dex"] }] },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Animal Handling", "Acrobatics"] },
+    "signatureTrait": "The Most Loyal",
+    "features": ["Ninken companion that fights alongside you (Fang Passing Fang combos)."],
+    "uniqueResource": { "key": "ninken", "type": "companion", "description": "A ninken combat companion." },
+    "affinity": []
+  },
+  {
+    "name": "Kaguya",
+    "abilityIncrease": { "choices": [{ "amount": 2, "options": ["str", "dex"] }, { "amount": 1, "options": ["str", "dex", "con"] }] },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Athletics", "Martial Arts"] },
+    "signatureTrait": "Savage Battle Instincts",
+    "features": ["Shikotsumyaku: weaponize bones (bone blades, bullets, full-body armor)."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Kurama",
+    "abilityIncrease": { "fixed": { "int": 1 }, "choices": [{ "amount": 2, "options": ["wis", "cha"] }] },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Illusions", "Insight"] },
+    "signatureTrait": "Illusions as Real as Reality",
+    "features": ["Genjutsu so vivid its effects can manifest as real harm."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Kuru",
+    "abilityIncrease": { "fixed": { "wis": 2, "con": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Insight", "Chakra Control"] },
+    "signatureTrait": "Dark Whip",
+    "features": ["Chakra-whip techniques that bind and drain."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Nara",
+    "abilityIncrease": { "fixed": { "int": 2, "cha": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Investigation", "Insight"] },
+    "signatureTrait": "Inconceivable Foresight",
+    "features": ["Shadow Imitation: bind and control targets via their shadow."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Non-Clan",
+    "abilityIncrease": { "choices": [{ "amount": 1, "options": ["str", "dex", "con", "int", "wis", "cha"] }, { "amount": 1, "options": ["str", "dex", "con", "int", "wis", "cha"] }, { "amount": 1, "options": ["str", "dex", "con", "int", "wis", "cha"] }] },
+    "abilityVerified": false,
+    "speed": 30,
+    "skillProficiencies": { "chooseN": 2, "from": ["Athletics", "Martial Arts", "Acrobatics", "Sleight of Hand", "Stealth", "Chakra Control", "Crafting", "History", "Investigation", "Nature", "Ninshou", "Animal Handling", "Illusions", "Insight", "Medicine", "Perception", "Survival", "Deception", "Intimidation", "Performance", "Persuasion"] },
+    "signatureTrait": "Limitless Potential",
+    "features": ["No bloodline limits — flexible growth (three free +1 ability increases and any two skills)."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Ryu",
+    "abilityIncrease": { "fixed": { "int": 2, "con": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Ninshou", "Chakra Control"] },
+    "signatureTrait": "Wrath of a Dragon",
+    "features": ["Dragon-style chakra techniques; elemental ferocity."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Sarutobi",
+    "abilityIncrease": { "fixed": { "str": 2, "con": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "chooseN": 2, "from": ["Athletics", "Martial Arts", "Chakra Control", "Ninshou", "Nature", "Perception", "Insight", "Survival"] },
+    "signatureTrait": "Bound by a Code of Honor",
+    "features": ["Adaptable will-of-fire prodigies; broad jutsu aptitude."],
+    "uniqueResource": null,
+    "affinity": ["Fire"]
+  },
+  {
+    "name": "Tsuchigumo",
+    "abilityIncrease": { "fixed": { "wis": 2, "dex": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Acrobatics", "Chakra Control"] },
+    "signatureTrait": "Arachnophobia",
+    "features": ["Spider/thread jutsu; sealing techniques."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Uchiha",
+    "abilityIncrease": { "fixed": { "cha": 1 }, "choices": [{ "amount": 2, "options": ["int", "dex"] }] },
+    "abilityVerified": false,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Insight"], "chooseN": 1, "from": ["Ninshou", "Perception", "Intimidation"] },
+    "signatureTrait": "The Curse of Hatred",
+    "features": ["Sharingan: copy jutsu, perceive motion, cast eye-genjutsu (staged progression).", "Fire Release affinity."],
+    "uniqueResource": { "key": "sharingan", "type": "dojutsu", "states": ["inactive", "1tomoe", "2tomoe", "3tomoe", "mangekyo"], "description": "Sharingan dojutsu with staged tomoe progression." },
+    "affinity": ["Fire"]
+  },
+  {
+    "name": "Uzumaki",
+    "abilityIncrease": { "fixed": { "con": 2, "cha": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Chakra Control", "Ninshou"] },
+    "signatureTrait": "Never Backing Down",
+    "features": ["Massive vitality and chakra; mastery of sealing (Fuinjutsu).", "Bonus maximum HP each level."],
+    "uniqueResource": { "key": "vitality", "type": "hpBonus", "perLevel": 1, "flat": 2, "description": "Bonus to maximum HP (huge vitality)." },
+    "affinity": []
+  },
+  {
+    "name": "Yamanaka",
+    "abilityIncrease": { "fixed": { "cha": 2, "int": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Illusions", "Persuasion"] },
+    "signatureTrait": "Impossible to Pin Down",
+    "features": ["Mind-transfer and sensory jutsu (possess, scan, telepathy)."],
+    "uniqueResource": null,
+    "affinity": []
+  },
+  {
+    "name": "Yuki",
+    "abilityIncrease": { "fixed": { "dex": 2, "int": 1 } },
+    "abilityVerified": true,
+    "speed": 30,
+    "skillProficiencies": { "fixed": ["Chakra Control", "Ninshou"] },
+    "signatureTrait": "Cold to the Bone",
+    "features": ["Ice Release (kekkei genkai): combine Water and Wind into ice jutsu."],
+    "uniqueResource": null,
+    "affinity": ["Ice", "Water", "Wind"]
+  }
+]

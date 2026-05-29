@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Entertainer",
+    "skillProficiencies": { "fixed": ["Acrobatics", "Performance"] },
+    "toolProficiencies": ["Musical Instrument"],
+    "startingEquipment": ["costume", "musical instrument", "belt pouch with 15 Ryo"],
+    "equipmentPacks": ["Entertainment Pack"],
+    "feature": { "name": "Back by Popular Demand", "description": "You can always find a place to perform, earning food, lodging, and a friendly local audience." },
+    "abilityIncrease": { "amount": 1, "options": ["cha", "int"] },
+    "verified": true
+  },
+  {
+    "name": "Genius",
+    "skillProficiencies": { "chooseN": 2, "from": ["Ninshou", "Martial Arts", "Investigation", "History", "Crafting", "Nature"] },
+    "toolProficiencies": ["one tool of your choice"],
+    "startingEquipment": ["scholar's notes", "ink and quill", "belt pouch with 20 Ryo"],
+    "equipmentPacks": ["Scholar's Pack"],
+    "feature": { "name": "Meeting Expectations", "description": "Your reputation precedes you; you have advantage on checks to be recognized as exceptionally skilled in your field." },
+    "abilityIncrease": { "amount": 1, "options": ["wis", "int"] },
+    "verified": true
+  },
+  {
+    "name": "Hard Worker",
+    "skillProficiencies": { "fixed": ["Acrobatics", "Athletics"] },
+    "toolProficiencies": ["one artisan's tool"],
+    "startingEquipment": ["training weights", "mess kit", "belt pouch with 10 Ryo"],
+    "equipmentPacks": ["Explorer's Pack"],
+    "feature": { "name": "Focus and Grit", "description": "Through relentless practice you can re-attempt a failed ability check once per short rest." },
+    "abilityIncrease": { "amount": 1, "options": ["str", "dex"] },
+    "verified": true
+  },
+  {
+    "name": "Hermit",
+    "skillProficiencies": { "fixed": ["Animal Handling", "History"] },
+    "toolProficiencies": ["Herbalism Kit"],
+    "startingEquipment": ["herbalism kit", "scroll of notes", "belt pouch with 5 Ryo"],
+    "equipmentPacks": ["Explorer's Pack"],
+    "feature": { "name": "Discovery", "description": "Your seclusion granted a unique insight or truth the GM reveals when relevant." },
+    "abilityIncrease": { "amount": 1, "options": ["wis", "int"] },
+    "verified": false
+  },
+  {
+    "name": "Leader",
+    "skillProficiencies": { "fixed": ["History"], "chooseN": 1, "from": ["Deception", "Persuasion"] },
+    "toolProficiencies": ["Gaming Set"],
+    "startingEquipment": ["signet or insignia", "ledger", "belt pouch with 25 Ryo"],
+    "equipmentPacks": ["Diplomat's Pack"],
+    "feature": { "name": "Leadership Presence", "description": "Allies who can see and hear you gain advantage on saves against fear while you lead." },
+    "abilityIncrease": { "amount": 1, "options": ["cha", "int"] },
+    "verified": true
+  },
+  {
+    "name": "Noble",
+    "skillProficiencies": { "fixed": ["History", "Persuasion"] },
+    "toolProficiencies": ["Gaming Set"],
+    "startingEquipment": ["fine clothes", "signet ring", "belt pouch with 30 Ryo"],
+    "equipmentPacks": ["Diplomat's Pack"],
+    "feature": { "name": "Position of Privilege", "description": "Your standing opens doors; people of import are inclined to grant you an audience." },
+    "abilityIncrease": { "amount": 1, "options": ["cha", "int"] },
+    "verified": false
+  },
+  {
+    "name": "Student",
+    "skillProficiencies": { "fixed": ["Acrobatics"], "chooseN": 1, "from": ["Ninshou", "History", "Chakra Control", "Investigation"] },
+    "toolProficiencies": ["Calligrapher's Supplies"],
+    "startingEquipment": ["academy textbook", "ink and quill", "belt pouch with 10 Ryo"],
+    "equipmentPacks": ["Scholar's Pack"],
+    "feature": { "name": "Academy Connections", "description": "You know instructors and classmates across the village who can offer training or information." },
+    "abilityIncrease": { "amount": 1, "options": ["wis", "int"] },
+    "verified": false
+  },
+  {
+    "name": "Traveler",
+    "skillProficiencies": { "fixed": ["Insight", "Perception"] },
+    "toolProficiencies": ["Navigator's Tools"],
+    "startingEquipment": ["traveler's clothes", "map case", "belt pouch with 15 Ryo"],
+    "equipmentPacks": ["Explorer's Pack"],
+    "feature": { "name": "The Exotic Individual", "description": "Your foreign experience lets you recall useful customs, routes, and contacts in distant lands." },
+    "abilityIncrease": { "amount": 1, "options": ["wis", "con"] },
+    "verified": false
+  },
+  {
+    "name": "Trouble Maker",
+    "skillProficiencies": { "fixed": ["Deception", "Sleight of Hand"] },
+    "toolProficiencies": ["Thieves' Tools"],
+    "startingEquipment": ["set of marked dice", "smoke pellet", "belt pouch with 10 Ryo"],
+    "equipmentPacks": ["Burglar's Pack"],
+    "feature": { "name": "Pitiable", "description": "You can talk your way out of minor trouble, playing on others' sympathy to avoid consequences." },
+    "abilityIncrease": { "amount": 1, "options": ["dex", "cha"] },
+    "verified": true
+  },
+  {
+    "name": "Urchin",
+    "skillProficiencies": { "fixed": ["Sleight of Hand", "Stealth"] },
+    "toolProficiencies": ["Thieves' Tools", "Disguise Kit"],
+    "startingEquipment": ["small knife", "city map", "belt pouch with 5 Ryo"],
+    "equipmentPacks": ["Burglar's Pack"],
+    "feature": { "name": "City Secrets", "description": "You know the hidden paths of the streets and can move through a city twice as fast when leading." },
+    "abilityIncrease": { "amount": 1, "options": ["dex", "wis"] },
+    "verified": false
+  }
+]

@@ -82,6 +82,10 @@ export class EngineClient {
     return this.req("GET", `/v1/jutsu${s ? `?${s}` : ""}`);
   }
 
+  listContent(kind: "clans" | "classes" | "backgrounds"): Promise<any> {
+    return this.req("GET", `/v1/content/${kind}`);
+  }
+
   health(): Promise<any> {
     return this.req("GET", `/v1/health`);
   }

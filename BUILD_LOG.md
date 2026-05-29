@@ -80,3 +80,62 @@ Full jutsu catalog is 399/708 (clan-tree jutsu scattered in clan sections are a
 later extraction pass; mechanically complete for play).
 
 **Next:** Phase 1 — character system.
+
+---
+
+## Phase 1 — Character system ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Ch.1 (character_manage), Ch.2 (20 clans), Ch.3 (backgrounds + Will of
+Fire), Ch.4 (8 classes), Ch.6 (skills + checks), casting-by-jutsu-type rule.
+
+**Built (real):**
+- `domain/character.ts`: the dual-pool sheet (HP/Hit Dice + Chakra/Chakra Dice
+  first-class), abilities (base + tracked bonuses + derived totals), three casting
+  tracks, proficiencies, clan traits, class features, conditions, jutsuKnown +
+  cap, ryo, Will of Fire, unique clan resources, affinities, `classes[]` (multiclass-ready).
+- `rules/skills.ts`: the verified custom skill list by ability (Martial Arts/STR,
+  Chakra Control/CON, Crafting+Ninshou/INT, Illusions/WIS, etc.).
+- `rules/abilities.ts`: ability mod, **proficiency +3 at L1** scaling +1/4 levels,
+  rank-from-level bands, point-buy (27) validation, standard array, 4d6-drop-lowest
+  (seeded), take-average leveling.
+- `rules/character.ts`: clan/class/background application (ability increases incl.
+  choices, skill grants incl. chooseN, saves, features, unique resources), and
+  `deriveCharacter` — computes totals, both pools (die + CON per level, + clan
+  HP/chakra bonuses), AC (incl. Taijutsu Unarmored Defense = 10+DEX+CON), the three
+  type-keyed casting tracks (Nin=INT, Gen=WIS, Tai=max(STR,DEX)), jutsuKnown cap.
+- `intents/character.ts`: `character_create` (one-shot 7-step build), granular
+  `character_set_{abilities,clan,class,background}`, `character_finalize`,
+  `character_add_mission_points`, `character_level_up`, `will_of_fire`
+  (grant/spend/gift/reset_mission), `character_spend_chakra`, `character_heal`.
+- `intents/checks.ts`: `skill_check`, `saving_throw`, `ability_check` (Ch.6, all
+  deterministic d20 math, adv/dis/bonus, vs-DC).
+- Content: `content/classes.json` (8 classes), `content/clans.json` (20 clans),
+  `content/backgrounds.json` (10 backgrounds). REST `/v1/content/{clans,classes,
+  backgrounds}` reads + `POST /v1/characters`. MCP tools: `create_character`,
+  `level_up`, `list_clans`, `list_classes`.
+
+**Checkpoint proven:** builds any legal character end-to-end with correct dual
+pools, ability totals, proficiency, rank, saves, AC, and the three type-keyed
+casting mods; educational rejections for unknown clan / bad point-buy / missing
+choices; Will of Fire spend/gift; deterministic rolled abilities; level-up scaling.
+19 tests pass; E2E builds a character through the controller.
+
+**Logged divergences / rules-faithful defaults (data cells the spec flagged
+NEEDS VISUAL READ — encoded as defensible defaults, easy to correct in content):**
+- Save pairs: Genjutsu (CON/CHA ✓), Intel Op (DEX/INT ✓), Scout-Nin (STR/CON ✓),
+  Weapon Spec (STR/DEX ✓) confirmed. **Defaulted/flagged**: Ninjutsu Spec
+  (INT/WIS), Medical-Nin (WIS/CHA), Taijutsu Spec (STR/DEX — later OCR note over
+  the Ch.4 table's STR/CON), Hunter-Nin (DEX/WIS — unverified). `savesVerified`
+  flag on each class.
+- Jutsu Known cap = a per-archetype formula anchored on the verified Genjutsu
+  progression (caster 2+⌈L/2⌉, hybrid 1+⌈L/2⌉, martial 1+⌈L/3⌉).
+- Hyuga/Non-Clan/Uchiha ability lines + several backgrounds' Feature/ASI cells were
+  column-fused in the source; encoded as rules-faithful values with `verified:false`.
+- Taijutsu casting uses max(STR,DEX) (spec says "STR/DEX"); Genjutsu Pledge WIS→CHA
+  swap not yet wired (default WIS).
+
+**Stubbed / deferred:** clan-jutsu trees + unique-resource mechanics (Calories,
+dojutsu activation, ninken) are stored as descriptors; their active mechanics land
+with combat/jutsu (Phase 2+). Subclass feature sets are descriptive.
+
+**Next:** Phase 2 — jutsu casting + combat.

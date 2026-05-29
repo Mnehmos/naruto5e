@@ -49,6 +49,9 @@ export class ContentPack {
 
   private jutsuById = new Map<string, JutsuRecord>();
   private jutsuByName = new Map<string, JutsuRecord>();
+  private clanByName = new Map<string, any>();
+  private classByName = new Map<string, any>();
+  private backgroundByName = new Map<string, any>();
 
   constructor(dir: string) {
     this.dir = dir;
@@ -72,10 +75,35 @@ export class ContentPack {
       this.jutsuById.set(j.id, j);
       if (j.name) this.jutsuByName.set(j.name.toLowerCase(), j);
     }
+    this.clanByName.clear();
+    for (const c of this.clans) this.clanByName.set(String(c.name).toLowerCase(), c);
+    this.classByName.clear();
+    for (const c of this.classes) this.classByName.set(String(c.name).toLowerCase(), c);
+    this.backgroundByName.clear();
+    for (const b of this.backgrounds) this.backgroundByName.set(String(b.name).toLowerCase(), b);
   }
 
   getJutsu(idOrName: string): JutsuRecord | undefined {
     return this.jutsuById.get(idOrName) ?? this.jutsuByName.get(idOrName.toLowerCase());
+  }
+
+  getClan(name: string): any | undefined {
+    return this.clanByName.get(name.toLowerCase());
+  }
+  getClass(name: string): any | undefined {
+    return this.classByName.get(name.toLowerCase());
+  }
+  getBackground(name: string): any | undefined {
+    return this.backgroundByName.get(name.toLowerCase());
+  }
+  clanNames(): string[] {
+    return this.clans.map((c) => c.name);
+  }
+  classNames(): string[] {
+    return this.classes.map((c) => c.name);
+  }
+  backgroundNames(): string[] {
+    return this.backgrounds.map((b) => b.name);
   }
 
   static load(dir: string): ContentPack {

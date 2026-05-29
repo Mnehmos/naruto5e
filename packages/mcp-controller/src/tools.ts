@@ -76,6 +76,52 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   );
 
   server.registerTool(
+    "create_character",
+    {
+      description:
+        "Build a Naruto 5e character end-to-end (the 7-step build in one call): clan, class, " +
+        "background, abilities (method: manual|point_buy|standard_array|roll_4d6), and any required " +
+        "skill/ability choices. Returns the finalized sheet or an educational rejection naming what's missing.",
+      inputSchema: {
+        roomId: z.string(),
+        name: z.string(),
+        clan: z.string().optional(),
+        className: z.string().optional(),
+        background: z.string().optional(),
+        level: z.number().optional(),
+        abilities: z.record(z.any()).optional(),
+        abilityChoices: z.array(z.string()).optional(),
+        bgAbilityChoice: z.string().optional(),
+        clanSkillChoices: z.array(z.string()).optional(),
+        classSkillChoices: z.array(z.string()).optional(),
+        backgroundSkillChoices: z.array(z.string()).optional(),
+      },
+    },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "character_create", params })),
+  );
+
+  server.registerTool(
+    "level_up",
+    {
+      description: "Advance a character one level (recomputes pools, proficiency, rank, new features).",
+      inputSchema: { roomId: z.string(), actorId: z.string() },
+    },
+    async ({ roomId, actorId }) => ok(await client.submitIntent({ roomId, actorId, type: "character_level_up" })),
+  );
+
+  server.registerTool(
+    "list_clans",
+    { description: "List the 20 playable clan options.", inputSchema: {} },
+    async () => ok(await client.listContent("clans")),
+  );
+
+  server.registerTool(
+    "list_classes",
+    { description: "List the 8 base classes (HD/Chakra die, saves, archetype).", inputSchema: {} },
+    async () => ok(await client.listContent("classes")),
+  );
+
+  server.registerTool(
     "list_jutsu",
     {
       description: "Read the jutsu catalog, filterable by rank (E-S), classification, or name query.",

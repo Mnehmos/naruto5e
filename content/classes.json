@@ -1,0 +1,189 @@
+[
+  {
+    "name": "Genjutsu Specialist",
+    "hitDie": 6,
+    "chakraDie": 12,
+    "savingThrows": ["con", "cha"],
+    "savesVerified": true,
+    "archetype": "caster",
+    "primaryCasting": "genjutsu",
+    "proficiencies": {
+      "armor": ["Light"],
+      "weapons": ["Simple"],
+      "tools": ["Trappers Kit"],
+      "skills": { "fixed": ["Illusions"], "chooseN": 3, "from": ["Chakra Control", "Deception", "History", "Insight", "Intimidation", "Investigation", "Perception", "Persuasion", "Stealth"] }
+    },
+    "subclassChoiceLevel": 2,
+    "subclasses": ["Illusionist", "Mind Render", "Dream Weaver"],
+    "features": [
+      { "level": 1, "name": "Chakra Disruption", "description": "Restrain an enemy's chakra: they can't cast jutsu of cost <= this genjutsu's cost until the end of their next turn. Recharges on a short rest; a 2nd use at L7." },
+      { "level": 1, "name": "Actualization Die", "description": "A d4 (d6 at L7, d8 at L15). Spend to add psychic damage equal to the result, or raise a cast genjutsu's save DC by half the result. Regain on a long rest." },
+      { "level": 2, "name": "Genjutsu Pledge", "description": "Choose a subclass path (features at 2/6/10/14). A Pledge may let genjutsu use CHA instead of WIS." },
+      { "level": 2, "name": "Malleable Mirages", "description": "Learn the class genjutsu: 3 at L2, +1 at L4/6/8/10/12/15/18." },
+      { "level": 3, "name": "Genjutsu Inception", "description": "A chosen concept (e.g. Illusionary Weapon: a bonus-action psychic weapon using your genjutsu attack bonus)." }
+    ],
+    "startingEquipment": ["1 simple weapon", "kunai (x10) or shuriken (x10)", "Padded Armor", "Trappers Kit", "smoke bomb (x1)"]
+  },
+  {
+    "name": "Ninjutsu Specialist",
+    "hitDie": 6,
+    "chakraDie": 12,
+    "savingThrows": ["int", "wis"],
+    "savesVerified": false,
+    "archetype": "caster",
+    "primaryCasting": "ninjutsu",
+    "proficiencies": {
+      "armor": ["Light"],
+      "weapons": ["Simple"],
+      "tools": [],
+      "skills": { "fixed": ["Ninshou"], "chooseN": 3, "from": ["Chakra Control", "Crafting", "History", "Insight", "Investigation", "Nature", "Perception", "Stealth"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Elementalist", "Summoner", "Shape Manipulator"],
+    "features": [
+      { "level": 1, "name": "Efficient Molding", "description": "Reduce the chakra cost of a known ninjutsu by 1 (min 1) a number of times per long rest equal to your INT modifier." },
+      { "level": 1, "name": "Nature Affinity", "description": "Gain an elemental release affinity; advantage on the elemental-advantage clash check for your affinity." },
+      { "level": 3, "name": "Ninjutsu Focus", "description": "Choose a subclass path (Elementalist / Summoner / Shape Manipulator)." }
+    ],
+    "startingEquipment": ["1 simple weapon", "kunai (x10)", "Padded Armor", "soldier pill (x2)"]
+  },
+  {
+    "name": "Intelligence Operative",
+    "hitDie": 8,
+    "chakraDie": 10,
+    "savingThrows": ["dex", "int"],
+    "savesVerified": true,
+    "archetype": "hybrid",
+    "primaryCasting": "ninjutsu",
+    "proficiencies": {
+      "armor": ["Light"],
+      "weapons": ["Simple"],
+      "tools": ["Disguise Kit"],
+      "skills": { "fixed": ["Investigation"], "chooseN": 3, "from": ["Deception", "History", "Insight", "Ninshou", "Perception", "Sleight of Hand", "Stealth", "Persuasion"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Tactician", "Interrogator", "Saboteur"],
+    "features": [
+      { "level": 1, "name": "Plans", "description": "At the start of combat, hand out tactical Plan dice to allies that can be spent to add to a roll." },
+      { "level": 1, "name": "Brave Orders", "description": "Use a bonus action to direct an ally, granting them a reaction attack or movement." },
+      { "level": 3, "name": "Operative Specialty", "description": "Choose a subclass path." }
+    ],
+    "startingEquipment": ["2 simple weapons", "Disguise Kit", "Padded Armor", "wire"]
+  },
+  {
+    "name": "Medical-Nin",
+    "hitDie": 8,
+    "chakraDie": 10,
+    "savingThrows": ["wis", "cha"],
+    "savesVerified": false,
+    "archetype": "hybrid",
+    "primaryCasting": "ninjutsu",
+    "proficiencies": {
+      "armor": ["Light"],
+      "weapons": ["Simple"],
+      "tools": ["Medical Kit"],
+      "skills": { "fixed": ["Medicine"], "chooseN": 3, "from": ["Chakra Control", "Insight", "Investigation", "Nature", "Ninshou", "Perception", "Persuasion"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Field Medic", "Poison Master", "Surgeon"],
+    "features": [
+      { "level": 1, "name": "Chakra Scalpel", "description": "A precise chakra blade: a bonus-action melee touch that deals damage or severs muscle (reduces a target's next attack/movement)." },
+      { "level": 1, "name": "Mystical Palm", "description": "Spend chakra to heal a creature you touch for 1d8 + your WIS mod per chakra die spent." },
+      { "level": 3, "name": "Medical Specialty", "description": "Choose a subclass path." }
+    ],
+    "startingEquipment": ["1 simple weapon", "Medical Kit", "Padded Armor", "blood pill (x2)"]
+  },
+  {
+    "name": "Scout-Nin",
+    "hitDie": 8,
+    "chakraDie": 10,
+    "savingThrows": ["str", "con"],
+    "savesVerified": true,
+    "archetype": "hybrid",
+    "primaryCasting": "ninjutsu",
+    "proficiencies": {
+      "armor": ["Light", "Medium"],
+      "weapons": ["Simple", "Martial"],
+      "tools": ["Navigator's Tools"],
+      "skills": { "fixed": ["Survival"], "chooseN": 3, "from": ["Acrobatics", "Athletics", "Animal Handling", "Nature", "Perception", "Stealth"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Assault Scout", "Defensive Scout", "Tactical Scout", "Cloning Scout"],
+    "features": [
+      { "level": 1, "name": "Scouting Technique", "description": "A maneuver suite tied to your chosen Scouting path." },
+      { "level": 1, "name": "Maneuvers", "description": "Learn combat maneuvers fueled by superiority dice." },
+      { "level": 3, "name": "Scout Path", "description": "Choose Assault / Defensive / Tactical / Cloning." }
+    ],
+    "startingEquipment": ["2 martial weapons or 1 martial + shield", "Navigator's Tools", "Padded Armor"]
+  },
+  {
+    "name": "Hunter-Nin",
+    "hitDie": 10,
+    "chakraDie": 8,
+    "savingThrows": ["dex", "wis"],
+    "savesVerified": false,
+    "archetype": "martial",
+    "primaryCasting": "ninjutsu",
+    "proficiencies": {
+      "armor": ["Light", "Medium"],
+      "weapons": ["Simple", "Martial"],
+      "tools": ["Poisoner's Kit"],
+      "skills": { "fixed": ["Perception"], "chooseN": 3, "from": ["Acrobatics", "Athletics", "Insight", "Investigation", "Nature", "Stealth", "Survival"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Tracker", "Assassin", "Executioner"],
+    "features": [
+      { "level": 1, "name": "Hunter's Mark", "description": "Mark a quarry; deal extra damage to it and track it unerringly." },
+      { "level": 1, "name": "Silent Killing", "description": "Advantage on attacks against a target that can't see you; bonus damage on a surprise strike." },
+      { "level": 3, "name": "Hunter Specialty", "description": "Choose a subclass path." }
+    ],
+    "startingEquipment": ["2 martial weapons", "Poisoner's Kit", "Battle Armor", "senbon (x10)"]
+  },
+  {
+    "name": "Weapon Specialist",
+    "hitDie": 10,
+    "chakraDie": 8,
+    "savingThrows": ["str", "dex"],
+    "savesVerified": true,
+    "archetype": "martial",
+    "primaryCasting": "taijutsu",
+    "proficiencies": {
+      "armor": ["Light", "Medium", "Heavy"],
+      "weapons": ["Simple", "Martial"],
+      "tools": ["Smith's Tools"],
+      "skills": { "fixed": ["Martial Arts"], "chooseN": 2, "from": ["Acrobatics", "Athletics", "Crafting", "Intimidation", "Perception"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Bukijutsu Archivist", "Blademaster", "Puppeteer"],
+    "features": [
+      { "level": 1, "name": "Weapon Arsenal", "description": "Treat all bukijutsu as known weapon techniques; draw/stow weapons freely." },
+      { "level": 1, "name": "Precision Strike", "description": "Add a bonus to a weapon attack's damage equal to half your proficiency, scaling with rank." },
+      { "level": 3, "name": "Weapon Style", "description": "Choose a subclass path." }
+    ],
+    "startingEquipment": ["3 martial weapons", "Smith's Tools", "Flak Jacket"]
+  },
+  {
+    "name": "Taijutsu Specialist",
+    "hitDie": 12,
+    "chakraDie": 6,
+    "savingThrows": ["str", "dex"],
+    "savesVerified": false,
+    "archetype": "martial",
+    "primaryCasting": "taijutsu",
+    "proficiencies": {
+      "armor": ["Light", "Medium"],
+      "weapons": ["Simple"],
+      "tools": [],
+      "skills": { "fixed": ["Martial Arts"], "chooseN": 2, "from": ["Acrobatics", "Athletics", "Chakra Control", "Intimidation", "Perception", "Survival"] }
+    },
+    "subclassChoiceLevel": 3,
+    "subclasses": ["Passionate Youth", "Iron Body", "Gentle Fist Adept"],
+    "features": [
+      { "level": 1, "name": "Combo Points", "description": "Land unarmed/taijutsu strikes to bank Combo Points; spend them to power finishers." },
+      { "level": 1, "name": "Unarmored Defense", "description": "While unarmored, AC = 10 + DEX mod + CON mod." },
+      { "level": 1, "name": "Inner Gates", "description": "Open chakra gates to surge power at the cost of exhaustion." },
+      { "level": 3, "name": "Taijutsu Style", "description": "Choose a subclass path." }
+    ],
+    "startingEquipment": ["1 simple weapon", "Combat Bracers", "soldier pill (x1)"]
+  }
+]

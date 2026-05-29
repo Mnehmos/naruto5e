@@ -53,19 +53,41 @@ POST /v1/rooms/demo/intent
 
 Returns an ordered IR stream; the same IR streams to every WS subscriber.
 
-## What's playable now (Phase 0)
+## Build a character (Phase 1)
 
-- The full intent pipeline: validate → resolve → emit ordered IR, over REST and WS.
-- Batch beats (stop-on-failure + atomic), with educational failures on rejection.
-- Scoped state reads. Deterministic, reproducible dice (seeded per room).
-- The jutsu catalog is queryable (399 techniques).
+```bash
+curl -s localhost:8787/v1/characters -H 'content-type: application/json' -d '{
+  "roomId":"demo","name":"Haku","clan":"Yuki","className":"Ninjutsu Specialist",
+  "background":"Hard Worker",
+  "abilities":{"method":"manual","scores":{"str":10,"dex":14,"con":14,"int":14,"wis":12,"cha":8}},
+  "bgAbilityChoice":"str",
+  "classSkillChoices":["Nature","Stealth","Perception"]
+}'
+# -> resolved: a finalized sheet (HP 8, Chakra 14, casting Nin+5/Gen+4/Tai+6, ...)
+
+curl -s localhost:8787/v1/content/clans     # the 20 clan options
+curl -s localhost:8787/v1/content/classes   # the 8 classes
+```
+
+A skill check: `{"type":"skill_check","actorId":"<charId>","params":{"skill":"Stealth","dc":15}}`.
+
+## What's playable now (through Phase 1)
+
+- The full intent pipeline + batch + educational failures over REST and WS.
+- **Build any legal character** end-to-end: 20 clans, 8 classes + subclasses, 10
+  backgrounds, dual HP/Chakra pools, six abilities (4 generation methods), the
+  three type-keyed casting mods (Nin=INT / Gen=WIS / Tai=STR-DEX), skills, saves,
+  rank, proficiency, Will of Fire (grant/spend/gift), level-up.
+- Deterministic d20 checks (skill / save / ability). Queryable jutsu catalog.
 
 ## Current limits
 
-- No characters / combat / jutsu casting yet (Phases 1–2).
+- No combat / jutsu casting yet (Phase 2). Clan-jutsu trees and unique-resource
+  mechanics (Calories, dojutsu, ninken) are descriptors until later phases.
 - Renderers and the DM-brain harness come in Phases 10–11.
 
 ## What's next
 
-Phase 1: build any legal character (dual pools, 6 abilities, 8 classes + subclasses,
-20 clans, 10 backgrounds, Will of Fire, casting-by-jutsu-type).
+Phase 2: jutsu casting (chakra cost, components, ranks E–S, attack/save, upcast,
+concentration) + combat (initiative, TurnBudget, conditions, death saves, clashing
+jutsu) — run a full encounter with jutsu.

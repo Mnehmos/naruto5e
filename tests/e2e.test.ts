@@ -47,4 +47,36 @@ describe("E2E — MCP controller drives the engine", () => {
     const state = await client.getRoomState("e2e");
     expect(state.room.location).toBe("Training Ground 3");
   });
+
+  // ---- Phase 1: build a legal character through the controller ---------
+  it("builds a character end-to-end via the controller and reads it back", async () => {
+    const r = await client.submitIntent({
+      roomId: "e2e",
+      type: "character_create",
+      params: {
+        name: "Sakura",
+        clan: "Non-Clan",
+        className: "Medical-Nin",
+        background: "Genius",
+        abilities: { method: "standard_array", assign: { str: 8, dex: 13, con: 14, int: 15, wis: 12, cha: 10 } },
+        abilityChoices: ["int", "wis", "con"],
+        bgAbilityChoice: "int",
+        backgroundSkillChoices: ["Ninshou", "History"],
+        clanSkillChoices: ["Insight", "Persuasion"],
+        classSkillChoices: ["Insight", "Nature", "Persuasion"],
+      },
+    });
+    expect(r.status).toBe("resolved");
+    const id = r.events[0].data.character.id;
+    const c = await client.getCharacter(id);
+    expect(c.className).toBe("Medical-Nin");
+    expect(c.hitDice.type).toBe(8);
+    expect(c.chakraDice.type).toBe(10);
+    // type-keyed casting present
+    expect(c.casting.ninjutsu).toBeDefined();
+    expect(c.casting.genjutsu).toBeDefined();
+    expect(c.casting.taijutsu).toBeDefined();
+    expect(c.willOfFire).toBe(true);
+    (globalThis as any).__sakuraId = id;
+  });
 });
