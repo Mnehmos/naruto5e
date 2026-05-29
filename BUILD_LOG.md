@@ -377,3 +377,30 @@ decayed body rejects harvest) each move Standing; gated stock blocks/unblocks on
 reputation; recovery raises Standing. 52 tests pass.
 
 **Next:** Phase 8 — content tools (jutsu_build point model + freeform resolver).
+
+---
+
+## Phase 8 — Content tools (jutsu_build + freeform) ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** the empirical jutsu point-cost model, jutsu_build (governor), and the
+freeform/improv resolver.
+
+**Built (real):**
+- `rules/pricing.ts`: the EXACT model — budget {E:2,D:4,C:8,B:14,A:19,S:28};
+  spend = Σ(dice×per-die) + range×0.04 + areaDim×0.107 + 0.4×conditionTiers
+  −10%(concentration); per-die d4 1.0 … d12 2.5; E/D floor discount. `verdict`
+  green/yellow/red with a plain-language balance note. **Validated against the
+  spec's worked examples**: C 3d8/60ft/20ft→9.6, A 10d8/90ft→20.6, S 10d10/120ft→25.8.
+- `intents/content.ts`: `jutsu_build` (op draft|price|rerank|commit) — draft
+  assembles a full Ch.9 record (envelope + structured effect) with points +
+  verdict; commit adds it to the catalog (indistinguishable from canon —
+  learnable + castable with zero special-casing). `freeform` (op resolve|cost) —
+  conforms an improv into a priced, ephemeral, castable primitive sharing the same
+  pricing engine (so a one-off can't out-power a real jutsu). MCP jutsu_build +
+  freeform tools.
+
+**Checkpoint proven:** the model reproduces canon within band; draft → verdict;
+commit makes a built jutsu learnable + castable end-to-end; freeform resolves an
+improv into a castable primitive op. 57 tests pass.
+
+**Next:** Phase 9 — the tick system (rest-embedded multi-agent world advancement).

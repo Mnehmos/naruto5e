@@ -11,6 +11,7 @@ import { registerAdversaryIntents } from "./adversary.js";
 import { registerCustomizationIntents } from "./customization.js";
 import { registerStandingIntents } from "./standing.js";
 import { registerWorldIntents } from "./world.js";
+import { registerContentToolIntents } from "./content.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -29,4 +30,5 @@ export function registerAllHandlers(engine: Engine): void {
   registerCustomizationIntents(engine); // Phase 5 (Ch.13 multiclass + feats)
   registerStandingIntents(engine); // Phase 6 (Standing / RPP)
   registerWorldIntents(engine); // Phase 7 (npc / economy / theft / corpse)
+  registerContentToolIntents(engine); // Phase 8 (jutsu_build + freeform)
 }

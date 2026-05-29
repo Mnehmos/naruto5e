@@ -177,12 +177,27 @@ curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"defect
   trigger → defect), corpse harvest (KKG/secret = patron-positive / authority-
   negative, gated to a fresh body) vs. honorable recovery.
 
+## Author a jutsu / price an improv (Phase 8)
+
+```bash
+# draft a B-rank jutsu and see the green/yellow/red verdict, then commit it:
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' -d '{"type":"jutsu_build","params":{"op":"draft","rank":"B","classification":"Ninjutsu","name":"Test Inferno","effects":{"damage":"6d8","range":60,"area":{"size":20,"shape":"sphere"},"save":"dex","conditions":["prone"]}}}'
+# price a one-off improvised action on the same scale:
+curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' -d '{"actorId":"<id>","type":"freeform","params":{"op":"resolve","description":"freeze handholds and hurl ice shards","effects":{"damage":"2d6","range":30,"save":"dex","damageType":"ice"},"targets":["<t>"]}}'
+```
+
+## What's playable now (through Phase 8)
+
+- Everything in Phases 1–7, plus **content tools**: jutsu_build (the empirical
+  point governor — draft/price/rerank/commit, green/yellow/red) producing canon
+  Ch.9 records that are immediately learnable + castable, and the freeform
+  resolver (improv conformed into a priced, castable primitive).
+
 ## Current limits
 
-- Content tools, the world tick, renderers, and the DM-brain harness arrive in
-  Phases 8–11.
+- The world tick, renderers, and the DM-brain harness arrive in Phases 9–11.
 
 ## What's next
 
-Phase 8: content tools — jutsu_build (the empirical point model + green/yellow/red
-governor) and the freeform resolver (improv priced on the same engine).
+Phase 9: the tick system — rest/downtime embeds a multi-agent world advancement
+(restResult + tick + playerDigest).

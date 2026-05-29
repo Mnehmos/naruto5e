@@ -301,4 +301,22 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "Return a body to its authority — an honorable, Standing-positive act.", inputSchema: { roomId: z.string(), actorId: z.string(), corpseId: z.string(), toAuthorityId: z.string().optional(), honor: z.number().optional() } },
     async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "corpse_recover", params })),
   );
+
+  // ---- Phase 8: content tools -----------------------------------------
+  server.registerTool(
+    "jutsu_build",
+    {
+      description: "Author a balanced jutsu via the empirical point model. op: draft|price|rerank|commit. Returns a canon Ch.9 record + points + green/yellow/red verdict.",
+      inputSchema: { roomId: z.string(), op: z.string().optional(), rank: z.string().optional(), classification: z.string().optional(), name: z.string().optional(), effects: z.record(z.any()).optional(), record: z.record(z.any()).optional(), targetRank: z.string().optional() },
+    },
+    async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "jutsu_build", params })),
+  );
+  server.registerTool(
+    "freeform",
+    {
+      description: "Conform an improvised action into a priced, castable primitive (op: resolve|cost). Shares the jutsu_build pricing engine so a one-off can't out-power a real jutsu.",
+      inputSchema: { roomId: z.string(), actorId: z.string().optional(), op: z.string().optional(), description: z.string().optional(), classification: z.string().optional(), rank: z.string().optional(), effects: z.record(z.any()).optional(), targets: z.array(z.string()).optional() },
+    },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "freeform", params })),
+  );
 }

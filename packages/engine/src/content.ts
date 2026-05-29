@@ -36,7 +36,7 @@ export interface JutsuEffect {
   healing?: { dice: string };
   halfOnSave?: boolean;
   conditions?: { name: string; save?: string }[];
-  area?: { size: number; shape: string };
+  area?: { size: number; shape?: string };
   concentration?: boolean;
 }
 
