@@ -438,3 +438,72 @@ playerDigest and the tick mutates world state (heat cools, agents act); downtime
 fires a large tick (heat fully cools, economy restock). 60 tests pass.
 
 **Next:** Phase 10 — renderers (the tactical visualizer + role-aware app shell).
+
+---
+
+## Phase 10 — Renderers (tactical visualizer + app shell) ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** the 3D tactical visualizer (subscribes to the IR stream; click = intent
+via direct REST) and the role-aware app shell (player|DM).
+
+**Built (real):** `apps/web/index.html` — a self-contained, zero-build web client
+the engine serves at `/` (`express.static`). It is a pure renderer of engine state
++ IR (never a source of truth):
+- **App shell** (role-aware): top bar (scene · round/turn · Will of Fire · role
+  toggle), left rail (character sheet + party/field cards with HP/Chakra bars +
+  conditions), center tactical map, right rail (narration/IR feed as prose), bottom
+  drawer tabs (Jutsu · Inventory · Console).
+- **Tactical visualizer** (canvas, top-down): grid, team-colored tokens with HP +
+  Chakra bars, active-turn glow, and the cast AoE shape drawn from the jutsu's area
+  data. Subscribes to `ws://…/v1/rooms/{room}/stream`; every IR batch appends
+  narration and re-hydrates state.
+- **Interaction = intent submission** (the symmetry, made visual): click a tile →
+  `move` intent; click a target token → `attack`; arm a jutsu card + click a
+  target → `cast`; action bar (advance/begin/end combat/dodge/dash); a raw-intent
+  Console (the DM write-path). Every commit round-trips through engine REST; the
+  client only proposes.
+
+**Decision (logged):** implemented as a vanilla canvas client rather than
+Three.js/R3F so it runs with **zero install/build** (the "runs tonight" stack
+goal). Because actions arrive as typed IR carrying classification + element +
+area, the 3D/diorama upgrade is a later additive swap on the same IR contract —
+the tactical layer never depends on it.
+
+**Verified:** the engine serves the app at `/`; panels render live state; clicks
+submit intents; the IR feed updates over the websocket.
+
+**Next:** Phase 11 — the LLM DM client wired to the MCP controller.
+
+---
+
+## Phase 11 — LLM DM client ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** wire a real DM brain (parser + agent orchestration) to the MCP controller.
+
+**Built (real):** `packages/harness` (tier 3 — the sole write-path):
+- `DMBrain.respond(roomId, utterance)` — reads room state via the controller's
+  `EngineClient` (the thin MCP adapter into engine REST), conforms the player's
+  natural language into structured intents, submits them, and narrates the
+  resulting IR. Surfaces educational rejections as re-conformable beats.
+- **Two modes**: *LLM mode* (when `ANTHROPIC_API_KEY` is set and
+  `@anthropic-ai/sdk` is available) — Claude (`claude-opus-4-8` by default) runs a
+  tool-use loop with a `submit_intent` tool + a DM system prompt + a state digest,
+  routing every tool call to the engine and feeding IR back. *Deterministic
+  fallback* (offline) — `parser.ts` maps common phrasings (cast/attack/move/
+  narrate/advance/rest/combat) onto intents, resolving actor/target names to ids
+  from room state. The SDK import is dynamic so the harness runs with no key.
+- `cli.ts` — a REPL DM (`npm run dm <roomId>`). The harness never holds
+  authoritative state and never rolls dice; it declares intent, the engine decides.
+
+**Checkpoint proven:** the brain parses NL into structured intents, drives the
+engine through the controller's client, narrates resolved IR, and surfaces
+educational rejections. 63 tests pass.
+
+---
+
+## FINAL STATUS — all 11 phases complete, runnable, committed
+
+Engine (tier 1) + MCP controller (tier 2) + DM harness (tier 3) + a web renderer,
+spanning all 14 rulebook chapters + the seven layered systems + the content tools
++ the tick. 63 Vitest tests pass; `npm run build` (full typecheck) is clean; the
+dev server boots on SQLite and serves the app. See PLAYTEST.md to run it.

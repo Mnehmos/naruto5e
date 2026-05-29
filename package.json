@@ -18,7 +18,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "mcp": "tsx packages/mcp-controller/src/index.ts",
-    "seed": "tsx packages/engine/src/scripts/seed.ts",
+    "dm": "tsx packages/harness/src/cli.ts",
     "smoke": "tsx packages/engine/src/scripts/smoke.ts"
   },
   "devDependencies": {

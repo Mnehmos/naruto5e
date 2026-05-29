@@ -193,11 +193,54 @@ curl -s localhost:8787/v1/rooms/demo/intent -H 'content-type: application/json' 
   Ch.9 records that are immediately learnable + castable, and the freeform
   resolver (improv conformed into a priced, castable primitive).
 
-## Current limits
+## The world tick (Phase 9)
 
-- The world tick, renderers, and the DM-brain harness arrive in Phases 9–11.
+Resting embeds the world advancement automatically — one call returns all three
+layers:
 
-## What's next
+```bash
+curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"rest","params":{"type":"downtime"}}' -H 'content-type: application/json'
+# -> events include a "rest" event carrying { restResult, tick, playerDigest }
+```
 
-Phase 9: the tick system — rest/downtime embeds a multi-agent world advancement
-(restResult + tick + playerDigest).
+## The web app (Phase 10)
+
+Open **http://localhost:8787/** in a browser. Enter a room id and connect:
+- left: character sheet + party/field (HP/Chakra bars, conditions),
+- center: the top-down tactical map — click a tile to **move**, click an enemy
+  token to **attack**, arm a Jutsu card then click a target to **cast**; action
+  bar for advance/begin/end combat; a raw-intent Console (DM),
+- right: the live narration/IR feed.
+
+Everything round-trips through the engine; the client only proposes (the symmetry).
+
+## The DM harness (Phase 11)
+
+```bash
+# start the engine, then in another shell:
+NARUTO_ENGINE_URL=http://localhost:8787 npm run dm demo
+player> Yuki casts Chakra Pulse at Bandit
+player> narrate: Mist rolls across the bridge.
+```
+
+Runs offline with a deterministic parser; set `ANTHROPIC_API_KEY` (and install
+`@anthropic-ai/sdk`) for the Claude-backed DM brain (tool-use loop over the engine).
+
+## What's playable now (ALL phases)
+
+The full spec: build characters → equip → take missions → spawn tiered
+adversaries/bosses → run jutsu combat → rest (which advances the world) →
+customize (multiclass/feats) → move Standing through play (NPC memory, economy,
+theft, corpse) → author jutsu / resolve improv — all driven by NL through the DM
+harness or directly via REST/the web app, streamed as IR.
+
+## Run commands (summary)
+
+```bash
+npm install            # deps (better-sqlite3 + @anthropic-ai/sdk are optional)
+npm run build          # full typecheck gate
+npm test               # 63 Vitest tests (the playable loop + every phase checkpoint)
+npm run dev            # engine: REST + WS + the web app at http://localhost:8787
+npm run mcp            # the MCP controller (stdio) -> engine
+npm run dm <room>      # the DM harness REPL
+```

@@ -23,7 +23,9 @@
       "@naruto5e/engine": ["packages/engine/src/index.ts"],
       "@naruto5e/engine/*": ["packages/engine/src/*"],
       "@naruto5e/mcp-controller": ["packages/mcp-controller/src/index.ts"],
-      "@naruto5e/mcp-controller/*": ["packages/mcp-controller/src/*"]
+      "@naruto5e/mcp-controller/*": ["packages/mcp-controller/src/*"],
+      "@naruto5e/harness": ["packages/harness/src/index.ts"],
+      "@naruto5e/harness/*": ["packages/harness/src/*"]
     }
   }
 }
