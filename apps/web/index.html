@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Naruto 5e — Table</title>
+<style>
+  :root { --bg:#0e1116; --panel:#161b22; --line:#2b323c; --ink:#e6edf3; --dim:#8b949e; --pc:#3b82f6; --enemy:#ef4444; --acc:#f59e0b; --chakra:#22d3ee; --hp:#34d399; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:13px/1.45 ui-monospace,Menlo,Consolas,monospace; background:var(--bg); color:var(--ink); height:100vh; display:flex; flex-direction:column; }
+  header { display:flex; align-items:center; gap:14px; padding:8px 12px; background:var(--panel); border-bottom:1px solid var(--line); }
+  header .grow { flex:1; }
+  header b { color:var(--acc); }
+  .role { padding:2px 8px; border:1px solid var(--line); border-radius:4px; cursor:pointer; }
+  .role.dm { background:#7c3aed33; border-color:#7c3aed; }
+  main { flex:1; display:grid; grid-template-columns:280px 1fr 320px; min-height:0; }
+  .col { display:flex; flex-direction:column; min-height:0; overflow:hidden; border-right:1px solid var(--line); }
+  .col:last-child { border-right:none; border-left:1px solid var(--line); }
+  .panel { padding:10px; border-bottom:1px solid var(--line); overflow:auto; }
+  .panel h3 { margin:0 0 6px; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--dim); }
+  #center { display:flex; flex-direction:column; }
+  #map { flex:1; background:#0b0e13; }
+  #feed { flex:1; overflow:auto; padding:10px; }
+  #feed .line { padding:3px 0; border-bottom:1px solid #1c2230; }
+  #feed .roll { color:var(--acc); }
+  #feed .dmg { color:var(--enemy); }
+  #feed .sys { color:var(--dim); font-style:italic; }
+  .bar { height:6px; border-radius:3px; background:#222; margin:2px 0; overflow:hidden; }
+  .bar > span { display:block; height:100%; }
+  .card { border:1px solid var(--line); border-radius:6px; padding:6px 8px; margin-bottom:6px; background:#11161d; }
+  .card .nm { font-weight:bold; }
+  .actbar { display:flex; gap:6px; flex-wrap:wrap; padding:8px; border-top:1px solid var(--line); background:var(--panel); }
+  button { font:inherit; background:#21262d; color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:5px 9px; cursor:pointer; }
+  button:hover { border-color:var(--acc); }
+  input,select,textarea { font:inherit; background:#0b0e13; color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:4px 6px; }
+  .row { display:flex; gap:6px; align-items:center; margin:4px 0; }
+  .row > * { min-width:0; }
+  .console textarea { width:100%; height:54px; resize:vertical; }
+  .tabs { display:flex; gap:4px; padding:6px 8px 0; }
+  .tabs button.active { border-color:var(--acc); color:var(--acc); }
+  .pill { font-size:11px; color:var(--dim); }
+  .jutsu { cursor:pointer; }
+  .jutsu:hover { border-color:var(--chakra); }
+</style>
+</head>
+<body>
+<header>
+  <b>Naruto&nbsp;5e</b>
+  <span id="scene" class="pill">—</span>
+  <span id="turn" class="pill"></span>
+  <span class="grow"></span>
+  <span id="wof" class="pill"></span>
+  <span id="roleBadge" class="role dm" title="click to toggle">DM</span>
+  <input id="room" value="demo" size="8" title="room id" />
+  <button id="connect">connect</button>
+</header>
+<main>
+  <div class="col">
+    <div class="panel" id="sheet"><h3>Character Sheet</h3><div id="sheetBody" class="pill">no character selected</div></div>
+    <div class="panel" id="party" style="flex:1"><h3>Party / Field</h3><div id="partyBody"></div></div>
+  </div>
+  <div id="center" class="col">
+    <canvas id="map"></canvas>
+    <div class="actbar">
+      <button data-act="advance">advance turn ▸</button>
+      <button data-act="combat_start">begin combat</button>
+      <button data-act="combat_end">end combat</button>
+      <select id="actor" title="acting character"></select>
+      <button data-act="dodge">dodge</button>
+      <button data-act="dash">dash</button>
+      <span class="pill">click a tile to move · click a jutsu/target to cast</span>
+    </div>
+  </div>
+  <div class="col">
+    <div id="feed" class="panel" style="flex:1"><h3>Narration / IR</h3><div id="feedBody"></div></div>
+    <div class="tabs">
+      <button class="active" data-tab="jutsu">Jutsu</button>
+      <button data-tab="inv">Inventory</button>
+      <button data-tab="console">Console</button>
+    </div>
+    <div class="panel" id="drawer" style="height:240px"></div>
+  </div>
+</main>
+<script>
+const $ = (s)=>document.querySelector(s);
+let ROOM = "demo", ROLE = "dm", ws=null, state=null, selectedJutsu=null, castMode=false, tab="jutsu", catalog=[];
+const api = (p,o)=>fetch(p,o).then(r=>r.json());
+
+function intent(type, params={}, actorId){
+  return api(`/v1/rooms/${ROOM}/intent`,{method:"POST",headers:{"content-type":"application/json"},
+    body:JSON.stringify({type,params,actorId,submittedBy:{clientType:"ui",role:ROLE}})});
+}
+
+async function hydrate(){
+  state = await api(`/v1/rooms/${ROOM}/state`);
+  render();
+}
+function actorList(){
+  const cs = (state.characters||[]); const as=(state.adversaries||[]);
+  return [...cs.map(c=>({...c,_team:c.team||"pc"})), ...as.map(a=>({...a,_team:a.team||"enemy",isAdv:true}))];
+}
+function activeId(){ const e=state.encounter; return e&&e.status==="active"?e.order[e.activeIndex]:null; }
+
+function render(){
+  $("#scene").textContent = (state.room.location||"—") + " · " + (state.room.mode||"scene");
+  const e = state.room && state.encounter;
+  $("#turn").textContent = e&&state.encounter.status==="active" ? `round ${state.encounter.round} · turn: ${nameOf(activeId())}` : "out of combat";
+  // actor dropdown
+  const sel = $("#actor"); const cur = sel.value;
+  sel.innerHTML = actorList().map(a=>`<option value="${a.id}">${a.name}</option>`).join("");
+  if(cur) sel.value = cur;
+  renderParty(); renderSheet(); renderDrawer(); drawMap();
+}
+function nameOf(id){ const a=actorList().find(x=>x.id===id); return a?a.name:id; }
+function bar(cur,max,color){ const p=Math.max(0,Math.min(100,100*cur/(max||1))); return `<div class="bar"><span style="width:${p}%;background:${color}"></span></div>`; }
+function renderParty(){
+  $("#partyBody").innerHTML = actorList().map(a=>{
+    const dead = a.dead?' ☠':''; const act = a.id===activeId()?' ◀':'';
+    return `<div class="card" style="border-left:3px solid var(--${a._team==='pc'?'pc':'enemy'})">
+      <div class="nm">${a.name}${act}${dead} <span class="pill">${a.isAdv?('('+a.tier+')'):(a.rank||'')}</span></div>
+      HP ${a.hp.current}/${a.hp.max} ${bar(a.hp.current,a.hp.max,'var(--hp)')}
+      Chakra ${a.chakra.current}/${a.chakra.max} ${bar(a.chakra.current,a.chakra.max,'var(--chakra)')}
+      ${(a.conditions&&a.conditions.length)?`<span class="pill">${a.conditions.join(', ')}</span>`:''}
+    </div>`;
+  }).join("");
+}
+function renderSheet(){
+  const id=$("#actor").value; const c=actorList().find(x=>x.id===id);
+  if(!c){ $("#sheetBody").textContent="—"; return; }
+  const ab=c.abilityTotals||{}; const cast=c.casting||{};
+  $("#sheetBody").innerHTML = `<div class="nm">${c.name}</div>
+    <span class="pill">${c.clan||''} ${c.className||c.tier||''} · L${c.level||''} · AC ${c.ac}</span>
+    HP ${c.hp.current}/${c.hp.max} ${bar(c.hp.current,c.hp.max,'var(--hp)')}
+    Chakra ${c.chakra.current}/${c.chakra.max} ${bar(c.chakra.current,c.chakra.max,'var(--chakra)')}
+    ${ab.str!==undefined?`<div class="row pill">STR ${ab.str} DEX ${ab.dex} CON ${ab.con} INT ${ab.int} WIS ${ab.wis} CHA ${ab.cha}</div>`:''}
+    ${cast.ninjutsu?`<div class="pill">Nin +${cast.ninjutsu.attack}/DC${cast.ninjutsu.saveDC} · Gen +${cast.genjutsu.attack}/DC${cast.genjutsu.saveDC} · Tai +${cast.taijutsu.attack}/DC${cast.taijutsu.saveDC}</div>`:''}
+    ${c.willOfFire?`<span class="pill">🔥 Will of Fire</span>`:''}`;
+}
+function renderDrawer(){
+  const d=$("#drawer");
+  if(tab==="jutsu"){
+    const id=$("#actor").value; const c=actorList().find(x=>x.id===id);
+    const known = c&&c.jutsuKnown? c.jutsuKnown.map(jid=>catalog.find(j=>j.id===jid)).filter(Boolean):[];
+    const list = known.length?known:catalog.slice(0,40);
+    d.innerHTML = `<div class="pill">${known.length?'known':'catalog'} — click to arm a cast</div>`+ list.map(j=>
+      `<div class="card jutsu ${selectedJutsu===j.id?'':''}" data-jutsu="${j.id}" style="${selectedJutsu===j.id?'border-color:var(--chakra)':''}">
+        <span class="nm">${j.name||j.id}</span> <span class="pill">${j.classification} ${j.rank} · ${j.cost??'?'} chakra</span></div>`).join("");
+    d.querySelectorAll("[data-jutsu]").forEach(el=>el.onclick=()=>{ selectedJutsu=el.dataset.jutsu; castMode=true; renderDrawer(); $("#feedBody").insertAdjacentHTML("afterbegin",`<div class="line sys">armed ${el.dataset.jutsu} — click a target token</div>`); });
+  } else if(tab==="inv"){
+    const id=$("#actor").value; const c=actorList().find(x=>x.id===id);
+    const inv=(c&&c.equipment)||[];
+    d.innerHTML = `<div class="pill">Ryo: ${c?c.ryo:0}</div>`+ inv.map(it=>`<div class="card"><span class="nm">${it.name||it.id}</span> <span class="pill">${it.type||''}${it.equipped?' · equipped':''}${it.stolen?' · stolen':''}</span></div>`).join("") || "<div class='pill'>empty</div>";
+  } else {
+    d.innerHTML = `<div class="console"><div class="pill">submit a raw intent (DM write-path)</div>
+      <div class="row"><input id="cType" placeholder="type e.g. narrate" style="flex:1"></div>
+      <textarea id="cParams" placeholder='params JSON e.g. {"text":"A masked nin appears."}'></textarea>
+      <div class="row"><input id="cActor" placeholder="actorId (optional)" style="flex:1"><button id="cSend">send</button></div></div>`;
+    $("#cSend").onclick=async()=>{ let p={}; try{p=JSON.parse($("#cParams").value||"{}")}catch(e){alert("bad JSON");return;}
+      const r=await intent($("#cType").value.trim(), p, $("#cActor").value.trim()||undefined); logResult(r); };
+  }
+}
+
+// ---- canvas battlemap (top-down tactical, IR-driven) ----
+const cv=$("#map"), cx=cv.getContext("2d"); const CELL=40;
+function layout(){ // assign default positions in a grid for tokens lacking one
+  const as=actorList(); let pc=0, en=0;
+  as.forEach(a=>{ if(!a._pos){ if(a._team==='pc'){ a._pos={x:1,y:1+pc++}; } else { a._pos={x:8,y:1+en++}; } } });
+  return as;
+}
+let lastEffect=null;
+function drawMap(){
+  const w=cv.clientWidth, h=cv.clientHeight; cv.width=w; cv.height=h;
+  cx.clearRect(0,0,w,h);
+  cx.strokeStyle="#1b2130";
+  for(let x=0;x<w;x+=CELL){ cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,h);cx.stroke(); }
+  for(let y=0;y<h;y+=CELL){ cx.beginPath();cx.moveTo(0,y);cx.lineTo(w,y);cx.stroke(); }
+  const as=layout();
+  if(lastEffect&&lastEffect.area&&lastEffect.origin){ const o=lastEffect.origin; cx.fillStyle="rgba(245,158,11,.18)"; cx.beginPath(); cx.arc((o.x+.5)*CELL,(o.y+.5)*CELL,(lastEffect.area.size/5)*CELL,0,7); cx.fill(); }
+  as.forEach(a=>{ const p=a.position||a._pos; const cxp=(p.x+.5)*CELL, cyp=(p.y+.5)*CELL;
+    if(a.id===activeId()){ cx.strokeStyle="var(--acc)"; cx.lineWidth=3; cx.beginPath(); cx.arc(cxp,cyp,16,0,7); cx.stroke(); cx.lineWidth=1; }
+    cx.fillStyle = a._team==='pc'?'#3b82f6':'#ef4444'; if(a.dead) cx.fillStyle="#555";
+    cx.beginPath(); cx.arc(cxp,cyp,12,0,7); cx.fill();
+    cx.fillStyle="#e6edf3"; cx.font="10px monospace"; cx.textAlign="center";
+    cx.fillText(a.name.slice(0,8), cxp, cyp+24);
+    // hp bar
+    const hpp=a.hp.current/(a.hp.max||1); cx.fillStyle="#333"; cx.fillRect(cxp-14,cyp-20,28,3); cx.fillStyle="#34d399"; cx.fillRect(cxp-14,cyp-20,28*hpp,3);
+    const ckp=a.chakra.current/(a.chakra.max||1); cx.fillStyle="#333"; cx.fillRect(cxp-14,cyp-16,28,3); cx.fillStyle="#22d3ee"; cx.fillRect(cxp-14,cyp-16,28*ckp,3);
+    a._screen={x:cxp,y:cyp};
+  });
+}
+cv.onclick=async(e)=>{
+  const r=cv.getBoundingClientRect(); const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const as=layout(); const hit=as.find(a=>a._screen&&Math.hypot(a._screen.x-mx,a._screen.y-my)<16);
+  const actor=$("#actor").value;
+  if(castMode&&selectedJutsu&&hit){ const res=await intent("cast",{jutsu:selectedJutsu,targets:[hit.id]},actor); logResult(res); castMode=false; selectedJutsu=null; await hydrate(); return; }
+  if(hit&&hit.id!==actor){ // attack target
+    const res=await intent("attack",{target:hit.id,damage:"1d6"},actor); logResult(res); await hydrate(); return; }
+  // else move to clicked cell
+  const gx=Math.floor(mx/CELL), gy=Math.floor(my/CELL);
+  const res=await intent("move",{to:{x:gx,y:gy}},actor); logResult(res); await hydrate();
+};
+
+function logResult(r){
+  if(!r) return;
+  if(r.status==="rejected"){ $("#feedBody").insertAdjacentHTML("afterbegin",`<div class="line dmg">✗ ${r.reason.rule}: ${r.reason.explain}${r.suggestions&&r.suggestions[0]?'<br><span class=sys>→ '+r.suggestions[0]+'</span>':''}</div>`); }
+}
+function renderEvents(events){
+  for(const ev of events){
+    if(ev.type==="cast"&&ev.data&&ev.data.area){ lastEffect={area:ev.data.area,origin:ev.data.origin}; }
+    const cls = ev.type==="damage"||ev.type==="down"?"dmg": (ev.type==="roll"||ev.type==="save"||ev.type==="attack"||ev.type==="death_save"?"roll":"");
+    const txt = ev.narration || `${ev.type} ${JSON.stringify(ev.data).slice(0,80)}`;
+    $("#feedBody").insertAdjacentHTML("afterbegin", `<div class="line ${cls}">${txt}</div>`);
+  }
+}
+
+function connect(){
+  ROOM=$("#room").value.trim()||"demo";
+  if(ws) ws.close();
+  ws=new WebSocket(`ws://${location.host}/v1/rooms/${ROOM}/stream`);
+  ws.onmessage=(m)=>{ const msg=JSON.parse(m.data); if(msg.type==="ir"){ renderEvents(msg.events); hydrate(); } };
+  ws.onopen=()=> $("#feedBody").insertAdjacentHTML("afterbegin",`<div class="line sys">connected to ${ROOM}</div>`);
+  hydrate();
+}
+
+document.querySelectorAll(".actbar [data-act]").forEach(b=>b.onclick=async()=>{
+  const act=b.dataset.act; const actor=$("#actor").value;
+  let r;
+  if(act==="combat_start") r=await intent("combat_start",{});
+  else if(act==="advance") r=await intent("advance",{});
+  else if(act==="combat_end") r=await intent("combat_end",{});
+  else r=await intent(act,{},actor);
+  logResult(r); await hydrate();
+});
+document.querySelectorAll(".tabs [data-tab]").forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x===b)); renderDrawer(); });
+$("#actor").onchange=()=>{ renderSheet(); renderDrawer(); };
+$("#roleBadge").onclick=()=>{ ROLE=ROLE==="dm"?"player":"dm"; const el=$("#roleBadge"); el.textContent=ROLE.toUpperCase(); el.classList.toggle("dm",ROLE==="dm"); };
+$("#connect").onclick=connect;
+window.addEventListener("resize",drawMap);
+(async()=>{ const c=await api("/v1/jutsu"); catalog=c.jutsu||[]; connect(); })();
+</script>
+</body>
+</html>

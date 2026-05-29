@@ -1,5 +1,7 @@
 import { createServer, type Server } from "node:http";
+import path from "node:path";
 import express, { type Express } from "express";
+import { REPO_ROOT } from "../config.js";
 import { WebSocketServer, type WebSocket } from "ws";
 import { z } from "zod";
 import { newId, type IREvent } from "@naruto5e/shared";
@@ -27,6 +29,10 @@ export interface BuiltServer {
 export function buildServer(engine: Engine): BuiltServer {
   const app = express();
   app.use(express.json({ limit: "4mb" }));
+
+  // The role-aware web app shell + tactical renderer (Phase 10): a static client
+  // that subscribes to the IR stream and submits intents over REST. Served at /.
+  app.use("/", express.static(path.join(REPO_ROOT, "apps", "web")));
 
   app.get("/v1/health", (_req, res) => {
     res.json({ ok: true, actions: engine.knownActions().length });
