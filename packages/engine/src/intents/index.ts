@@ -12,6 +12,7 @@ import { registerCustomizationIntents } from "./customization.js";
 import { registerStandingIntents } from "./standing.js";
 import { registerWorldIntents } from "./world.js";
 import { registerContentToolIntents } from "./content.js";
+import { registerTickIntents } from "./tick.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -31,4 +32,5 @@ export function registerAllHandlers(engine: Engine): void {
   registerStandingIntents(engine); // Phase 6 (Standing / RPP)
   registerWorldIntents(engine); // Phase 7 (npc / economy / theft / corpse)
   registerContentToolIntents(engine); // Phase 8 (jutsu_build + freeform)
+  registerTickIntents(engine); // Phase 9 (rest-embedded multi-agent tick)
 }

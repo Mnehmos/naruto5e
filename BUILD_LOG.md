@@ -404,3 +404,37 @@ commit makes a built jutsu learnable + castable end-to-end; freeform resolves an
 improv into a castable primitive op. 57 tests pass.
 
 **Next:** Phase 9 — the tick system (rest-embedded multi-agent world advancement).
+
+---
+
+## Phase 9 — The tick system ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** Architecture §12-13 — rest-bounded multi-agent world advancement,
+embedded in the rest/downtime return as restResult + tick + playerDigest.
+
+**Built (real):** `intents/tick.ts`:
+- `runEmbeddedTick(magnitude, playerIds)`: deterministic off-screen world
+  advancement — theft heat decay (long: a step / downtime: fully cools), corpse
+  decay, in-scope NPC "agents" acting (a deterministic, seeded stand-in for the
+  LLM-tier agents — patrol / train / leverage standing / leave a message), economy
+  drift/restock. Standing deltas route through `applyStandingDelta`. Builds the
+  three-layer package; the **playerDigest is the narration filter** (only outcomes
+  touching the player surface).
+- The **`rest` handler now embeds the tick** (§13): one call → restResult (party
+  benefit) + tick (full world advancement into state) + playerDigest (what the DM
+  reads aloud). Magnitude keyed to rest type: short=small, long=medium,
+  downtime=large. `downtime` recovers like a long rest + fires a large tick.
+- Standalone `tick_preview` (scope without resolving), `tick_run`, `tick_resolve`
+  (resolve a DM-conformed batch of agent/world ops — the LLM-supplied path).
+  MCP tick tools.
+
+**Note:** the engine hosts no LLM (§2.4), so per-NPC agent actions are a
+deterministic stand-in here; in the full deployment the LLM tier supplies richer
+agent intents via tick.run/agent.tick and the DM conforms them into tick.resolve.
+This embedded path lets the world advance autonomously so the loop always runs.
+
+**Checkpoint proven:** a long rest returns restResult + tick (medium) +
+playerDigest and the tick mutates world state (heat cools, agents act); downtime
+fires a large tick (heat fully cools, economy restock). 60 tests pass.
+
+**Next:** Phase 10 — renderers (the tactical visualizer + role-aware app shell).

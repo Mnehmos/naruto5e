@@ -3,6 +3,7 @@ import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import type { Character } from "../domain/character.js";
 import { abilityMod } from "../rules/abilities.js";
+import { magnitudeForRest, runEmbeddedTick } from "./tick.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -31,7 +32,7 @@ export function registerRestIntents(engine: Engine): void {
     let hitDiceSpent = 0;
     let chakraDiceSpent = 0;
 
-    if (type === "long") {
+    if (type === "long" || type === "downtime") {
       c.hp.current = c.hp.max;
       c.chakra.current = c.chakra.max;
       // recover half (rounded down, min 1) of each dice pool
@@ -65,8 +66,22 @@ export function registerRestIntents(engine: Engine): void {
       willOfFire: c.willOfFire ? "refreshed" : "unchanged",
       pools: { hp: c.hp, chakra: c.chakra, hitDice: c.hitDice, chakraDice: c.chakraDice },
     };
-    // restResult is layer 1; tick (layer 2) + playerDigest (layer 3) embed in Phase 9.
-    ctx.ir.emit("rest", { actor: c.id, data: { restResult }, narration: `${c.name} takes a ${type} rest: +${restResult.recovered.hp} HP, +${restResult.recovered.chakra} chakra.` });
+    // The tick is EMBEDDED in the rest return (Architecture §13): one call ->
+    // restResult (layer 1) + tick (layer 2, world advancement) + playerDigest
+    // (layer 3, the narration filter). The DM never has to remember to advance
+    // the world — resting the party does it and hands back what to say.
+    const magnitude = magnitudeForRest(type);
+    const playerIds = ctx.store.collection<Character>("characters").find((x) => x.roomId === ctx.room.id && x.isPC).map((x) => x.id);
+    const { tick, playerDigest } = runEmbeddedTick(ctx, magnitude, playerIds);
+
+    ctx.ir.emit("rest", {
+      actor: c.id,
+      data: { restResult, tick, playerDigest },
+      narration: `${c.name} takes a ${type} rest: +${restResult.recovered.hp} HP, +${restResult.recovered.chakra} chakra.`,
+    });
+    if (playerDigest.length) {
+      ctx.ir.emit("player_digest", { data: { playerDigest }, narration: playerDigest.join(" ") });
+    }
   });
 
   // ---- downtime activities (Ch.7c) ------------------------------------

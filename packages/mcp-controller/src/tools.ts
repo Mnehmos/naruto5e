@@ -319,4 +319,16 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     },
     async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "freeform", params })),
   );
+
+  // ---- Phase 9: the world tick (also embedded in rest) ----------------
+  server.registerTool(
+    "tick_preview",
+    { description: "Preview which NPC agents a tick would call (by proximity + stake + magnitude), without resolving.", inputSchema: { roomId: z.string(), trigger: z.string().optional() } },
+    async ({ roomId, trigger }) => ok(await client.submitIntent({ roomId, type: "tick_preview", params: { trigger } })),
+  );
+  server.registerTool(
+    "tick_run",
+    { description: "Run a standalone world tick (the rest tool embeds this automatically). Returns tick + playerDigest.", inputSchema: { roomId: z.string(), trigger: z.string().optional() } },
+    async ({ roomId, trigger }) => ok(await client.submitIntent({ roomId, type: "tick_run", params: { trigger } })),
+  );
 }
