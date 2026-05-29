@@ -345,3 +345,35 @@ gating, the rogue defect path).
 
 **Next:** Phase 7 — world-consequence systems (npc/economy/theft/corpse), all
 routing deltas through standing_manage.
+
+---
+
+## Phase 7 — World-consequence systems ✅ (RUNNABLE, COMMITTED)
+
+**Spec:** the integrated memory · economy · theft · corpse systems, all routing
+deltas through standing_manage (the currency spine).
+
+**Built (real):** `domain/world.ts` + `intents/world.ts`:
+- **npc_manage**: npc_create, npc_interact (records a memory; a memory's
+  standingDelta writes into the authority ledger — "the memory is the why"),
+  npc_learn_fact, npc_get_relationship. familiarity/disposition tracked.
+- **economy_manage**: vendor_create (open + gated stock), economy_list_stock
+  (gated entries unlocked by Standing), economy_buy (gated stock unbuyable without
+  the reputation — "Ryo buys; Standing permits" — plus a standing discount).
+- **theft_manage**: theft_steal (heat + witnesses), theft_report (Standing hit
+  with the jurisdiction, accumulating heat → the **rogue trigger** at a
+  threshold/repeat), theft_heat_decay, theft_fence (launder via a heat-capacity
+  vendor → builds patron Standing).
+- **corpse_manage**: corpse_create, corpse_loot (mundane), corpse_harvest (a
+  weighted KKG/secret/scroll → craters the deceased's authority, spikes the
+  patron's; KKG gated to a *fresh* body — real time pressure), corpse_recover
+  (honor → Standing-positive), corpse_advance_decay.
+- All standing-affecting acts go through `applyStandingDelta`. MCP tools:
+  npc_interact, economy_buy, steal, harvest_corpse, recover_corpse.
+
+**Checkpoint proven:** a theft (reported → Standing drops, repeats → rogue
+trigger) and a corpse-harvest (KKG → deceased authority craters + patron spikes;
+decayed body rejects harvest) each move Standing; gated stock blocks/unblocks on
+reputation; recovery raises Standing. 52 tests pass.
+
+**Next:** Phase 8 — content tools (jutsu_build point model + freeform resolver).

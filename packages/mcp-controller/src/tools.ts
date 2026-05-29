@@ -274,4 +274,31 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     { description: "Read all of a character's per-authority Standing ledgers (with soft descriptors).", inputSchema: { roomId: z.string(), actorId: z.string() } },
     async ({ roomId, actorId }) => ok(await client.submitIntent({ roomId, actorId, type: "get_ledgers" })),
   );
+
+  // ---- Phase 7: world-consequence systems -----------------------------
+  server.registerTool(
+    "npc_interact",
+    { description: "Record an NPC interaction (memory). A standingDelta writes into that NPC's authority ledger.", inputSchema: { roomId: z.string(), actorId: z.string(), npcId: z.string(), beat: z.string(), importance: z.string().optional(), dispositionDelta: z.number().optional(), standingDelta: z.object({ authorityId: z.string(), reputation: z.number().optional(), favor: z.number().optional() }).optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "npc_interact", params })),
+  );
+  server.registerTool(
+    "economy_buy",
+    { description: "Buy from a vendor (gated stock checks Standing; high reputation discounts).", inputSchema: { roomId: z.string(), actorId: z.string(), vendorId: z.string(), item: z.string() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "economy_buy", params })),
+  );
+  server.registerTool(
+    "steal",
+    { description: "Steal an item (sets heat, records witnesses). Getting reported damages Standing with the jurisdiction.", inputSchema: { roomId: z.string(), actorId: z.string(), item: z.string(), jurisdictionAuthorityId: z.string(), witnesses: z.array(z.string()).optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "theft_steal", params })),
+  );
+  server.registerTool(
+    "harvest_corpse",
+    { description: "Harvest a weighted secret (KKG/clan secret/scroll) from a body — craters the deceased's authority, spikes the patron's (the rogue trade-off). KKG needs a fresh body.", inputSchema: { roomId: z.string(), actorId: z.string(), corpseId: z.string(), what: z.string(), patronAuthorityId: z.string().optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "corpse_harvest", params })),
+  );
+  server.registerTool(
+    "recover_corpse",
+    { description: "Return a body to its authority — an honorable, Standing-positive act.", inputSchema: { roomId: z.string(), actorId: z.string(), corpseId: z.string(), toAuthorityId: z.string().optional(), honor: z.number().optional() } },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "corpse_recover", params })),
+  );
 }

@@ -169,12 +169,20 @@ curl -s localhost:8787/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"defect
   (gates access) + capped favor (spent to be taught gated content), obligations,
   and the rogue **defect** path (ledger swap → missing-nin).
 
+## What's playable now (through Phase 7)
+
+- Everything in Phases 1–6, plus the **world-consequence web** (all moving
+  Standing): NPC memory (a defining memory raises reputation), economy with
+  Standing-gated stock + discounts, theft (heat → reported → Standing hit → rogue
+  trigger → defect), corpse harvest (KKG/secret = patron-positive / authority-
+  negative, gated to a fresh body) vs. honorable recovery.
+
 ## Current limits
 
-- The world-consequence systems, content tools, the world tick, renderers, and
-  the DM-brain harness arrive in Phases 7–11.
+- Content tools, the world tick, renderers, and the DM-brain harness arrive in
+  Phases 8–11.
 
 ## What's next
 
-Phase 7: world-consequence — NPC memory, economy (gated stock), theft (heat +
-rogue trigger), corpse (KKG/secret harvest vs recovery), all moving Standing.
+Phase 8: content tools — jutsu_build (the empirical point model + green/yellow/red
+governor) and the freeform resolver (improv priced on the same engine).
