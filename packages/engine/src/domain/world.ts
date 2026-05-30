@@ -34,6 +34,20 @@ export const NpcRelationshipSchema = z.object({
 });
 export type NpcRelationship = z.infer<typeof NpcRelationshipSchema>;
 
+// An NPC goal/agenda item — what the NPC pursues off-screen. The tick advances
+// `progress` and (for directed drives) routes the effect through the Standing spine.
+export const NpcGoalSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  drive: z.enum(["advance", "undermine", "protect", "train", "patrol", "scheme"]).default("scheme"),
+  targetActorId: z.string().optional(), // whom the drive is aimed at (defaults to a PC)
+  targetAuthorityId: z.string().optional(), // which ledger it moves (defaults to npc.authorityId)
+  intensity: z.number().default(1), // scales per-tick effect & progress
+  progress: z.number().default(0), // 0..100; achieved at 100
+  done: z.boolean().default(false),
+});
+export type NpcGoal = z.infer<typeof NpcGoalSchema>;
+
 export const NpcSchema = z.object({
   id: z.string(),
   kind: z.literal("npc").default("npc"),
@@ -41,6 +55,8 @@ export const NpcSchema = z.object({
   name: z.string(),
   authorityId: z.string().optional(),
   knownFacts: z.array(z.string()).default([]),
+  goals: z.array(NpcGoalSchema).default([]),
+  position: z.object({ x: z.number(), y: z.number() }).optional(), // for spatial/social-stealth
 });
 export type Npc = z.infer<typeof NpcSchema>;
 

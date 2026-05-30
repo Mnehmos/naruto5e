@@ -2,7 +2,7 @@ import { newId, reject, rollExpression } from "@naruto5e/shared";
 import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import type { Character } from "../domain/character.js";
-import { NpcRelationshipSchema, NpcSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
+import { NpcRelationshipSchema, NpcSchema, NpcGoalSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
 import { applyStandingDelta, getLedger } from "../rules/standing.js";
 import { dispositionTier, familiarityTier, salientMemories } from "../rules/npc.js";
 
@@ -21,9 +21,29 @@ function relId(npcId: string, actorId: string) {
 export function registerWorldIntents(engine: Engine): void {
   // ============ A) npc_manage (memory <-> Standing) ============
   engine.registerHandler("npc_create", (ctx) => {
-    const npc = NpcSchema.parse({ id: (ctx.op.params.id as string) || newId("npc"), roomId: ctx.room.id, name: String(ctx.op.params.name ?? "NPC"), authorityId: ctx.op.params.authorityId as string });
+    const goals = ((ctx.op.params.goals as any[]) ?? []).map((g) =>
+      NpcGoalSchema.parse({ id: g.id ?? newId("goal"), text: String(g.text ?? "an unstated aim"), drive: g.drive, targetActorId: g.targetActorId, targetAuthorityId: g.targetAuthorityId, intensity: g.intensity ?? 1 }),
+    );
+    const npc = NpcSchema.parse({ id: (ctx.op.params.id as string) || newId("npc"), roomId: ctx.room.id, name: String(ctx.op.params.name ?? "NPC"), authorityId: ctx.op.params.authorityId as string, goals, position: ctx.op.params.position as any });
     coll(ctx, "npcs").put(npc);
-    ctx.ir.emit("npc_created", { data: { npc }, narration: `${npc.name} enters the world.` });
+    ctx.ir.emit("npc_created", { data: { npc }, narration: `${npc.name} enters the world${goals.length ? ` (pursuing ${goals.length} goal${goals.length === 1 ? "" : "s"})` : ""}.` });
+  });
+
+  // npc_set_goal — upsert (or remove) a goal the NPC pursues off-screen; the tick
+  // advances it and routes directed drives through the Standing spine.
+  engine.registerHandler("npc_set_goal", (ctx) => {
+    const npc = coll<any>(ctx, "npcs").get(String(ctx.op.params.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${ctx.op.params.npcId}".`, {}, ["Create the NPC first (npc_create)."]);
+    const g = (ctx.op.params.goal as any) ?? {};
+    const remove = ctx.op.params.remove === true;
+    npc.goals = npc.goals ?? [];
+    const id = g.id ?? newId("goal");
+    npc.goals = npc.goals.filter((x: any) => x.id !== id);
+    if (!remove) {
+      npc.goals.push(NpcGoalSchema.parse({ id, text: String(g.text ?? "an unstated aim"), drive: g.drive, targetActorId: g.targetActorId, targetAuthorityId: g.targetAuthorityId, intensity: g.intensity ?? 1, progress: g.progress ?? 0 }));
+    }
+    coll(ctx, "npcs").put(npc);
+    ctx.ir.emit("npc_goal", { data: { npcId: npc.id, goals: npc.goals, removed: remove ? id : undefined }, narration: remove ? `${npc.name} sets aside a goal.` : `${npc.name} now pursues: ${g.text ?? "an aim"}.` });
   });
 
   engine.registerHandler("npc_interact", (ctx) => {

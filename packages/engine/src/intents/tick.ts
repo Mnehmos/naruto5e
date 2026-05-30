@@ -2,7 +2,7 @@ import { reject } from "@naruto5e/shared";
 import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import type { Npc } from "../domain/world.js";
-import { DECAY_ORDER, type Corpse, type StolenItem } from "../domain/world.js";
+import { DECAY_ORDER, NpcRelationshipSchema, type Corpse, type NpcRelationship, type StolenItem } from "../domain/world.js";
 import { applyStandingDelta } from "../rules/standing.js";
 
 export type Magnitude = "small" | "medium" | "large";
@@ -82,12 +82,48 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
     }
   }
 
-  // ---- in-scope NPC agents act (deterministic stand-in) ----
+  // ---- in-scope NPC agents act: goal-driven where an agenda exists, else generic ----
+  const PROGRESS_STEP: Record<Magnitude, number> = { small: 5, medium: 15, large: 40 };
+  const STANDING_BASE: Record<Magnitude, number> = { small: 1, medium: 2, large: 3 };
+  const relId = (npcId: string, actorId: string) => `${npcId}:${actorId}`;
   const npcs = ctx.store.collection<Npc>("npcs").find((n) => n.roomId === ctx.room.id);
   const inScope = npcs.slice(0, AGENT_CAP[magnitude]);
-  for (let i = 0; i < inScope.length; i++) {
-    const npc = inScope[i];
-    // deterministic action choice seeded by the room RNG
+  for (const npc of inScope) {
+    const goal = (npc.goals ?? []).find((g) => !g.done);
+    if (goal) {
+      const target = goal.targetActorId ?? playerIds[0];
+      const authority = goal.targetAuthorityId ?? npc.authorityId;
+      let action = `pursues "${goal.text}"`;
+      // directed drives move a Standing ledger AND the NPC's memory of the target
+      if ((goal.drive === "advance" || goal.drive === "undermine" || goal.drive === "protect") && target && authority) {
+        const dir = goal.drive === "undermine" ? -1 : 1;
+        const delta = dir * Math.max(1, Math.round(STANDING_BASE[magnitude] * (goal.intensity ?? 1)));
+        const l = applyStandingDelta(ctx.store, target, authority, { reputation: delta, reason: `${npc.name}: ${goal.text}` });
+        tick.consequenceDeltas.standing.push({ authorityId: authority, charId: target, reputationDelta: delta, why: goal.text });
+        tick.resolved.push({ op: "standing", detail: `${authority} ${delta >= 0 ? "+" : ""}${delta} (${npc.name})` });
+        // surface the "why" as an off-screen NPC memory toward the target
+        const rels = ctx.store.collection<NpcRelationship>("npc_relationships");
+        let rel = rels.get(relId(npc.id, target));
+        if (!rel) rel = NpcRelationshipSchema.parse({ id: relId(npc.id, target), npcId: npc.id, actorId: target, authorityId: npc.authorityId });
+        rel.disposition = Math.max(-100, Math.min(100, rel.disposition + (dir > 0 ? 3 : -3)));
+        rel.memories.push({ eventId: `mem_tick_${npc.id}_${goal.id}_${goal.progress}`, summary: `off-screen: ${goal.text}`, importance: "notable", topics: ["offscreen", goal.drive], sentiment: dir * 3, witnessed: false });
+        rels.put(rel);
+        tick.consequenceDeltas.npcMemories.push({ npcId: npc.id, summary: goal.text });
+        if (playerSet.has(target)) digest.push(dir > 0 ? `${npc.name} advanced your standing with ${authority} (now ${l.reputation}).` : `${npc.name} worked against you with ${authority} (now ${l.reputation}).`);
+        action = goal.drive === "undermine" ? `schemes against ${target}` : goal.drive === "protect" ? `watches over ${target}` : `advocates for ${target}`;
+      }
+      goal.progress = Math.min(100, (goal.progress ?? 0) + Math.round(PROGRESS_STEP[magnitude] * (goal.intensity ?? 1)));
+      if (goal.progress >= 100 && !goal.done) {
+        goal.done = true;
+        tick.resolved.push({ op: "npc_goal", detail: `${npc.name} achieved: ${goal.text}` });
+        tick.consequenceDeltas.npcMemories.push({ npcId: npc.id, summary: `achieved: ${goal.text}` });
+        digest.push(`${npc.name} has achieved their aim: ${goal.text}.`);
+      }
+      ctx.store.collection<Npc>("npcs").put(npc);
+      tick.agentsCalled.push({ npcId: npc.id, name: npc.name, action });
+      continue;
+    }
+    // generic fallback for goal-less NPCs (deterministic, seeded by the room RNG)
     const roll = ctx.rng.int(0, 99);
     let action: string;
     if (roll < 30) {
@@ -95,7 +131,6 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
     } else if (roll < 55) {
       action = "trains / advances their own goals";
     } else if (roll < 75 && npc.authorityId) {
-      // a patron/authority NPC nudges standing for a player they have a stake in
       const target = playerIds[0];
       if (target) {
         const delta = magnitude === "large" ? ctx.rng.int(-3, 4) : ctx.rng.int(-1, 2);

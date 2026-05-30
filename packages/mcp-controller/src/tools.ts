@@ -61,14 +61,15 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     {
       description:
         "NPC management (consolidated action-router). Actions: " +
-        "create {name, authorityId?} — add an NPC; " +
+        "create {name, authorityId?, goals?[], position?} — add an NPC; " +
         "interact {npcId, beat, dispositionDelta?, familiarityDelta?, importance?(low|notable|defining), topics?, witnessed?, standingDelta?} — record an interaction (a standingDelta writes the NPC's authority ledger), bumps interactionCount; " +
         "learn_fact {npcId, fact} — the NPC now knows a fact; " +
+        "set_goal {npcId, goal:{text, drive?(advance|undermine|protect|train|patrol|scheme), targetActorId?, targetAuthorityId?, intensity?, id?}, remove?} — give the NPC an agenda the world tick pursues off-screen (directed drives move Standing + the NPC's memory of the target); " +
         "get_relationship {npcId} — raw relationship + derived attitude/closeness tiers; " +
         "context {npcId, limit?, minImportance?, topic?} — an LLM-ready summary (attitude/closeness tiers + salient topic/importance-filtered memories + known facts + Standing) to roleplay the NPC consistently in one read.",
       inputSchema: {
         roomId: z.string(),
-        action: z.enum(["create", "interact", "learn_fact", "get_relationship", "context"]),
+        action: z.enum(["create", "interact", "learn_fact", "set_goal", "get_relationship", "context"]),
         actorId: z.string().optional(),
         npcId: z.string().optional(),
         name: z.string().optional(),
@@ -81,13 +82,17 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         topics: z.array(z.string()).optional(),
         witnessed: z.boolean().optional(),
         standingDelta: z.object({ authorityId: z.string(), reputation: z.number().optional(), favor: z.number().optional() }).optional(),
+        goals: z.array(z.record(z.any())).optional(),
+        goal: z.record(z.any()).optional(),
+        remove: z.boolean().optional(),
+        position: z.object({ x: z.number(), y: z.number() }).optional(),
         limit: z.number().optional(),
         minImportance: z.enum(["low", "notable", "defining"]).optional(),
         topic: z.string().optional(),
       },
     },
     async ({ roomId, action, actorId, ...rest }) => {
-      const type = { create: "npc_create", interact: "npc_interact", learn_fact: "npc_learn_fact", get_relationship: "npc_get_relationship", context: "npc_context" }[action];
+      const type = { create: "npc_create", interact: "npc_interact", learn_fact: "npc_learn_fact", set_goal: "npc_set_goal", get_relationship: "npc_get_relationship", context: "npc_context" }[action];
       return ok(await client.submitIntent({ roomId, actorId, type, params: rest }));
     },
   );

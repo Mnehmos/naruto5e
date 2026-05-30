@@ -317,3 +317,32 @@ describe("batch ref-threading uses earlier ops' produced ids", () => {
     expect(r.events.find((e: any) => e.type === "npc_interaction").data.npcId).toBe(npcId);
   });
 });
+
+// NPC goals drive autonomous off-screen behavior through the rest-embedded tick.
+describe("NPC goals + tick", () => {
+  it("an undermine goal drops the target's standing, progresses, and is remembered", () => {
+    const pc = mkPC("Hero");
+    const npcId = (run("npc_create", {
+      name: "Gato",
+      authorityId: "wave_village",
+      goals: [{ text: "ruin the hero's name", drive: "undermine", targetActorId: pc, targetAuthorityId: "wave_village", intensity: 2 }],
+    }) as any).events[0].data.npc.id as string;
+
+    const tickEv = (run("tick_run", { magnitude: "large" }) as any).events.find((e: any) => e.type === "tick");
+    const standing = tickEv.data.tick.consequenceDeltas.standing;
+    expect(standing.some((s: any) => s.charId === pc && s.authorityId === "wave_village" && s.reputationDelta < 0)).toBe(true);
+
+    const npc = engine.getEntity("npcs", npcId) as any;
+    expect(npc.goals[0].progress).toBeGreaterThan(0); // large tick * intensity 2
+
+    const rel = engine.getEntity("npc_relationships", `${npcId}:${pc}`) as any;
+    expect(rel.memories.some((m: any) => (m.topics ?? []).includes("undermine"))).toBe(true);
+  });
+
+  it("a goal-less NPC still uses the generic tick behavior (no crash)", () => {
+    mkPC("Hero");
+    run("npc_create", { name: "Townsfolk" });
+    const tickEv = (run("tick_run", { magnitude: "small" }) as any).events.find((e: any) => e.type === "tick");
+    expect(tickEv.data.tick.agentsCalled.length).toBeGreaterThanOrEqual(1);
+  });
+});
