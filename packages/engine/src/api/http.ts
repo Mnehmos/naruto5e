@@ -47,12 +47,13 @@ export function buildServer(engine: Engine): BuiltServer {
     const intent = {
       intentId: req.body?.intentId ?? newId("intent"),
       roomId: req.params.roomId,
-      actorId: req.body?.actorId,
+      // tolerate clients that send actorId:null (e.g. ConvertTo-Json) — treat as absent
+      actorId: req.body?.actorId ?? undefined,
       submittedBy: req.body?.submittedBy ?? { clientType: "ui", role: "dm" },
       type: req.body?.type,
       params: req.body?.params ?? {},
-      cost: req.body?.cost,
-      clientTime: req.body?.clientTime,
+      cost: req.body?.cost ?? undefined,
+      clientTime: req.body?.clientTime ?? undefined,
     };
     try {
       const result = engine.resolveIntent(intent as any);
