@@ -13,13 +13,15 @@ function advs(ctx: ResolveContext) {
 }
 
 /** Build an adversary statblock from the tier baseline + modifiers (the 8-step build). */
-function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; role?: string; clan?: string; level: number; partySize?: number; jutsu?: string[]; traits?: string[]; affinity?: string[]; id?: string }): Adversary {
+function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; role?: string; clan?: string; level: number; partySize?: number; jutsu?: string[]; traits?: string[]; affinity?: string[]; id?: string; personalize?: { acMod?: number; attackMod?: number; hpMult?: number; damageMult?: number; dcMod?: number } }): Adversary {
   const base = adversaryBaseline(opts.level);
   const partySize = opts.partySize ?? 4;
   const m = tierMods(opts.tier, partySize);
 
+  const pz = opts.personalize ?? {}; // step 7 of the 8-step build: tune AC/HP/attack vs the party
   let hp = Math.round(base.hp * (opts.tier === "minion" ? 1 : m.hpMul));
   if (opts.tier === "minion") hp = Math.max(1, Math.min(20, base.hp)); // minion HP 1–20
+  hp = Math.max(1, Math.round(hp * (pz.hpMult ?? 1)));
   const chakra = Math.round(base.chakra * m.chakraMul);
   const cap = jutsuRankCap(opts.tier);
   const jutsu = (opts.jutsu ?? []).filter((id) => {
@@ -35,15 +37,15 @@ function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; r
     role: opts.role ?? "striker",
     clan: opts.clan,
     level: opts.level,
-    ac: base.ac + m.ac,
+    ac: base.ac + m.ac + (pz.acMod ?? 0),
     hp: { current: hp, max: hp, temp: 0 },
     chakra: { current: chakra, max: chakra, temp: 0 },
     abilityMods: Object.fromEntries(Object.entries(base.abilityMods).map(([k, v]) => [k, v + m.save])),
     proficiencyBonus: base.proficiencyBonus,
     saveBonus: m.save,
-    attack: base.attack + m.attack,
-    damage: Math.max(1, Math.round(base.damage * m.damageMul)),
-    jutsuDC: 8 + base.proficiencyBonus + Math.round(opts.level / 3) + m.dc,
+    attack: base.attack + m.attack + (pz.attackMod ?? 0),
+    damage: Math.max(1, Math.round(base.damage * m.damageMul * (pz.damageMult ?? 1))),
+    jutsuDC: 8 + base.proficiencyBonus + Math.round(opts.level / 3) + m.dc + (pz.dcMod ?? 0),
     initiativeBonus: m.init,
     traits: opts.traits ?? [],
     jutsu,
@@ -72,6 +74,7 @@ export function registerAdversaryIntents(engine: Engine): void {
       jutsu: (p.jutsu as string[]) ?? [],
       traits: (p.traits as string[]) ?? [],
       affinity: (p.affinity as string[]) ?? [],
+      personalize: p.personalize as any,
       id: p.id as string,
     });
     advs(ctx).put(adv);
@@ -99,6 +102,7 @@ export function registerAdversaryIntents(engine: Engine): void {
       jutsu: tpl.jutsu ?? [],
       traits: tpl.traits ?? [],
       affinity: tpl.affinity ?? [],
+      personalize: ctx.op.params.personalize as any,
       id: ctx.op.params.id as string,
     });
     advs(ctx).put(adv);

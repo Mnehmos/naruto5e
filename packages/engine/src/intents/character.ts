@@ -272,7 +272,12 @@ export function registerCharacterIntents(engine: Engine): void {
     if (char.hp.current > 0 && char.conditions.includes("Unconscious")) {
       char.conditions = char.conditions.filter((c) => c !== "Unconscious");
     }
+    const healed = char.hp.current - before;
     chars(ctx).put(char);
-    ctx.ir.emit("heal", { actor: char.id, data: { amount: char.hp.current - before, hp: char.hp } });
+    ctx.ir.emit("heal", {
+      actor: char.id,
+      data: { amount: healed, hp: char.hp, revived: before === 0 && char.hp.current > 0 },
+      narration: `${char.name} is healed for ${healed} (${char.hp.current}/${char.hp.max} HP)${before === 0 && char.hp.current > 0 ? " — back on their feet!" : ""}.`,
+    });
   });
 }

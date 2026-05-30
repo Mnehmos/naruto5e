@@ -7,7 +7,7 @@ import { actorAC, actorAbilityMod, actorAffinity, actorCasting, loadActor, saveA
 import { RANK_VALUE, clashResolve, elementalAdvantage, jutsuElement, rollDamage } from "../rules/combat.js";
 import { applyDamageDoc, healDoc } from "../rules/resolve.js";
 import { useLegendaryResistance, checkPhaseTransition } from "../rules/adversary.js";
-import { blockedComponents } from "../rules/conditions.js";
+import { blockedComponents, INCAPACITATING } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
 import { activeCombatantId } from "../rules/turn.js";
 
@@ -78,6 +78,13 @@ export function castJutsu(ctx: ResolveContext): void {
   const force = ctx.op.params.force === true;
   if (isPC && !force && Array.isArray(caster.jutsuKnown) && !caster.jutsuKnown.includes(jutsu.id)) {
     throw reject("not_known", `${caster.name} has not learned "${jutsu.name}".`, { jutsu: jutsu.id }, ["Learn it first (jutsu_learn), or pass force:true (DM)."]);
+  }
+
+  // incapacitation gate: a downed (0 HP) or incapacitated caster cannot act
+  // (mirrors the combat_action gate so casting can't bypass it).
+  const incap = (caster.conditions ?? []).find((c: string) => INCAPACITATING.has(c));
+  if ((caster.hp?.current ?? 1) <= 0 || incap) {
+    throw reject("incapacitated", `${caster.name} is ${incap ?? "unconscious"} and cannot cast.`, { condition: incap ?? "Unconscious", hp: caster.hp?.current }, ["Stabilize/revive first (healing or a successful death save)."]);
   }
 
   // components
