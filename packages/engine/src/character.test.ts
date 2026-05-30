@@ -126,3 +126,85 @@ describe("Phase 1 CHECKPOINT — build any legal character end-to-end", () => {
     expect(ra.events[0].data.character.abilities).toEqual(rb.events[0].data.character.abilities);
   });
 });
+
+// Regression — surfaced in the auto-mode campaign playtest: a medic's character_heal
+// healed the ACTOR instead of the targetId ally, and a dice-expression amount
+// ("2d8+8") was Number()'d to NaN and written into stored HP (current became null).
+describe("character_heal — target routing, dice amounts, NaN guard, corruption repair", () => {
+  function mkChar(name: string): string {
+    const r = build({
+      name,
+      clan: "Non-Clan",
+      className: "Taijutsu Specialist",
+      background: "Hard Worker",
+      abilities: { method: "manual", scores: { str: 14, dex: 12, con: 14, int: 10, wis: 10, cha: 10 } },
+      abilityChoices: ["str", "dex", "con"],
+      bgAbilityChoice: "str",
+      clanSkillChoices: ["Athletics", "Intimidation"],
+      classSkillChoices: ["Acrobatics", "Survival"],
+    });
+    if (r.status !== "resolved") throw new Error("mkChar rejected: " + JSON.stringify((r as any).reason));
+    return (r as any).events[0].data.character.id as string;
+  }
+  const coll = () => (engine as any).store.collection("characters");
+  const doc = (id: string) => engine.getEntity("characters", id) as any;
+  function setCurrent(id: string, current: number) {
+    const d = coll().get(id);
+    d.hp.current = current;
+    coll().put(d);
+  }
+  const heal = (actorId: string, params: Record<string, unknown>) =>
+    engine.resolveIntent({ intentId: "h", roomId: "r1", actorId, type: "character_heal", params, ...base } as any);
+
+  it("heals the targetId ally, not the acting medic", () => {
+    const medic = mkChar("Medic");
+    const ally = mkChar("Ally");
+    const max = doc(ally).hp.max;
+    const medicBefore = doc(medic).hp.current;
+    setCurrent(ally, max - 10);
+    const r = heal(medic, { targetId: ally, amount: 6 });
+    expect(r.status).toBe("resolved");
+    expect(doc(ally).hp.current).toBe(max - 4); // (max-10) + 6
+    expect(doc(medic).hp.current).toBe(medicBefore); // the medic is untouched
+  });
+
+  it("rolls a dice-expression amount into a finite heal (no NaN corruption)", () => {
+    const medic = mkChar("Medic");
+    const ally = mkChar("Ally");
+    setCurrent(ally, 1);
+    const r = heal(medic, { targetId: ally, amount: "1d4+1" });
+    expect(r.status).toBe("resolved");
+    const after = doc(ally).hp.current;
+    expect(Number.isFinite(after)).toBe(true);
+    expect(after).toBeGreaterThan(1); // 1d4+1 => +2..+5
+    expect((r as any).events[0].data.amount).toBeGreaterThan(0);
+  });
+
+  it("rejects a non-numeric amount and leaves HP uncorrupted", () => {
+    const medic = mkChar("Medic");
+    const ally = mkChar("Ally");
+    setCurrent(ally, 7);
+    const r = heal(medic, { targetId: ally, amount: "banana" });
+    expect(r.status).toBe("rejected");
+    if (r.status === "rejected") expect(r.reason.rule).toBe("invalid_amount");
+    expect(doc(ally).hp.current).toBe(7); // unchanged, still finite
+  });
+
+  it("repairs a previously-corrupted (non-finite) current HP", () => {
+    const medic = mkChar("Medic");
+    const ally = mkChar("Ally");
+    setCurrent(ally, NaN); // simulate the old build's NaN write (serializes to null)
+    expect(Number.isFinite(doc(ally).hp.current)).toBe(false);
+    const r = heal(medic, { targetId: ally, amount: 5 });
+    expect(r.status).toBe("resolved");
+    expect(doc(ally).hp.current).toBe(5); // repaired from 0, then +5
+  });
+
+  it("defaults to self-heal when no targetId is given", () => {
+    const medic = mkChar("Medic");
+    setCurrent(medic, 5);
+    const r = heal(medic, { amount: 4 });
+    expect(r.status).toBe("resolved");
+    expect(doc(medic).hp.current).toBe(9);
+  });
+});

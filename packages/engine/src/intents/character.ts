@@ -1,4 +1,4 @@
-import { newId, reject } from "@naruto5e/shared";
+import { newId, reject, rollExpression } from "@naruto5e/shared";
 import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import { CharacterSchema, type Character } from "../domain/character.js";
@@ -267,8 +267,33 @@ export function registerCharacterIntents(engine: Engine): void {
   });
 
   engine.registerHandler("character_heal", (ctx) => {
-    const char = loadChar(ctx, ctx.op.actorId);
-    const amount = Number(ctx.op.params.amount ?? 0);
+    // Heal applies to params.targetId (an ally) when given; otherwise the actor heals self.
+    const targetId = (ctx.op.params.targetId as string | undefined) ?? ctx.op.actorId;
+    const char = loadChar(ctx, targetId);
+    // amount may be a flat number (12) or a dice expression ("2d8+8").
+    const raw = ctx.op.params.amount ?? 0;
+    let amount: number;
+    try {
+      amount =
+        typeof raw === "number"
+          ? raw
+          : /^-?\d+$/.test(String(raw).trim())
+            ? Number(raw)
+            : rollExpression(ctx.rng, String(raw)).total;
+    } catch {
+      amount = NaN;
+    }
+    if (!Number.isFinite(amount) || amount < 0) {
+      throw reject(
+        "invalid_amount",
+        `Heal amount "${String(raw)}" must be a non-negative number or dice expression.`,
+        { amount: raw },
+        ['Pass a number (12) or a dice expression like "2d8+8".'],
+      );
+    }
+    amount = Math.floor(amount);
+    // Repair any previously-corrupted current (e.g. a NaN written by an older build).
+    if (!Number.isFinite(char.hp.current)) char.hp.current = 0;
     const before = char.hp.current;
     char.hp.current = Math.min(char.hp.max, char.hp.current + amount);
     if (char.hp.current > 0 && char.conditions.includes("Unconscious")) {

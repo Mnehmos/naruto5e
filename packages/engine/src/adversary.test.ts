@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { createEngine } from "./bootstrap.js";
 import type { Engine } from "./engine.js";
-import { adversaryBaseline, tierMods } from "./rules/adversary.js";
+import { adversaryBaseline, tierMods, checkPhaseTransition } from "./rules/adversary.js";
 
 const base = { submittedBy: { clientType: "system" as const, role: "dm" as const } };
 let engine: Engine;
@@ -92,5 +92,54 @@ describe("Phase 4 CHECKPOINT — spawn + run scaled enemies and a Solo boss", ()
     expect(la.events.some((e: any) => e.type === "legendary_action")).toBe(true);
     const after = engine.getEntity("adversaries", bId) as any;
     expect(after.legendary.actions).toBeLessThan(3);
+  });
+});
+
+// Deterministic coverage of the Solo phase-transition rule (the live campaign demo
+// of this was cut short by an environment port collision; this pins the logic).
+describe("Solo phase transition — checkPhaseTransition", () => {
+  const solo = () => ({
+    name: "Demon",
+    hp: { current: 100, max: 100 },
+    phases: { thresholds: [60, 30], crossed: [] as number[], current: 1 },
+    conditions: ["Burned"] as string[],
+  });
+
+  it("fires 60% then 30% once each, advancing the phase and clearing lingering conditions", () => {
+    const doc = solo();
+    // above 60% → nothing
+    doc.hp.current = 61;
+    expect(checkPhaseTransition(doc)).toBeNull();
+    expect(doc.phases.current).toBe(1);
+    // crossing 60% → phase 2, conditions thrown off
+    doc.hp.current = 60;
+    expect(checkPhaseTransition(doc)).toBe(60);
+    expect(doc.phases.current).toBe(2);
+    expect(doc.phases.crossed).toContain(60);
+    expect(doc.conditions).toEqual([]);
+    // 60% never re-fires
+    doc.conditions = ["Bleeding"];
+    doc.hp.current = 45;
+    expect(checkPhaseTransition(doc)).toBeNull();
+    expect(doc.conditions).toEqual(["Bleeding"]);
+    // crossing 30% → phase 3
+    doc.hp.current = 29;
+    expect(checkPhaseTransition(doc)).toBe(30);
+    expect(doc.phases.current).toBe(3);
+    expect(doc.conditions).toEqual([]);
+    // no thresholds left
+    doc.hp.current = 1;
+    expect(checkPhaseTransition(doc)).toBeNull();
+  });
+
+  it("advances one phase per damage event — a single huge hit defers the deeper threshold to the next hit", () => {
+    const doc = solo();
+    doc.conditions = [];
+    doc.hp.current = 10; // jumped past both 60% and 30% in one blow
+    expect(checkPhaseTransition(doc)).toBe(60); // shallower threshold resolves first
+    expect(doc.phases.crossed).toEqual([60]);
+    expect(checkPhaseTransition(doc)).toBe(30); // deeper threshold on the next damage event
+    expect(doc.phases.crossed).toEqual([60, 30]);
+    expect(doc.phases.current).toBe(3);
   });
 });
