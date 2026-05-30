@@ -24,6 +24,32 @@ export interface EngineDeps {
 
 type IRListener = (msg: { roomId: string; events: IREvent[] }) => void;
 
+/** Replace "$name" (whole value) and "${name}" (interpolated) refs with bound ids. */
+function resolveRefs<T>(value: T, bindings: Record<string, string>): T {
+  if (typeof value === "string") {
+    if (/^\$[A-Za-z0-9_]+$/.test(value)) return (bindings[value.slice(1)] ?? value) as unknown as T;
+    return value.replace(/\$\{([A-Za-z0-9_]+)\}/g, (m, k) => bindings[k] ?? m) as unknown as T;
+  }
+  if (Array.isArray(value)) return value.map((v) => resolveRefs(v, bindings)) as unknown as T;
+  if (value && typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) out[k] = resolveRefs(v, bindings);
+    return out as unknown as T;
+  }
+  return value;
+}
+
+/** The id a batch op "produced" (created entity or acting actor), for ref-threading. */
+function producedId(events: IREvent[]): string | undefined {
+  for (const e of events) {
+    const d = (e.data ?? {}) as Record<string, any>;
+    const cand =
+      d.character?.id ?? d.npc?.id ?? d.adversary?.id ?? d.corpse?.id ?? d.vendor?.id ?? d.mission?.id ?? d.encounterId ?? d.id ?? (e as { actor?: string }).actor;
+    if (typeof cand === "string") return cand;
+  }
+  return undefined;
+}
+
 /**
  * The Engine (Architecture tier 1): the authoritative, deterministic game
  * server. Owns all state, dice, and rules. Knows nothing of MCP or LLMs.
@@ -191,10 +217,15 @@ export class Engine {
         actorId: r.actorId as string | undefined,
         params: (r.params as Record<string, unknown>) ?? {},
         cost: r.cost as CostHint | undefined,
+        bind: r.bind as string | undefined,
       };
     });
 
     const ir = new IRStream();
+    // ref-threading: later ops can reference an earlier op's produced id as "$name"
+    // (when that op set `bind: "name"`) or positionally as "$0", "$1", ... This is
+    // what makes ORDER ergonomic — create-then-use in one batch, no round-trip.
+    const bindings: Record<string, string> = {};
 
     // dry-run preview: run the ordered ops in a transaction, capture the IR, then
     // ALWAYS roll back (state + rng) and return the preview. Lets the DM validate a
@@ -207,7 +238,7 @@ export class Engine {
         this.store.transaction(() => {
           ops.forEach((op, i) => {
             failedIndex = i;
-            this.dispatch(op, room, rng, ir, submittedBy);
+            this.dispatchBatchOp(op, i, room, rng, ir, submittedBy, bindings);
           });
           throw DRY_RUN_ROLLBACK; // discard all mutations — this was only a preview
         });
@@ -247,7 +278,7 @@ export class Engine {
         this.store.transaction(() => {
           ops.forEach((op, i) => {
             failedIndex = i;
-            this.dispatch(op, room, rng, ir, submittedBy);
+            this.dispatchBatchOp(op, i, room, rng, ir, submittedBy, bindings);
           });
           this.persistRng(room, rng);
         });
@@ -280,7 +311,7 @@ export class Engine {
       const rngBefore = rng.snapshot();
       try {
         this.store.transaction(() => {
-          this.dispatch(op, room, rng, ir, submittedBy);
+          this.dispatchBatchOp(op, i, room, rng, ir, submittedBy, bindings);
           this.persistRng(room, rng);
         });
       } catch (err) {
@@ -322,6 +353,23 @@ export class Engine {
     }
     const ctx: ResolveContext = { engine: this, store: this.store, room, rng, ir, op, submittedBy };
     handler(ctx);
+  }
+
+  /** Dispatch one batch op: resolve "$ref" tokens against `bindings`, run it, then
+   *  bind the id it produced under "$<index>" and (if set) its `bind` name. */
+  private dispatchBatchOp(op: ResolveOp, i: number, room: Room, rng: Rng, ir: IRStream, submittedBy: SubmittedBy, bindings: Record<string, string>): void {
+    const resolved: ResolveOp = {
+      ...op,
+      actorId: resolveRefs(op.actorId, bindings),
+      params: resolveRefs(op.params, bindings),
+    };
+    const before = ir.events.length;
+    this.dispatch(resolved, room, rng, ir, submittedBy);
+    const made = producedId(ir.events.slice(before));
+    if (made) {
+      bindings[String(i)] = made;
+      if (op.bind) bindings[op.bind] = made;
+    }
   }
 
   private persistRng(room: Room, rng: Rng): void {

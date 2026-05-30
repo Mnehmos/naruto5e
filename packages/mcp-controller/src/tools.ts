@@ -40,11 +40,13 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         "Submit an ordered list of intents as one sequenced transaction (the DM-ergonomics capstone). " +
         "ORDER MATTERS: ops run top-to-bottom against evolving state, so an earlier op's effect is visible to a later one. " +
         "Default stop-on-failure (commits up to the first failure, returns the rest + reason); atomic:true = all-or-nothing; " +
-        "dryRun:true = run the ordered sequence and ROLL BACK, returning the would-be IR so you can validate the plan/ordering before committing (nothing persists). Returns ordered IR.",
+        "dryRun:true = run the ordered sequence and ROLL BACK, returning the would-be IR so you can validate the plan/ordering before committing (nothing persists). " +
+        "REF-THREADING: an op may set `bind:\"name\"`; a later op can reference the id it created as \"$name\" (whole value) or \"${name}\" (in a string), or positionally as \"$0\",\"$1\". " +
+        "So you can create-then-use in one batch (e.g. spawn a boss with bind:\"boss\", then target \"$boss\") without a round-trip. Returns ordered IR.",
       inputSchema: {
         roomId: z.string(),
         ops: z.array(
-          z.object({ type: z.string(), actorId: z.string().optional(), params: z.record(z.any()).optional() }),
+          z.object({ type: z.string(), actorId: z.string().optional(), params: z.record(z.any()).optional(), bind: z.string().optional() }),
         ),
         atomic: z.boolean().optional(),
         dryRun: z.boolean().optional(),

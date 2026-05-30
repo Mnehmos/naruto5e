@@ -289,3 +289,31 @@ describe("batch dryRun previews without committing", () => {
     expect((engine.getRoomState(ROOM) as any).characters.length).toBe(0);
   });
 });
+
+// Ergonomics: batch ref-threading — a later op references an id an earlier op created.
+describe("batch ref-threading uses earlier ops' produced ids", () => {
+  it("$bind resolves a created id for a downstream op", () => {
+    const r = run("batch", {
+      ops: [
+        { type: "npc_create", params: { name: "Gato" }, bind: "villain" },
+        { type: "npc_interact", actorId: "char_x", params: { npcId: "$villain", beat: "extortion", dispositionDelta: -30 } },
+      ],
+    }) as any;
+    expect(r.status).toBe("resolved");
+    const npcId = r.events.find((e: any) => e.type === "npc_created").data.npc.id;
+    const inter = r.events.find((e: any) => e.type === "npc_interaction");
+    expect(inter.data.npcId).toBe(npcId); // "$villain" resolved to the just-created id
+    expect(inter.data.attitude).toBe("unfriendly"); // disposition -30
+  });
+
+  it("positional $0 also resolves", () => {
+    const r = run("batch", {
+      ops: [
+        { type: "npc_create", params: { name: "Inari" } },
+        { type: "npc_interact", actorId: "char_x", params: { npcId: "$0", beat: "a greeting" } },
+      ],
+    }) as any;
+    const npcId = r.events.find((e: any) => e.type === "npc_created").data.npc.id;
+    expect(r.events.find((e: any) => e.type === "npc_interaction").data.npcId).toBe(npcId);
+  });
+});

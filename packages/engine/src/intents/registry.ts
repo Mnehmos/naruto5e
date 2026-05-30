@@ -10,6 +10,8 @@ export interface ResolveOp {
   actorId?: string;
   params: Record<string, unknown>;
   cost?: CostHint;
+  /** In a batch: bind this op's produced id under a name later ops can reference as "$name". */
+  bind?: string;
 }
 
 /**
