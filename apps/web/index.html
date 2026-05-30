@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🍥</text></svg>" />
 <title>Naruto 5e — Table</title>
 <style>
   :root { --bg:#0e1116; --panel:#161b22; --line:#2b323c; --ink:#e6edf3; --dim:#8b949e; --pc:#3b82f6; --enemy:#ef4444; --acc:#f59e0b; --chakra:#22d3ee; --hp:#34d399; }
@@ -96,19 +97,23 @@ async function hydrate(){
   render();
 }
 function actorList(){
+  if(!state) return [];
   const cs = (state.characters||[]); const as=(state.adversaries||[]);
   return [...cs.map(c=>({...c,_team:c.team||"pc"})), ...as.map(a=>({...a,_team:a.team||"enemy",isAdv:true}))];
 }
-function activeId(){ const e=state.encounter; return e&&e.status==="active"?e.order[e.activeIndex]:null; }
+function activeId(){ if(!state) return null; const e=state.encounter; return e&&e.status==="active"?e.order[e.activeIndex]:null; }
 
+let lastActive=null;
 function render(){
   $("#scene").textContent = (state.room.location||"—") + " · " + (state.room.mode||"scene");
   const e = state.room && state.encounter;
-  $("#turn").textContent = e&&state.encounter.status==="active" ? `round ${state.encounter.round} · turn: ${nameOf(activeId())}` : "out of combat";
-  // actor dropdown
+  const active = e&&state.encounter.status==="active" ? activeId() : null;
+  $("#turn").innerHTML = active ? `round ${state.encounter.round} · <b style="color:var(--acc)">▶ ${nameOf(active)}'s turn</b>` : "out of combat";
+  // actor dropdown — auto-follows the active combatant so clicks "just work"
   const sel = $("#actor"); const cur = sel.value;
-  sel.innerHTML = actorList().map(a=>`<option value="${a.id}">${a.name}</option>`).join("");
-  if(cur) sel.value = cur;
+  sel.innerHTML = actorList().map(a=>`<option value="${a.id}">${a.name}${a.id===active?' ◀ (acting)':''}</option>`).join("");
+  if(active && active!==lastActive){ sel.value=active; lastActive=active; } // snap to whoever is up
+  else if(cur) sel.value=cur;
   renderParty(); renderSheet(); renderDrawer(); drawMap();
 }
 function nameOf(id){ const a=actorList().find(x=>x.id===id); return a?a.name:id; }
