@@ -98,6 +98,26 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   );
 
   server.registerTool(
+    "social_speak",
+    {
+      description:
+        "Ninja eavesdropping. An actor speaks at a volume (whisper|talk|shout); the engine computes who overhears via grid distance vs the volume's range, with an opposed Stealth(speaker) vs Perception(listener) roll at the edge — respecting the Deafened condition and the Silent Killing trait (speaker stays unheard except on a winning Perception roll). concealment 0..1 shrinks the range (e.g. Hidden Mist). audience defaults to everyone else in the room. Overhearing NPCs remember what they caught (feeds npc_manage context).",
+      inputSchema: {
+        roomId: z.string(),
+        actorId: z.string(),
+        text: z.string(),
+        volume: z.enum(["whisper", "talk", "shout"]).optional(),
+        audience: z.array(z.string()).optional(),
+        concealment: z.number().optional(),
+        record: z.boolean().optional(),
+        importance: z.enum(["low", "notable", "defining"]).optional(),
+        topics: z.array(z.string()).optional(),
+      },
+    },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "social_speak", params })),
+  );
+
+  server.registerTool(
     "server_manage",
     {
       description:

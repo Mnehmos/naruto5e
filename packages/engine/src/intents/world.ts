@@ -5,6 +5,7 @@ import type { Character } from "../domain/character.js";
 import { NpcRelationshipSchema, NpcSchema, NpcGoalSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
 import { applyStandingDelta, getLedger } from "../rules/standing.js";
 import { dispositionTier, familiarityTier, salientMemories } from "../rules/npc.js";
+import { resolveSpeech, type Volume } from "../rules/social.js";
 
 function coll<T extends { id: string }>(ctx: ResolveContext, name: string) {
   return ctx.store.collection<T>(name);
@@ -126,6 +127,44 @@ export function registerWorldIntents(engine: Engine): void {
     const rel = coll<NpcRelationship>(ctx, "npc_relationships").get(relId(String(ctx.op.params.npcId), String(ctx.op.actorId ?? ctx.op.params.actorId)));
     const tiers = rel ? { attitude: dispositionTier(rel.disposition), closeness: familiarityTier(rel.familiarity) } : null;
     ctx.ir.emit("npc_relationship", { data: { relationship: rel ?? null, tiers } });
+  });
+
+  // social_speak — who overhears an exchange (ninja eavesdropping). Reuses grid
+  // positions + Stealth/Perception skills + Deafened + Silent Killing; overhearing
+  // NPCs remember what they caught (feeds npc_context).
+  engine.registerHandler("social_speak", (ctx) => {
+    const speakerId = String(ctx.op.actorId ?? ctx.op.params.actorId ?? "");
+    const room = ctx.room.id;
+    const speaker = coll<any>(ctx, "characters").get(speakerId) ?? coll<any>(ctx, "adversaries").get(speakerId) ?? coll<any>(ctx, "npcs").get(speakerId);
+    if (!speaker) throw reject("actor_required", "social_speak requires a valid speaker actorId.", { speakerId }, ["Set actorId to a character, adversary, or NPC in the room."]);
+    const volume = (ctx.op.params.volume as Volume) ?? "talk";
+    const text = String(ctx.op.params.text ?? "");
+    const audience = ctx.op.params.audience as string[] | undefined;
+    const all: any[] = [
+      ...coll<any>(ctx, "characters").find((c) => c.roomId === room),
+      ...coll<any>(ctx, "adversaries").find((a) => a.roomId === room),
+      ...coll<any>(ctx, "npcs").find((n) => n.roomId === room),
+    ];
+    const listeners = (audience ? audience.map((id) => all.find((a) => a.id === id)).filter(Boolean) : all.filter((a) => a.id !== speakerId)) as any[];
+    const results = resolveSpeech(ctx.rng, speaker, listeners, { volume, concealment: Number(ctx.op.params.concealment ?? 0) });
+    const heard = results.filter((r) => r.heard);
+    // overhearing NPCs remember it (speech -> NPC memory -> later npc_context)
+    if (ctx.op.params.record !== false) {
+      const rels = coll<NpcRelationship>(ctx, "npc_relationships");
+      for (const r of heard) {
+        const npc = coll<any>(ctx, "npcs").get(r.listenerId);
+        if (!npc) continue;
+        let rel = rels.get(relId(npc.id, speakerId));
+        if (!rel) rel = NpcRelationshipSchema.parse({ id: relId(npc.id, speakerId), npcId: npc.id, actorId: speakerId, authorityId: npc.authorityId });
+        rel.memories.push({ eventId: newId("mem"), summary: `overheard (${r.clarity}): "${text}"`, importance: (ctx.op.params.importance as any) ?? "low", topics: ((ctx.op.params.topics as string[]) ?? []).concat("overheard"), sentiment: 0, witnessed: true });
+        rels.put(rel);
+      }
+    }
+    ctx.ir.emit("social_speak", {
+      actor: speakerId,
+      data: { volume, text, heardBy: heard.map((r) => r.listenerId), results },
+      narration: `${speaker.name ?? speakerId} ${volume === "whisper" ? "whispers" : volume === "shout" ? "shouts" : "speaks"}: "${text}" — caught by ${heard.length}/${listeners.length}.`,
+    });
   });
 
   // ============ B) economy_manage (Ryo gated by Standing) ============

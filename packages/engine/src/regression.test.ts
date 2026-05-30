@@ -346,3 +346,27 @@ describe("NPC goals + tick", () => {
     expect(tickEv.data.tick.agentsCalled.length).toBeGreaterThanOrEqual(1);
   });
 });
+
+// Social-stealth: who overhears an exchange (ninja eavesdropping), and NPC memory of it.
+describe("social_speak eavesdropping", () => {
+  it("a co-located NPC overhears and remembers what was said", () => {
+    const pc = mkPC("Hero");
+    const npcId = (run("npc_create", { name: "Spy" }) as any).events[0].data.npc.id as string;
+    const r = run("social_speak", { actorId: pc, text: "the scroll is hidden in the mill", volume: "talk", topics: ["secret"] }) as any;
+    expect(r.status).toBe("resolved");
+    expect(r.events[0].data.heardBy).toContain(npcId);
+    const rel = engine.getEntity("npc_relationships", `${npcId}:${pc}`) as any;
+    expect(rel.memories.some((m: any) => (m.topics ?? []).includes("overheard") && m.summary.includes("the scroll"))).toBe(true);
+  });
+
+  it("an out-of-range NPC does not overhear a whisper", () => {
+    const pc = mkPC("Hero");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.position = { x: 0, y: 0 };
+    cc.put(c);
+    const npcId = (run("npc_create", { name: "Distant", position: { x: 50, y: 0 } }) as any).events[0].data.npc.id as string;
+    const r = run("social_speak", { actorId: pc, text: "psst", volume: "whisper" }) as any;
+    expect(r.events[0].data.heardBy).not.toContain(npcId);
+  });
+});
