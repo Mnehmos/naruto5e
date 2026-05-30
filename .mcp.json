@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "naruto5e": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "tsx",
+        "packages/mcp-controller/src/index.ts"
+      ],
+      "env": {
+        "NARUTO_ENGINE_URL": "http://localhost:8787"
+      }
+    }
+  }
+}
