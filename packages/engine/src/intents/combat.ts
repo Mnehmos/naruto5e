@@ -58,6 +58,7 @@ function gateAction(ctx: ResolveContext, cost: CostDescriptor): { ref: ActorRef;
   const aff = canAfford(ref.doc.turnBudget, cost);
   if (!aff.ok) throw reject("action_economy", `${ref.doc.name}: ${aff.detail}.`, { lacking: aff.lacking }, ["Use a different action, or end your turn (advance)."]);
   spend(ref.doc.turnBudget, cost);
+  saveActor(ctx.store, ref); // persist the spend so the action economy actually gates repeat actions this turn
   return { ref, enc };
 }
 
@@ -208,6 +209,14 @@ export function registerCombatIntents(engine: Engine): void {
     if (enc) {
       enc.status = "ended";
       encounters(ctx).put(enc);
+      // concentration does not persist across encounters — clear it for every combatant
+      for (const c of enc.combatants) {
+        const ref = loadActor(ctx.store, c.actorId);
+        if (ref?.doc.concentration?.length) {
+          ref.doc.concentration = [];
+          saveActor(ctx.store, ref);
+        }
+      }
     }
     const room = rooms(ctx).get(ctx.room.id)!;
     room.mode = "scene";
@@ -254,8 +263,10 @@ export function registerCombatIntents(engine: Engine): void {
     const targetId = String(ctx.op.params.target ?? "");
     const tref = loadActor(ctx.store, targetId);
     if (!tref) throw reject("entity_not_found", `No target "${targetId}".`, { target: targetId }, ["Specify params.target as a combatant id."]);
-    const finesse = ctx.op.params.finesse === true;
-    const ability = (ctx.op.params.ability as "str" | "dex") ?? (finesse ? (actorAbilityMod(attacker, "dex") >= actorAbilityMod(attacker, "str") ? "dex" : "str") : "str");
+    // Default to the better physical stat — taijutsu/unarmed strikes key off
+    // max(STR,DEX). Defaulting to STR under-rolled DEX/finesse martials (a Hyuga
+    // taijutsu specialist's +6 came out +4). Callers can force one with params.ability.
+    const ability = (ctx.op.params.ability as "str" | "dex") ?? (actorAbilityMod(attacker, "dex") >= actorAbilityMod(attacker, "str") ? "dex" : "str");
     const mod = actorAbilityMod(attacker, ability) + (attacker.proficiencyBonus ?? 0);
     const roll = rollD20(ctx.rng, { modifier: mod, advantage: tref.doc.dodging ? false : !!ctx.op.params.advantage, disadvantage: tref.doc.dodging || !!ctx.op.params.disadvantage });
     const ac = actorAC(tref.doc);

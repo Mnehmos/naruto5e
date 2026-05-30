@@ -145,6 +145,7 @@ export function registerAdversaryIntents(engine: Engine): void {
       const aff = canAfford(attacker.turnBudget, { action: 1 });
       if (!aff.ok) throw reject("action_economy", `${attacker.name}: ${aff.detail}.`, {});
       spend(attacker.turnBudget, { action: 1 });
+      saveActor(ctx.store, ref); // persist the decrement — else the attacker reloads with a fresh action and can attack unlimited times per turn
     }
     const tref = loadActor(ctx.store, String(ctx.op.params.target ?? ""));
     if (!tref) throw reject("entity_not_found", `No target "${ctx.op.params.target}".`, {}, ["Specify params.target."]);

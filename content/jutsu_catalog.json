@@ -840,7 +840,10 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility"
+      "delivery": "utility",
+      "healing": {
+        "dice": "1d10"
+      }
     }
   },
   {

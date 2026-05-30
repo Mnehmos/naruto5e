@@ -131,12 +131,16 @@ export function castJutsu(ctx: ResolveContext): void {
     }
   }
 
-  // concentration cap (<= 2)
+  // concentration cap (<= 2). Re-casting a jutsu already concentrated-on refreshes
+  // that slot, so it doesn't count toward the cap (no "Fox Fire, Fox Fire" stacking).
   const eff = jutsu.effect;
   const wantsConcentration = !!eff?.concentration;
-  if (wantsConcentration && (caster.concentration?.length ?? 0) >= 2) {
-    const held = (caster.concentration ?? []).map((c: any) => c.name).join(", ");
-    throw reject("concentration_full", `${caster.name} already holds 2 concentration jutsu (${held}).`, { held }, ["End one concentration (jutsu_concentration op:end) before casting another."]);
+  if (wantsConcentration) {
+    const heldOther = (caster.concentration ?? []).filter((c: any) => c.jutsuId !== jutsu.id);
+    if (heldOther.length >= 2) {
+      const held = heldOther.map((c: any) => c.name).join(", ");
+      throw reject("concentration_full", `${caster.name} already holds 2 concentration jutsu (${held}).`, { held }, ["End one concentration (jutsu_concentration op:end) before casting another."]);
+    }
   }
 
   // target validation BEFORE paying costs: a directed cast at only-dead targets
@@ -178,9 +182,10 @@ export function castJutsu(ctx: ResolveContext): void {
   });
   saveActor(ctx.store, ref);
 
-  // start concentration slot
+  // start concentration slot — replace any existing slot for the SAME jutsu
+  // (refresh duration/targets) rather than stacking a duplicate.
   if (wantsConcentration) {
-    caster.concentration = caster.concentration ?? [];
+    caster.concentration = (caster.concentration ?? []).filter((c: any) => c.jutsuId !== jutsu.id);
     caster.concentration.push({ jutsuId: jutsu.id, name: jutsu.name, targets: (ctx.op.params.targets as string[]) ?? [] });
     saveActor(ctx.store, ref);
   }

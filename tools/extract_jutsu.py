@@ -142,7 +142,12 @@ def derive_effect(rec: dict) -> dict:
     # hit points equal to Xdy" / "heal a creature for Xdy").
     hm = re.search(r"(?:regain|heal|restore|mend)\w*\s+(?:up to\s+)?(\d+d\d+|\d+)\s*(?:hit points|hp|health)", low)
     if not hm:
-        hm = re.search(r"(?:regain|heal|restore|mend)\w*\s+(?:hit points|hp|health)\s*(?:equal to|of)?\s*(\d+d\d+|\d+)", low)
+        # "regains [a number of] hit points equal to XdY" — allow words between the
+        # heal verb and "hit points" (was too strict; missed e.g. Healing Hands).
+        hm = re.search(r"(?:regain|heal|restore|mend)\w*\b.{0,40}?(?:hit points|hp|health)\s*(?:equal to|of)?\s*(\d+d\d+|\d+)", low)
+    if not hm:
+        # "heal/restore ... equal to XdY" with no literal 'hit points' right before the dice
+        hm = re.search(r"(?:regain|heal|restore|mend)\w*\b.{0,40}?(?:equal to|of)\s+(\d+d\d+|\d+)", low)
     if hm:
         effect["healing"] = {"dice": hm.group(1)}
 
