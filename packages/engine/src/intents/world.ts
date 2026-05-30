@@ -4,6 +4,7 @@ import type { ResolveContext } from "./registry.js";
 import type { Character } from "../domain/character.js";
 import { NpcRelationshipSchema, NpcSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
 import { applyStandingDelta, getLedger } from "../rules/standing.js";
+import { dispositionTier, familiarityTier, salientMemories } from "../rules/npc.js";
 
 function coll<T extends { id: string }>(ctx: ResolveContext, name: string) {
   return ctx.store.collection<T>(name);
@@ -35,10 +36,12 @@ export function registerWorldIntents(engine: Engine): void {
     if (!rel) rel = NpcRelationshipSchema.parse({ id: relId(npcId, actorId), npcId, actorId, authorityId: npc.authorityId });
     rel.familiarity = Math.min(100, rel.familiarity + Number(ctx.op.params.familiarityDelta ?? 5));
     rel.disposition = Math.max(-100, Math.min(100, rel.disposition + Number(ctx.op.params.dispositionDelta ?? 0)));
+    rel.interactionCount = (rel.interactionCount ?? 0) + 1;
     const beat = String(ctx.op.params.beat ?? "an exchange");
     const importance = (ctx.op.params.importance as any) ?? "low";
+    const topics = (ctx.op.params.topics as string[]) ?? [];
     const sd = ctx.op.params.standingDelta as any;
-    rel.memories.push({ eventId: newId("mem"), summary: beat, importance, standingDelta: sd, sentiment: Number(ctx.op.params.dispositionDelta ?? 0), witnessed: ctx.op.params.witnessed !== false });
+    rel.memories.push({ eventId: newId("mem"), summary: beat, importance, topics, standingDelta: sd, sentiment: Number(ctx.op.params.dispositionDelta ?? 0), witnessed: ctx.op.params.witnessed !== false });
     rels.put(rel);
     // a memory with a standingDelta writes into the authority ledger (the "why" behind reputation)
     let standing: any = null;
@@ -46,7 +49,48 @@ export function registerWorldIntents(engine: Engine): void {
       const l = applyStandingDelta(ctx.store, actorId, sd.authorityId, { reputation: sd.reputation, favor: sd.favor, reason: beat });
       standing = { authorityId: sd.authorityId, reputation: l.reputation, favor: l.favor };
     }
-    ctx.ir.emit("npc_interaction", { actor: actorId, data: { npcId, disposition: rel.disposition, familiarity: rel.familiarity, standing }, narration: `${npc.name}: ${beat}.` });
+    ctx.ir.emit("npc_interaction", {
+      actor: actorId,
+      data: { npcId, disposition: rel.disposition, familiarity: rel.familiarity, attitude: dispositionTier(rel.disposition), closeness: familiarityTier(rel.familiarity), interactionCount: rel.interactionCount, standing },
+      narration: `${npc.name}: ${beat}.`,
+    });
+  });
+
+  // npc_context — a single LLM-ready summary (tiers + salient memories + facts +
+  // standing) so the DM can roleplay an NPC consistently in one read. Curated
+  // from the rpg.mcp get_context idea; filters via limit/minImportance/topic.
+  engine.registerHandler("npc_context", (ctx) => {
+    const npcId = String(ctx.op.params.npcId ?? "");
+    const actorId = String(ctx.op.actorId ?? ctx.op.params.actorId ?? "");
+    const npc = coll<any>(ctx, "npcs").get(npcId);
+    if (!npc) throw reject("entity_not_found", `No NPC "${npcId}".`, { npcId }, ["Create the NPC first (npc_create)."]);
+    const rel = coll<NpcRelationship>(ctx, "npc_relationships").get(relId(npcId, actorId));
+    const familiarity = rel?.familiarity ?? 0;
+    const disposition = rel?.disposition ?? 0;
+    const salient = salientMemories(rel?.memories ?? [], {
+      limit: Number(ctx.op.params.limit ?? 5),
+      minImportance: ctx.op.params.minImportance as string | undefined,
+      topic: ctx.op.params.topic as string | undefined,
+    });
+    const facts = [...new Set([...(npc.knownFacts ?? []), ...(rel?.knownFacts ?? [])])];
+    let standing: any = null;
+    if (npc.authorityId && actorId) {
+      const l = getLedger(ctx.store, actorId, npc.authorityId);
+      if (l) standing = { authorityId: npc.authorityId, reputation: l.reputation, favor: l.favor, hostile: l.hostile };
+    }
+    const attitude = dispositionTier(disposition);
+    const closeness = familiarityTier(familiarity);
+    const lines = [
+      `${npc.name} regards ${actorId || "the party"} as ${attitude} (${closeness}; ${rel?.interactionCount ?? 0} prior interaction${(rel?.interactionCount ?? 0) === 1 ? "" : "s"}).`,
+      salient.length ? `Remembers: ${salient.map((m) => m.summary).join("; ")}.` : "",
+      facts.length ? `Knows: ${facts.join("; ")}.` : "",
+      standing ? `Standing with ${standing.authorityId}: reputation ${standing.reputation}${standing.hostile ? " (HOSTILE)" : ""}.` : "",
+    ].filter(Boolean);
+    ctx.ir.emit("npc_context", {
+      actor: actorId || undefined,
+      data: { npcId, name: npc.name, attitude, closeness, disposition, familiarity, interactionCount: rel?.interactionCount ?? 0, salientMemories: salient, knownFacts: facts, standing },
+      narration: lines.join(" "),
+    });
   });
 
   engine.registerHandler("npc_learn_fact", (ctx) => {
@@ -60,7 +104,8 @@ export function registerWorldIntents(engine: Engine): void {
 
   engine.registerHandler("npc_get_relationship", (ctx) => {
     const rel = coll<NpcRelationship>(ctx, "npc_relationships").get(relId(String(ctx.op.params.npcId), String(ctx.op.actorId ?? ctx.op.params.actorId)));
-    ctx.ir.emit("npc_relationship", { data: { relationship: rel ?? null } });
+    const tiers = rel ? { attitude: dispositionTier(rel.disposition), closeness: familiarityTier(rel.familiarity) } : null;
+    ctx.ir.emit("npc_relationship", { data: { relationship: rel ?? null, tiers } });
   });
 
   // ============ B) economy_manage (Ryo gated by Standing) ============

@@ -196,6 +196,50 @@ export class Engine {
 
     const ir = new IRStream();
 
+    // dry-run preview: run the ordered ops in a transaction, capture the IR, then
+    // ALWAYS roll back (state + rng) and return the preview. Lets the DM validate a
+    // multi-step plan — where op ORDER matters — before committing it for real.
+    if (intent.params.dryRun === true) {
+      const rngBefore = rng.snapshot();
+      const DRY_RUN_ROLLBACK = Symbol("dry_run_rollback");
+      let failedIndex = -1;
+      try {
+        this.store.transaction(() => {
+          ops.forEach((op, i) => {
+            failedIndex = i;
+            this.dispatch(op, room, rng, ir, submittedBy);
+          });
+          throw DRY_RUN_ROLLBACK; // discard all mutations — this was only a preview
+        });
+      } catch (err) {
+        this.rngs.set(room.id, Rng.restore(rngBefore)); // un-advance the dice too
+        if (err === DRY_RUN_ROLLBACK) {
+          return {
+            intentId: intent.intentId,
+            status: "resolved",
+            events: ir.events,
+            stateAfter: this.scopedStateAfter(room.id),
+            dryRun: true,
+            note: "Dry-run preview: ops ran in order and rolled back — NOTHING was committed. Resubmit without dryRun to apply.",
+          } as IntentResult;
+        }
+        if (err instanceof EngineError) {
+          return {
+            intentId: intent.intentId,
+            status: "rejected",
+            failedAt: { index: failedIndex, op: ops[failedIndex] },
+            reason: err.reason,
+            committed: [],
+            stateAfter: this.scopedStateAfter(room.id),
+            remaining: ops.slice(failedIndex),
+            suggestions: [...err.suggestions, "Dry-run preview: nothing was applied. Fix the failing op's ordering/params and re-preview."],
+            dryRun: true,
+          } as IntentResult;
+        }
+        throw err;
+      }
+    }
+
     if (atomic) {
       const rngBefore = rng.snapshot();
       let failedIndex = -1;

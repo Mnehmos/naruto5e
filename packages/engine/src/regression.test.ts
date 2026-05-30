@@ -217,3 +217,75 @@ describe("taijutsu '+XdY' bonus dice parse into effect.damage", () => {
     expect(c.getJutsu("dragon-tail-foot").effect.damage.dice).toBe("4d8");
   });
 });
+
+// Ergonomics: NPC context summary (curated from rpg.mcp get_context).
+describe("npc_context — one-read NPC summary", () => {
+  it("returns attitude/closeness tiers, salient memories, interactionCount, and standing", () => {
+    const pc = mkPC("Hero");
+    const npcId = (run("npc_create", { name: "Tazuna", authorityId: "wave_village" }) as any).events[0].data.npc.id as string;
+    run("npc_interact", { npcId, actorId: pc, beat: "shared a meal", dispositionDelta: 15, familiarityDelta: 20, importance: "low", topics: ["food"] });
+    run("npc_interact", { npcId, actorId: pc, beat: "saved his life", dispositionDelta: 40, familiarityDelta: 30, importance: "defining", topics: ["rescue"], standingDelta: { authorityId: "wave_village", reputation: 25 } });
+
+    const d = (run("npc_context", { npcId, actorId: pc, limit: 5 }) as any).events[0].data;
+    expect(d.attitude).toBe("friendly"); // disposition 0+15+40 = 55
+    expect(d.closeness).toBe("friend"); // familiarity 0+20+30 = 50
+    expect(d.interactionCount).toBe(2);
+    expect(d.salientMemories[0].summary).toBe("saved his life"); // defining first
+    expect(d.salientMemories.length).toBe(2);
+    expect(d.standing.reputation).toBe(25);
+
+    // topic filter narrows recall
+    const food = (run("npc_context", { npcId, actorId: pc, topic: "food" }) as any).events[0].data;
+    expect(food.salientMemories.map((m: any) => m.summary)).toEqual(["shared a meal"]);
+  });
+
+  it("get_relationship surfaces derived tiers", () => {
+    const pc = mkPC("Hero");
+    const npcId = (run("npc_create", { name: "Rival" }) as any).events[0].data.npc.id as string;
+    run("npc_interact", { npcId, actorId: pc, beat: "a tense standoff", dispositionDelta: -70 });
+    const d = (run("npc_get_relationship", { npcId, actorId: pc }) as any).events[0].data;
+    expect(d.tiers.attitude).toBe("hostile"); // -70
+  });
+});
+
+// Ergonomics: batch dry-run previews an ordered plan without committing.
+describe("batch dryRun previews without committing", () => {
+  it("runs ops in order, returns IR, and rolls back state + rng", () => {
+    const before = (engine.getRoomState(ROOM) as any).room.rngState;
+    const ghost = {
+      type: "character_create",
+      params: {
+        name: "Ghost",
+        clan: "Non-Clan",
+        className: "Taijutsu Specialist",
+        background: "Hard Worker",
+        abilities: { method: "manual", scores: { str: 14, dex: 12, con: 14, int: 10, wis: 10, cha: 10 } },
+        abilityChoices: ["str", "dex", "con"],
+        bgAbilityChoice: "str",
+        clanSkillChoices: ["Athletics", "Intimidation"],
+        classSkillChoices: ["Acrobatics", "Survival"],
+      },
+    };
+    const r = run("batch", { ops: [{ type: "narrate", params: { text: "a scene" } }, ghost], dryRun: true }) as any;
+    expect(r.status).toBe("resolved");
+    expect(r.dryRun).toBe(true);
+    expect(r.events.length).toBeGreaterThanOrEqual(2); // narrate + character_created previewed
+    // nothing persisted
+    let st = engine.getRoomState(ROOM) as any;
+    expect(st.characters.length).toBe(0);
+    expect(st.room.rngState).toBe(before); // dice un-advanced
+
+    // committing the same batch for real DOES persist
+    const r2 = run("batch", { ops: [ghost] }) as any;
+    expect(r2.status).toBe("resolved");
+    st = engine.getRoomState(ROOM) as any;
+    expect(st.characters.length).toBe(1);
+  });
+
+  it("a failing op in a dry-run reports the failure with dryRun:true and no state change", () => {
+    const r = run("batch", { ops: [{ type: "narrate", params: { text: "ok" } }, { type: "cast", actorId: "nobody", params: { jutsu: "fire-release-fox-fire" } }], dryRun: true }) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.dryRun).toBe(true);
+    expect((engine.getRoomState(ROOM) as any).characters.length).toBe(0);
+  });
+});

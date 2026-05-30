@@ -38,17 +38,56 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     {
       description:
         "Submit an ordered list of intents as one sequenced transaction (the DM-ergonomics capstone). " +
-        "Default stop-on-failure; atomic:true = all-or-nothing. Returns ordered IR.",
+        "ORDER MATTERS: ops run top-to-bottom against evolving state, so an earlier op's effect is visible to a later one. " +
+        "Default stop-on-failure (commits up to the first failure, returns the rest + reason); atomic:true = all-or-nothing; " +
+        "dryRun:true = run the ordered sequence and ROLL BACK, returning the would-be IR so you can validate the plan/ordering before committing (nothing persists). Returns ordered IR.",
       inputSchema: {
         roomId: z.string(),
         ops: z.array(
           z.object({ type: z.string(), actorId: z.string().optional(), params: z.record(z.any()).optional() }),
         ),
         atomic: z.boolean().optional(),
+        dryRun: z.boolean().optional(),
         role: z.enum(["player", "dm"]).optional(),
       },
     },
     async (args) => ok(await client.batch(args as any)),
+  );
+
+  server.registerTool(
+    "npc_manage",
+    {
+      description:
+        "NPC management (consolidated action-router). Actions: " +
+        "create {name, authorityId?} — add an NPC; " +
+        "interact {npcId, beat, dispositionDelta?, familiarityDelta?, importance?(low|notable|defining), topics?, witnessed?, standingDelta?} — record an interaction (a standingDelta writes the NPC's authority ledger), bumps interactionCount; " +
+        "learn_fact {npcId, fact} — the NPC now knows a fact; " +
+        "get_relationship {npcId} — raw relationship + derived attitude/closeness tiers; " +
+        "context {npcId, limit?, minImportance?, topic?} — an LLM-ready summary (attitude/closeness tiers + salient topic/importance-filtered memories + known facts + Standing) to roleplay the NPC consistently in one read.",
+      inputSchema: {
+        roomId: z.string(),
+        action: z.enum(["create", "interact", "learn_fact", "get_relationship", "context"]),
+        actorId: z.string().optional(),
+        npcId: z.string().optional(),
+        name: z.string().optional(),
+        authorityId: z.string().optional(),
+        beat: z.string().optional(),
+        fact: z.string().optional(),
+        dispositionDelta: z.number().optional(),
+        familiarityDelta: z.number().optional(),
+        importance: z.enum(["low", "notable", "defining"]).optional(),
+        topics: z.array(z.string()).optional(),
+        witnessed: z.boolean().optional(),
+        standingDelta: z.object({ authorityId: z.string(), reputation: z.number().optional(), favor: z.number().optional() }).optional(),
+        limit: z.number().optional(),
+        minImportance: z.enum(["low", "notable", "defining"]).optional(),
+        topic: z.string().optional(),
+      },
+    },
+    async ({ roomId, action, actorId, ...rest }) => {
+      const type = { create: "npc_create", interact: "npc_interact", learn_fact: "npc_learn_fact", get_relationship: "npc_get_relationship", context: "npc_context" }[action];
+      return ok(await client.submitIntent({ roomId, actorId, type, params: rest }));
+    },
   );
 
   server.registerTool(

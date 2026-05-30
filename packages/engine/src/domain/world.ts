@@ -15,12 +15,14 @@ export const NpcRelationshipSchema = z.object({
   authorityId: z.string().optional(),
   familiarity: z.number().default(0), // 0..100
   disposition: z.number().default(0), // -100..100
+  interactionCount: z.number().default(0), // deterministic counter (no wall-clock)
   memories: z
     .array(
       z.object({
         eventId: z.string(),
         summary: z.string(),
         importance: z.enum(["low", "notable", "defining"]).default("low"),
+        topics: z.array(z.string()).default([]), // searchable tags for recall
         standingDelta: z.object({ authorityId: z.string(), reputation: z.number().optional(), favor: z.number().optional() }).optional(),
         sentiment: z.number().default(0),
         timestamp: z.string().optional(),

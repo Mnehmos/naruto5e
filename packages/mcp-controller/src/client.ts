@@ -17,6 +17,7 @@ export interface BatchArgs {
   roomId: string;
   ops: Array<{ type: string; actorId?: string; params?: Record<string, unknown> }>;
   atomic?: boolean;
+  dryRun?: boolean;
   role?: "player" | "dm";
 }
 
@@ -57,7 +58,7 @@ export class EngineClient {
   batch(args: BatchArgs): Promise<any> {
     return this.req("POST", `/v1/rooms/${encodeURIComponent(args.roomId)}/intent`, {
       type: "batch",
-      params: { ops: args.ops, atomic: args.atomic === true },
+      params: { ops: args.ops, atomic: args.atomic === true, dryRun: args.dryRun === true },
       submittedBy: { clientType: "llm", role: args.role ?? "dm" },
     });
   }
