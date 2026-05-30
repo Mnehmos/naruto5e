@@ -139,6 +139,19 @@ export function castJutsu(ctx: ResolveContext): void {
     throw reject("concentration_full", `${caster.name} already holds 2 concentration jutsu (${held}).`, { held }, ["End one concentration (jutsu_concentration op:end) before casting another."]);
   }
 
+  // target validation BEFORE paying costs: a directed cast at only-dead targets
+  // is rejected (don't charge chakra/action for striking a corpse).
+  const requestedTargets = (ctx.op.params.targets as string[]) ?? [];
+  if (requestedTargets.length && eff && eff.delivery !== "utility") {
+    const aliveTargets = requestedTargets.filter((id) => {
+      const t = loadActor(ctx.store, id);
+      return t && !t.doc.dead && (t.doc.hp?.current ?? 1) > 0;
+    });
+    if (aliveTargets.length === 0) {
+      throw reject("no_valid_target", `${jutsu.name} has no living target — every specified target is already defeated.`, { targets: requestedTargets }, ["Target a living creature, or pick a different action."]);
+    }
+  }
+
   // ---- pay costs ----
   caster.chakra.current -= chakraCost;
   if (isCombatant(caster) && !legendary) spend(caster.turnBudget, cost);
@@ -201,6 +214,10 @@ export function castJutsu(ctx: ResolveContext): void {
     const tref = loadActor(ctx.store, tid);
     if (!tref) {
       ctx.ir.emit("miss_target", { actor: caster.id, data: { target: tid, reason: "not found" } });
+      continue;
+    }
+    if (tref.doc.dead) {
+      ctx.ir.emit("miss_target", { actor: caster.id, data: { target: tid, reason: "already defeated" } });
       continue;
     }
     const target = tref.doc;
@@ -271,7 +288,8 @@ function applyDamageNumberAndEmit(ctx: ResolveContext, caster: any, tref: ActorR
   // Solo Phase Transition on crossing 60% / 30% HP.
   const crossed = tref.coll === "adversaries" ? checkPhaseTransition(tref.doc) : null;
   saveActor(ctx.store, tref);
-  ctx.ir.emit("damage", { actor: caster.id, data: { target: tref.doc.id, amount: out.dealt, type, rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} ${type} damage (${out.hp.current}/${out.hp.max} HP).` });
+  // `amount` = HP actually removed (after the overkill cap); `rolled` = raw dice total.
+  ctx.ir.emit("damage", { actor: caster.id, data: { target: tref.doc.id, amount: out.dealt, rolled: amount, type, rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} ${type} damage (${out.hp.current}/${out.hp.max} HP).` });
   if (crossed) ctx.ir.emit("phase_transition", { actor: tref.doc.id, data: { threshold: crossed, phase: tref.doc.phases.current }, narration: `${tref.doc.name} enters a new phase (${crossed}% HP)!` });
   concentrationCheck(ctx, tref, out.dealt);
   if (out.died) ctx.ir.emit("down", { actor: caster.id, data: { target: tref.doc.id, dead: true }, narration: `${tref.doc.name} is slain.` });
@@ -284,6 +302,11 @@ export function registerJutsuIntents(engine: Engine): void {
   engine.registerHandler("jutsu_learn", (ctx) => {
     const c = chars(ctx).get(String(ctx.op.actorId));
     if (!c) throw reject("actor_required", "jutsu_learn requires a valid actorId.", {}, ["Set actorId."]);
+    // learning is a downtime/progression activity, not a combat action
+    const room = ctx.store.collection<any>("rooms").get(ctx.room.id);
+    if (room?.mode === "combat" && room?.encounterId && ctx.op.params.force !== true) {
+      throw reject("in_combat", `${c.name} can't learn a new jutsu mid-combat.`, { mode: "combat" }, ["Learn it out of combat, or pass force:true (DM override)."]);
+    }
     const j = requireJutsu(ctx, String(ctx.op.params.jutsu ?? ""));
     if (c.jutsuKnown.includes(j.id)) {
       ctx.ir.emit("jutsu_learned", { actor: c.id, data: { jutsu: j.id, already: true } });

@@ -77,7 +77,9 @@ export function registerCharacterIntents(engine: Engine): void {
     if (bgName && !bg)
       throw reject("unknown_background", `No background "${bgName}".`, { background: bgName }, [`Backgrounds: ${content.backgroundNames().join(", ")}`]);
 
-    const level = Math.max(1, Math.min(20, Number(p.level ?? 1)));
+    const requestedLevel = Number(p.level ?? 1);
+    const level = Math.max(1, Math.min(20, requestedLevel));
+    const levelClamped = Number.isFinite(requestedLevel) && requestedLevel !== level ? { requested: requestedLevel, clampedTo: level } : null;
     const id = (p.id as string) || newId("char");
     if (chars(ctx).get(id)) throw reject("id_taken", `Character id "${id}" already exists.`, { id });
 
@@ -116,8 +118,8 @@ export function registerCharacterIntents(engine: Engine): void {
 
     ctx.ir.emit("character_created", {
       actor: char.id,
-      data: { character: summary(char) },
-      narration: `${char.name} — ${char.rank} ${char.clan ?? ""} ${char.className ?? ""} (L${char.level}), HP ${char.hp.max}, Chakra ${char.chakra.max}.`,
+      data: { character: summary(char), levelClamped },
+      narration: `${char.name} — ${char.rank} ${char.clan ?? ""} ${char.className ?? ""} (L${char.level}), HP ${char.hp.max}, Chakra ${char.chakra.max}.${levelClamped ? ` (requested level ${levelClamped.requested} clamped to ${levelClamped.clampedTo})` : ""}`,
     });
   });
 

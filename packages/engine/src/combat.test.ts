@@ -160,6 +160,32 @@ describe("Phase 2 CHECKPOINT — full combat with jutsu", () => {
     expect((engine.getEntity("characters", a) as any).hp.current).toBeLessThan(hpBefore);
   });
 
+  it("rejects casting at an already-dead target without charging chakra (dead-target guard)", () => {
+    const caster = buildPC("Caster", "Yuki", "Ninjutsu Specialist", { str: 10, dex: 14, con: 14, int: 16, wis: 10, cha: 8 });
+    const corpse = buildPC("Corpse", "Non-Clan", "Taijutsu Specialist", { str: 10, dex: 8, con: 10, int: 8, wis: 10, cha: 10 });
+    run("jutsu_learn", { jutsu: "chakra-pulse" }, caster);
+    const cd = engine.getEntity("characters", corpse) as any;
+    cd.dead = true; cd.hp.current = 0;
+    engine.store.collection("characters").put(cd);
+    const ckBefore = (engine.getEntity("characters", caster) as any).chakra.current;
+    const r = run("cast", { jutsu: "chakra-pulse", targets: [corpse] }, caster) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("no_valid_target");
+    expect((engine.getEntity("characters", caster) as any).chakra.current).toBe(ckBefore); // not charged
+  });
+
+  it("blocks resting during active combat (no rest-to-full exploit)", () => {
+    const a = buildPC("A", "Non-Clan", "Ninjutsu Specialist", { str: 10, dex: 14, con: 14, int: 15, wis: 10, cha: 8 });
+    const b = buildPC("B", "Non-Clan", "Taijutsu Specialist", { str: 14, dex: 12, con: 14, int: 8, wis: 10, cha: 10 });
+    run("combat_start", { combatants: [{ actorId: a, team: "pc" }, { actorId: b, team: "enemy" }] });
+    const r = run("rest", { type: "long" }, a) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("in_combat");
+    // after ending combat, rest works
+    run("combat_end", {});
+    expect((run("rest", { type: "long" }, a) as any).status).toBe("resolved");
+  });
+
   it("clash_resolve + elemental advantage: Fire vs Wind favors Fire", () => {
     const a = buildPC("Sasuke", "Uchiha", "Ninjutsu Specialist", { str: 10, dex: 14, con: 12, int: 16, wis: 10, cha: 12 }, { clanSkillChoices: ["Ninshou"], abilityChoices: ["int"] });
     const b = buildPC("WindNin", "Non-Clan", "Ninjutsu Specialist", { str: 10, dex: 14, con: 12, int: 12, wis: 10, cha: 8 });

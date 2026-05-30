@@ -26,6 +26,11 @@ function conMod(c: Character): number {
 export function registerRestIntents(engine: Engine): void {
   engine.registerHandler("rest", (ctx) => {
     const c = loadChar(ctx);
+    // no resting during active combat (a rest-to-full between turns would be an exploit)
+    const room = ctx.store.collection<any>("rooms").get(ctx.room.id);
+    if (room?.mode === "combat" && room?.encounterId) {
+      throw reject("in_combat", `${c.name} can't rest during active combat.`, { mode: "combat" }, ["End the encounter first (combat_end), then rest."]);
+    }
     const type = String(ctx.op.params.type ?? "short");
     const cm = conMod(c);
     const before = { hp: c.hp.current, chakra: c.chakra.current };
