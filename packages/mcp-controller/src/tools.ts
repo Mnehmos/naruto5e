@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { EngineClient } from "./client.js";
+import * as lifecycle from "./engine-process.js";
 
 /**
  * The MCP tool surface (Architecture §3.1). Per §9.3 the action surface IS the
@@ -48,6 +49,24 @@ export function registerTools(server: McpServer, client: EngineClient): void {
       },
     },
     async (args) => ok(await client.batch(args as any)),
+  );
+
+  server.registerTool(
+    "server_manage",
+    {
+      description:
+        "Manage the tier-1 engine server lifecycle (dev ergonomics). " +
+        "action: status (is the engine reachable on NARUTO_ENGINE_URL — returns /v1/health), " +
+        "start (spawn a DETACHED engine that outlives the controller; no-op if already healthy), " +
+        "stop (kill the tracked engine PID, with a kill-by-port fallback), " +
+        "restart (stop then start). PORT is derived from the engine URL; SQLite state in data/ survives a restart. " +
+        "Use this when game tools return 'fetch failed' (engine down).",
+      inputSchema: {
+        action: z.enum(["status", "start", "stop", "restart"]),
+        dbDriver: z.enum(["sqlite", "memory"]).optional(),
+      },
+    },
+    async ({ action, dbDriver }) => ok(await lifecycle.manage(action, client.url, { dbDriver })),
   );
 
   server.registerTool(

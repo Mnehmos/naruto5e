@@ -25,6 +25,11 @@ export class EngineClient {
     this.baseUrl = baseUrl.replace(/\/$/, "");
   }
 
+  /** The engine base URL this client targets (used by server-lifecycle tooling). */
+  get url(): string {
+    return this.baseUrl;
+  }
+
   private async req(method: string, path: string, body?: unknown): Promise<any> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       method,

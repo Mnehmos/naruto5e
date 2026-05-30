@@ -35,7 +35,13 @@ export function buildServer(engine: Engine): BuiltServer {
   app.use("/", express.static(path.join(REPO_ROOT, "apps", "web")));
 
   app.get("/v1/health", (_req, res) => {
-    res.json({ ok: true, actions: engine.knownActions().length });
+    res.json({
+      ok: true,
+      pid: process.pid,
+      uptimeMs: Math.round(process.uptime() * 1000),
+      jutsu: engine.content.jutsu.length,
+      actions: engine.knownActions().length,
+    });
   });
 
   app.get("/v1/actions", (_req, res) => {
