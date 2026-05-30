@@ -8,7 +8,7 @@
         "packages/mcp-controller/src/index.ts"
       ],
       "env": {
-        "NARUTO_ENGINE_URL": "http://localhost:8787"
+        "NARUTO_ENGINE_URL": "http://localhost:8970"
       }
     }
   }

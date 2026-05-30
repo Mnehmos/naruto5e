@@ -18,7 +18,7 @@ export function buildController(engineUrl: string): { server: McpServer; client:
 }
 
 async function main(): Promise<void> {
-  const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8787";
+  const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8970";
   const { server } = buildController(engineUrl);
   const transport = new StdioServerTransport();
   await server.connect(transport);

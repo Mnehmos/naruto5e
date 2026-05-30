@@ -4,10 +4,10 @@ import { DMBrain } from "./dm.js";
 /**
  * A tiny REPL DM. Pipe player lines in; the brain conforms them to intents,
  * submits through the controller's engine client, and narrates the IR.
- *   NARUTO_ENGINE_URL=http://localhost:8787 npm run --workspace @naruto5e/harness start -- <roomId>
+ *   NARUTO_ENGINE_URL=http://localhost:8970 npm run --workspace @naruto5e/harness start -- <roomId>
  */
 async function main(): Promise<void> {
-  const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8787";
+  const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8970";
   const roomId = process.argv[2] ?? "demo";
   const dm = new DMBrain(engineUrl);
   // eslint-disable-next-line no-console

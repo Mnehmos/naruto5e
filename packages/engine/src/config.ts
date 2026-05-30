@@ -23,7 +23,7 @@ export function loadConfig(overrides: Partial<EngineConfig> = {}): EngineConfig 
     ? "postgres"
     : (process.env.NARUTO_DB as EngineConfig["dbDriver"]) || "sqlite";
   return {
-    port: Number(process.env.PORT ?? 8787),
+    port: Number(process.env.PORT ?? 8970),
     dbDriver: overrides.dbDriver ?? driver,
     dbPath: overrides.dbPath ?? process.env.NARUTO_DB_PATH ?? path.join(REPO_ROOT, "data", "naruto5e.db"),
     contentDir: overrides.contentDir ?? process.env.NARUTO_CONTENT ?? path.join(REPO_ROOT, "content"),

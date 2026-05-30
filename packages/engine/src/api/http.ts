@@ -189,7 +189,19 @@ export function buildServer(engine: Engine): BuiltServer {
     httpServer,
     wss,
     listen: (port: number) =>
-      new Promise<number>((resolve) => {
+      new Promise<number>((resolve, reject) => {
+        // Fail loudly on a bind error (e.g. EADDRINUSE) instead of leaving a
+        // half-up process — a tsx-watch reload that loses the port must surface.
+        httpServer.once("error", (err: NodeJS.ErrnoException) => {
+          if (err.code === "EADDRINUSE") {
+            // eslint-disable-next-line no-console
+            console.error(
+              `[engine] FATAL: port ${port} is already in use. Another process holds it. ` +
+                `Set PORT to a free port (and NARUTO_ENGINE_URL on the controller/harness to match) and restart.`,
+            );
+          }
+          reject(err);
+        });
         httpServer.listen(port, () => {
           const addr = httpServer.address();
           resolve(typeof addr === "object" && addr ? addr.port : port);
