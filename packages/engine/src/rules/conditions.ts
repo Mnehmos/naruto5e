@@ -14,9 +14,22 @@ export const CONDITIONS = [
   "Restrained",
   "Stunned",
   "Unconscious",
+  // Naruto-specific damage-over-time conditions
+  "Burned",
+  "Bleeding",
 ] as const;
 
 export type ConditionName = (typeof CONDITIONS)[number];
+
+/**
+ * Damage-over-time conditions tick at the START of the afflicted creature's turn.
+ * (Defaults — flagged for exact-rulebook verification.) Burned: fire; Bleeding:
+ * slashing. Cleared via the `condition` op or a healing/medical effect.
+ */
+export const CONDITION_DOT: Record<string, { dice: string; type: string }> = {
+  Burned: { dice: "1d4", type: "fire" },
+  Bleeding: { dice: "1d4", type: "slashing" },
+};
 
 export function isCondition(name: string): name is ConditionName {
   return (CONDITIONS as readonly string[]).includes(name);

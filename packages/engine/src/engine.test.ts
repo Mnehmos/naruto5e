@@ -53,7 +53,8 @@ describe("Phase 0 — intent pipeline", () => {
     expect(r.status).toBe("rejected");
     if (r.status === "rejected") {
       expect(r.reason.rule).toBe("unknown_action");
-      expect(r.suggestions[0]).toMatch(/Known actions/);
+      // the rejection surfaces the full action vocabulary so the verb is discoverable
+      expect(r.suggestions.join(" ")).toContain("narrate");
     }
   });
 

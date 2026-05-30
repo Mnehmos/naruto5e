@@ -320,6 +320,33 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "freeform", params })),
   );
 
+  // ---- state management + discoverability -----------------------------
+  server.registerTool(
+    "list_actions",
+    { description: "List every engine action verb (the full intent vocabulary) — use when unsure what to submit.", inputSchema: {} },
+    async () => ok(await client.listActions()),
+  );
+  server.registerTool(
+    "end_combat",
+    { description: "End the active encounter (drops the room back to scene mode).", inputSchema: { roomId: z.string() } },
+    async ({ roomId }) => ok(await client.submitIntent({ roomId, type: "combat_end" })),
+  );
+  server.registerTool(
+    "reset_room",
+    { description: "Clear all entities (characters, adversaries, encounters, missions, NPCs, vendors, corpses) in a room and return it to scene mode.", inputSchema: { roomId: z.string() } },
+    async ({ roomId }) => ok(await client.submitIntent({ roomId, type: "room_reset" })),
+  );
+  server.registerTool(
+    "reset_world",
+    { description: "Wipe ALL game state across every room/collection — a full clean slate.", inputSchema: { roomId: z.string().optional() } },
+    async ({ roomId }) => ok(await client.submitIntent({ roomId: roomId ?? "system", type: "world_reset" })),
+  );
+  server.registerTool(
+    "delete_character",
+    { description: "Delete a character/adversary by id (also removes it from the active encounter).", inputSchema: { roomId: z.string(), id: z.string() } },
+    async ({ roomId, id }) => ok(await client.submitIntent({ roomId, type: "character_delete", params: { id } })),
+  );
+
   // ---- Phase 9: the world tick (also embedded in rest) ----------------
   server.registerTool(
     "tick_preview",

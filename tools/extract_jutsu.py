@@ -107,6 +107,8 @@ CONDITIONS = [
     "Blinded", "Charmed", "Deafened", "Frightened", "Grappled", "Incapacitated",
     "Invisible", "Paralyzed", "Petrified", "Poisoned", "Prone", "Restrained",
     "Stunned", "Unconscious",
+    # Naruto-specific damage-over-time conditions
+    "Burned", "Bleeding",
 ]
 
 
@@ -136,8 +138,11 @@ def derive_effect(rec: dict) -> dict:
     if dmg:
         effect["damage"] = dmg
 
-    # healing
-    hm = re.search(r"(?:regains?|heals?|restore[sd]?)\s*(?:up to\s*)?(\d+d\d+|\d+)\s*(?:hit points|hp|health)", low)
+    # healing — dice may come before OR after "hit points" ("regain X hp" / "regains
+    # hit points equal to Xdy" / "heal a creature for Xdy").
+    hm = re.search(r"(?:regain|heal|restore|mend)\w*\s+(?:up to\s+)?(\d+d\d+|\d+)\s*(?:hit points|hp|health)", low)
+    if not hm:
+        hm = re.search(r"(?:regain|heal|restore|mend)\w*\s+(?:hit points|hp|health)\s*(?:equal to|of)?\s*(\d+d\d+|\d+)", low)
     if hm:
         effect["healing"] = {"dice": hm.group(1)}
 
@@ -147,12 +152,20 @@ def derive_effect(rec: dict) -> dict:
     if save_m:
         effect["delivery"] = "save"
         effect["saveAbility"] = SAVE_ABILITY[save_m.group(1)]
-        if re.search(r"half(?:\s+as\s+much)?(?:\s+the)?\s+damage|half\s+damage", low):
+        # "half as much on a successful one" / "half the damage" / "half damage" — any
+        # "half" in a save jutsu's text means half-on-save (the prior regex was too strict).
+        if re.search(r"\bhalf\b", low):
             effect["halfOnSave"] = True
     elif attack_m:
         effect["delivery"] = "attack"
     elif dmg:
         effect["delivery"] = "auto"  # "each creature ... takes" with no save
+
+    # multi-projectile: "make N ... attacks" (e.g. Phoenix Fire -> 3 attacks)
+    hm2 = re.search(r"make\s+(\d+)\s+[\w ]*?attack", low)
+    if hm2 and int(hm2.group(1)) > 1:
+        effect["delivery"] = "attack"
+        effect["hits"] = int(hm2.group(1))
 
     # conditions (attach the save ability if there is one)
     conds = []
@@ -198,7 +211,10 @@ def main():
     records = []
     seen_slugs = {}
     n = len(lines)
-    anchor_idxs = [k for k, (_, ln) in enumerate(lines) if ln.strip().lower().startswith("classification:")]
+    # tolerate "Classification:" AND "Classification :" (OCR sometimes spaces the colon) —
+    # otherwise space-colon blocks get swallowed into the preceding jutsu's text.
+    anchor_re = re.compile(r"^\s*classification\s*:", re.I)
+    anchor_idxs = [k for k, (_, ln) in enumerate(lines) if anchor_re.match(ln)]
 
     for a_i, k in enumerate(anchor_idxs):
         page = lines[k][0]
@@ -270,10 +286,11 @@ def main():
         if not classification or not rl:
             continue
         cls = clean(classification)
-        # normalize classification to canonical set
+        # normalize classification to canonical set (space-tolerant: OCR may split "Genjuts u")
+        cls_compact = re.sub(r"\s+", "", cls).lower()
         cls_norm = None
         for c in ["Ninjutsu", "Genjutsu", "Taijutsu", "Bukijutsu", "Hijutsu", "Medical"]:
-            if c.lower() in cls.lower():
+            if c.lower() in cls_compact:
                 cls_norm = c
                 break
         cls_norm = cls_norm or cls

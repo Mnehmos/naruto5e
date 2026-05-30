@@ -38,6 +38,8 @@ export interface JutsuEffect {
   conditions?: { name: string; save?: string }[];
   area?: { size: number; shape?: string };
   concentration?: boolean;
+  /** number of separate attack rolls (multi-projectile jutsu, e.g. Phoenix Fire). */
+  hits?: number;
 }
 
 function readJson<T>(file: string, fallback: T): T {

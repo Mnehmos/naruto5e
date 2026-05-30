@@ -208,15 +208,19 @@ export function castJutsu(ctx: ResolveContext): void {
     const edge = elementalAdvantage(attackerEl, defenderEl[0]);
 
     if (eff.delivery === "attack") {
-      const roll = rollD20(ctx.rng, { modifier: casting.attack, advantage: edge === "attacker", disadvantage: edge === "defender" });
-      const hit = roll.isCrit || (!roll.isFumble && roll.total >= actorAC(target));
-      ctx.ir.emit("attack", { actor: caster.id, data: { target: tid, jutsu: jutsu.name, roll: roll.total, natural: roll.natural, vsAC: actorAC(target), hit, crit: roll.isCrit, edge }, narration: `${caster.name}'s ${jutsu.name} ${hit ? "hits" : "misses"} ${target.name} (${roll.total} vs AC ${actorAC(target)}).` });
-      if (hit && dmgDice) {
-        applyDamageAndEmit(ctx, caster, tref, dmgDice, eff.damage!.type, roll.isCrit, isPCActor(tref));
-        applyConditions(ctx, caster, tref, eff, null);
-      } else if (hit) {
-        applyConditions(ctx, caster, tref, eff, null);
+      const hits = Math.max(1, eff.hits ?? 1); // multi-projectile jutsu roll once per mote
+      let anyHit = false;
+      for (let h = 0; h < hits; h++) {
+        const roll = rollD20(ctx.rng, { modifier: casting.attack, advantage: edge === "attacker", disadvantage: edge === "defender" });
+        const ac = actorAC(target);
+        const hit = roll.isCrit || (!roll.isFumble && roll.total >= ac);
+        ctx.ir.emit("attack", { actor: caster.id, data: { target: tid, jutsu: jutsu.name, hitIndex: hits > 1 ? h + 1 : undefined, of: hits > 1 ? hits : undefined, roll: roll.total, natural: roll.natural, vsAC: ac, hit, crit: roll.isCrit, edge }, narration: `${caster.name}'s ${jutsu.name}${hits > 1 ? ` (${h + 1}/${hits})` : ""} ${hit ? "hits" : "misses"} ${target.name} (${roll.total} vs AC ${ac}).` });
+        if (hit && dmgDice && !target.dead && (target.hp?.current ?? 1) >= 0) {
+          applyDamageAndEmit(ctx, caster, tref, dmgDice, eff.damage!.type, roll.isCrit, isPCActor(tref));
+          anyHit = true;
+        }
       }
+      if (anyHit) applyConditions(ctx, caster, tref, eff, null);
     } else if (eff.delivery === "save") {
       const ability = eff.saveAbility ?? "dex";
       const saveMod = actorAbilityMod(target, ability) + (target.proficiencies?.savingThrows?.includes?.(ability) ? target.proficiencyBonus ?? 0 : 0);

@@ -90,6 +90,10 @@ export class EngineClient {
     return this.req("GET", `/v1/content/${kind}${q ? `?q=${encodeURIComponent(q)}` : ""}`);
   }
 
+  listActions(): Promise<any> {
+    return this.req("GET", `/v1/actions`);
+  }
+
   health(): Promise<any> {
     return this.req("GET", `/v1/health`);
   }

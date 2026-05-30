@@ -10,7 +10,7 @@ import { activeEncounter } from "../rules/turn.js";
 import { applyDamageDoc } from "../rules/resolve.js";
 import { rollDamage } from "../rules/combat.js";
 import { checkPhaseTransition } from "../rules/adversary.js";
-import { INCAPACITATING } from "../rules/conditions.js";
+import { INCAPACITATING, CONDITION_DOT } from "../rules/conditions.js";
 import { castJutsu } from "./jutsu.js";
 
 function rooms(ctx: ResolveContext) {
@@ -96,6 +96,24 @@ function autoDeathSave(ctx: ResolveContext, ref: ActorRef): void {
   ctx.ir.emit("death_save", { actor: doc.id, data: { ...roll, deathSaves: doc.deathSaves, dead: doc.dead }, narration });
 }
 
+/** Tick damage-over-time conditions (Burned/Bleeding) at the start of a turn. */
+function tickDot(ctx: ResolveContext, ref: ActorRef): void {
+  const doc = ref.doc;
+  if (doc.dead || !doc.conditions?.length) return;
+  for (const cond of [...doc.conditions]) {
+    const dot = CONDITION_DOT[cond];
+    if (!dot) continue;
+    const dmg = rollDamage(ctx.rng, dot.dice);
+    const isPC = doc.isPC ?? ref.coll === "characters";
+    const out = applyDamageDoc(doc, dmg.total, { isPC });
+    saveActor(ctx.store, ref);
+    ctx.ir.emit("ongoing_damage", { actor: doc.id, data: { condition: cond, amount: out.dealt, type: dot.type, hp: out.hp }, narration: `${doc.name} takes ${out.dealt} ${dot.type} damage from ${cond} (${out.hp.current}/${out.hp.max} HP).` });
+    if (out.died) ctx.ir.emit("down", { actor: doc.id, data: { target: doc.id, dead: true }, narration: `${doc.name} succumbs to ${cond}.` });
+    else if (out.downed) ctx.ir.emit("down", { actor: doc.id, data: { target: doc.id, dead: false }, narration: `${doc.name} collapses from ${cond}, dying.` });
+    if (doc.dead || (doc.hp?.current ?? 0) === 0) break;
+  }
+}
+
 export function registerCombatIntents(engine: Engine): void {
   // ---- combat_manage --------------------------------------------------
   engine.registerHandler("combat_start", (ctx) => {
@@ -173,6 +191,8 @@ export function registerCombatIntents(engine: Engine): void {
         }
       }
       ctx.ir.emit("advance", { actor: ref.doc.id, data: { round, activeIndex: idx, turn: ref.doc.id }, narration: `Round ${round}: ${ref.doc.name}'s turn.` });
+      // damage-over-time conditions (Burned/Bleeding) tick at the START of the turn
+      tickDot(ctx, ref);
       // downed PC auto-rolls a death save at the start of its turn
       if (ref.doc.isPC && !ref.doc.dead && (ref.doc.hp?.current ?? 1) === 0 && !ref.doc.deathSaves?.stable) {
         autoDeathSave(ctx, ref);
@@ -183,7 +203,7 @@ export function registerCombatIntents(engine: Engine): void {
   engine.registerHandler("combat_advance", advance);
   engine.registerHandler("end_turn", advance);
 
-  engine.registerHandler("combat_end", (ctx) => {
+  const endCombat = (ctx: ResolveContext) => {
     const enc = activeEncounter(ctx.store, ctx.room.id);
     if (enc) {
       enc.status = "ended";
@@ -194,7 +214,9 @@ export function registerCombatIntents(engine: Engine): void {
     delete (room as any).encounterId;
     rooms(ctx).put(room);
     ctx.ir.emit("combat_end", { data: { encounterId: enc?.id }, narration: "The encounter ends." });
-  });
+  };
+  // forgiving aliases so the verb is easy to find
+  for (const v of ["combat_end", "end_combat", "end_encounter", "combat_stop"]) engine.registerHandler(v, endCombat);
 
   engine.registerHandler("combat_add", (ctx) => {
     const enc = getActiveEncounter(ctx);

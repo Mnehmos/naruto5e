@@ -139,6 +139,27 @@ describe("Phase 2 CHECKPOINT — full combat with jutsu", () => {
     expect(sawDeathSave).toBe(true);
   });
 
+  it("half-on-save jutsu are parsed with halfOnSave (Hellfire Rejection regression)", () => {
+    const hr = engine.content.getJutsu("fire-release-hellfire-rejection");
+    expect(hr?.effect?.delivery).toBe("save");
+    expect(hr?.effect?.halfOnSave).toBe(true); // text: "...or half as much on a successful one"
+  });
+
+  it("Burned (DoT) ticks fire damage at the start of the afflicted creature's turn", () => {
+    const a = buildPC("Burnt", "Non-Clan", "Taijutsu Specialist", { str: 14, dex: 12, con: 14, int: 8, wis: 10, cha: 10 });
+    const b = buildPC("Foe", "Non-Clan", "Taijutsu Specialist", { str: 14, dex: 12, con: 14, int: 8, wis: 10, cha: 10 });
+    run("combat_start", { combatants: [{ actorId: a, team: "pc" }, { actorId: b, team: "enemy" }] });
+    run("condition", { condition: "Burned" }, a); // apply Burned to A
+    const hpBefore = (engine.getEntity("characters", a) as any).hp.current;
+    let sawTick = false;
+    for (let i = 0; i < 4 && !sawTick; i++) {
+      const r = run("advance", {}) as any;
+      if (r.events.some((e: any) => e.type === "ongoing_damage" && e.data.condition === "Burned")) sawTick = true;
+    }
+    expect(sawTick).toBe(true);
+    expect((engine.getEntity("characters", a) as any).hp.current).toBeLessThan(hpBefore);
+  });
+
   it("clash_resolve + elemental advantage: Fire vs Wind favors Fire", () => {
     const a = buildPC("Sasuke", "Uchiha", "Ninjutsu Specialist", { str: 10, dex: 14, con: 12, int: 16, wis: 10, cha: 12 }, { clanSkillChoices: ["Ninshou"], abilityChoices: ["int"] });
     const b = buildPC("WindNin", "Non-Clan", "Ninjutsu Specialist", { str: 10, dex: 14, con: 12, int: 12, wis: 10, cha: 8 });

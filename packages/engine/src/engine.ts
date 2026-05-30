@@ -251,9 +251,16 @@ export class Engine {
   private dispatch(op: ResolveOp, room: Room, rng: Rng, ir: IRStream, submittedBy: SubmittedBy): void {
     const handler = this.handlers.get(op.type);
     if (!handler) {
+      // surface the FULL action vocabulary + nearest matches (don't truncate — the
+      // verb the caller wants must be discoverable from the rejection).
+      const all = this.knownActions();
+      const near = all.filter((a) => a.includes(op.type) || op.type.includes(a) || a.split("_").some((p) => op.type.includes(p)));
       throw new EngineError("unknown_action", `No engine action "${op.type}" exists.`, {
-        values: { requested: op.type },
-        suggestions: [`Known actions: ${this.knownActions().slice(0, 24).join(", ")}`],
+        values: { requested: op.type, didYouMean: near.slice(0, 8) },
+        suggestions: [
+          near.length ? `Did you mean: ${near.slice(0, 8).join(", ")}?` : `No close match for "${op.type}".`,
+          `All ${all.length} actions: ${all.join(", ")}`,
+        ],
       });
     }
     const ctx: ResolveContext = { engine: this, store: this.store, room, rng, ir, op, submittedBy };
