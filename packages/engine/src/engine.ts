@@ -169,7 +169,20 @@ export class Engine {
    * remaining + reason). `atomic: true` => all-or-nothing.
    */
   private resolveBatch(intent: Intent, room: Room, rng: Rng, submittedBy: SubmittedBy): IntentResult {
-    const rawOps = (intent.params.ops as unknown[]) ?? [];
+    // accept either `ops` or `intents` as the sub-op list (callers used both); a
+    // batch with neither is a caller error, not a silent no-op success.
+    const rawOps = (intent.params.ops as unknown[]) ?? (intent.params.intents as unknown[]) ?? [];
+    if (!Array.isArray(rawOps) || rawOps.length === 0) {
+      return {
+        intentId: intent.intentId,
+        status: "rejected",
+        reason: { rule: "empty_batch", explain: "A batch must carry a non-empty `ops` (or `intents`) array.", values: {} },
+        committed: [],
+        stateAfter: this.scopedStateAfter(room.id),
+        remaining: [],
+        suggestions: ["Pass params.ops: [{ type, actorId?, params }] — at least one sub-intent."],
+      } as IntentResult;
+    }
     const atomic = intent.params.atomic === true;
     const ops: ResolveOp[] = rawOps.map((o) => {
       const r = o as Record<string, unknown>;

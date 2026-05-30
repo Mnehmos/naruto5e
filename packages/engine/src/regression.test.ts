@@ -174,3 +174,46 @@ describe("concentration replaces the same jutsu instead of stacking", () => {
     expect(slots.length).toBe(1);
   });
 });
+
+// bug_1780152098496 (MEDIUM): batch silently swallowed sub-intent problems —
+// returned a false 'resolved' with zero events when the sub-op list key was wrong.
+describe("batch surfaces problems instead of silently no-op'ing", () => {
+  it("accepts `intents` as an alias for `ops`", () => {
+    const r = run("batch", { intents: [{ type: "narrate", params: { text: "a" } }, { type: "narrate", params: { text: "b" } }] }) as any;
+    expect(r.status).toBe("resolved");
+    expect(r.events.length).toBeGreaterThanOrEqual(2);
+  });
+  it("rejects an empty batch instead of a false resolved", () => {
+    const r = run("batch", {}) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("empty_batch");
+  });
+  it("propagates a sub-intent rejection (stop-on-failure)", () => {
+    const pc = mkPC("Checker");
+    const r = run("batch", { ops: [{ type: "ability_check", actorId: pc, params: { skill: "Perception" } }] }) as any;
+    expect(r.status).toBe("rejected"); // malformed sub-op (skill, not ability) must surface
+  });
+});
+
+// bug_1780152112965 (LOW): mid-combat spawns never enrolled in initiative.
+describe("mid-combat spawns enroll in initiative", () => {
+  it("a spawn during an active encounter joins the order", () => {
+    const pc = mkPC("Hero");
+    run("combat_start", { combatants: [{ actorId: pc, team: "pc" }] });
+    const sp = run("adversary_spawn", { name: "Reinforcement", tier: "minion", level: 2 }) as any;
+    const advId = sp.events[0].data.adversary.id as string;
+    const enc: any = engine.getEntity("encounters", (engine.getRoom(ROOM) as any).encounterId);
+    expect(enc.order).toContain(advId);
+  });
+});
+
+// bug_1780152414482 (MEDIUM): taijutsu "your unarmed damage + XdY" dice weren't parsed.
+describe("taijutsu '+XdY' bonus dice parse into effect.damage", () => {
+  it("the named taijutsu carry their bonus dice", () => {
+    const c = (engine as any).content;
+    expect(c.getJutsu("leaf-great-flash").effect.damage.dice).toBe("7d4");
+    expect(c.getJutsu("adamantine-acala").effect.damage.dice).toBe("3d10");
+    expect(c.getJutsu("fist-slam").effect.damage.dice).toBe("6d6");
+    expect(c.getJutsu("dragon-tail-foot").effect.damage.dice).toBe("4d8");
+  });
+});

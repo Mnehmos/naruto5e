@@ -12725,7 +12725,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "attack",
-      "concentration": true
+      "concentration": true,
+      "damage": {
+        "dice": "5d4",
+        "type": "psychic"
+      }
     }
   },
   {
@@ -14902,7 +14906,11 @@
           "name": "Incapacitated",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "1d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15183,7 +15191,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility"
+      "delivery": "auto",
+      "damage": {
+        "dice": "1d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15311,7 +15323,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility"
+      "delivery": "auto",
+      "damage": {
+        "dice": "1d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15342,7 +15358,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "1d10",
+        "type": "force"
+      }
     }
   },
   {
@@ -15412,7 +15432,11 @@
     "effect": {
       "delivery": "save",
       "saveAbility": "str",
-      "halfOnSave": true
+      "halfOnSave": true,
+      "damage": {
+        "dice": "1d12",
+        "type": "fall"
+      }
     }
   },
   {
@@ -15513,7 +15537,11 @@
           "name": "Prone",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "2d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15585,7 +15613,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "1d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15750,7 +15782,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "save",
-      "saveAbility": "con"
+      "saveAbility": "con",
+      "damage": {
+        "dice": "3d10",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15788,7 +15824,11 @@
           "name": "Incapacitated",
           "save": "dex"
         }
-      ]
+      ],
+      "damage": {
+        "dice": "4d8",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -15975,7 +16015,11 @@
           "name": "Prone",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "6d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16102,7 +16146,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "2d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16139,7 +16187,11 @@
           "name": "Paralyzed",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "7d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16181,6 +16233,10 @@
       "area": {
         "size": 10,
         "shape": "sphere"
+      },
+      "damage": {
+        "dice": "4d6",
+        "type": "bludgeoning"
       }
     }
   },
@@ -16213,13 +16269,17 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility",
+      "delivery": "auto",
       "conditions": [
         {
           "name": "Incapacitated",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "2d8",
+        "type": "fall"
+      }
     }
   },
   {
@@ -16251,7 +16311,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "save",
-      "saveAbility": "con"
+      "saveAbility": "con",
+      "damage": {
+        "dice": "5d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16386,7 +16450,11 @@
           "name": "Stunned",
           "save": "con"
         }
-      ]
+      ],
+      "damage": {
+        "dice": "2d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16665,7 +16733,11 @@
           "name": "Burned",
           "save": "dex"
         }
-      ]
+      ],
+      "damage": {
+        "dice": "4d10",
+        "type": "fire"
+      }
     }
   },
   {
@@ -16762,7 +16834,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "5d8",
+        "type": "wind"
+      }
     }
   },
   {
@@ -16795,7 +16871,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "save",
-      "saveAbility": "dex"
+      "saveAbility": "dex",
+      "damage": {
+        "dice": "8d6",
+        "type": "wind"
+      }
     }
   },
   {
@@ -16864,7 +16944,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "12d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -16993,13 +17077,17 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility",
+      "delivery": "auto",
       "conditions": [
         {
           "name": "Prone",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "2d8",
+        "type": "fall"
+      }
     }
   },
   {
@@ -17709,7 +17797,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "1d10",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -18253,7 +18345,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "4d6",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -18291,7 +18387,11 @@
           "name": "Prone",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "3d8",
+        "type": "fall"
+      }
     }
   },
   {
@@ -18390,7 +18490,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "4d10",
+        "type": "force"
+      }
     }
   },
   {
@@ -18458,7 +18562,7 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility",
+      "delivery": "auto",
       "conditions": [
         {
           "name": "Restrained",
@@ -18468,6 +18572,10 @@
       "area": {
         "size": 30,
         "shape": "radius"
+      },
+      "damage": {
+        "dice": "3d8",
+        "type": "ice"
       }
     }
   },
@@ -18500,7 +18608,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "utility"
+      "delivery": "auto",
+      "damage": {
+        "dice": "5d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -19377,7 +19489,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "save",
-      "saveAbility": "dex"
+      "saveAbility": "dex",
+      "damage": {
+        "dice": "5d10",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -19653,7 +19769,11 @@
           "name": "Bleeding",
           "save": null
         }
-      ]
+      ],
+      "damage": {
+        "dice": "14d6",
+        "type": "fire"
+      }
     }
   },
   {
@@ -19724,7 +19844,11 @@
     "classificationVerified": true,
     "componentsVerified": true,
     "effect": {
-      "delivery": "attack"
+      "delivery": "attack",
+      "damage": {
+        "dice": "8d4",
+        "type": "bludgeoning"
+      }
     }
   },
   {
@@ -19947,7 +20071,11 @@
     "componentsVerified": true,
     "effect": {
       "delivery": "attack",
-      "hits": 3
+      "hits": 3,
+      "damage": {
+        "dice": "8d8",
+        "type": "slashing"
+      }
     }
   }
 ]

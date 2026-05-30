@@ -59,17 +59,38 @@ function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; r
   return adv;
 }
 
+/** If an encounter is active, enroll a freshly-spawned adversary into initiative
+ *  (mid-combat reinforcements otherwise never got an auto-turn). */
+function enrollIfCombat(ctx: ResolveContext, adv: Adversary): void {
+  const enc = activeEncounter(ctx.store, ctx.room.id);
+  if (!enc || enc.order.includes(adv.id)) return;
+  const dexMod = (adv as any).abilityMods?.dex ?? 0;
+  const init = rollD20(ctx.rng, { modifier: dexMod + (adv.initiativeBonus ?? 0) }).total;
+  (adv as any).initiative = init;
+  if (!(adv as any).turnBudget) (adv as any).turnBudget = defaultBudget((adv as any).speed ?? 30);
+  advs(ctx).put(adv);
+  const activeId = enc.order[enc.activeIndex];
+  enc.combatants.push({ actorId: adv.id, kind: "adversary", initiative: init, isPC: false, team: (adv as any).team ?? "enemy", extraActions: 0 });
+  enc.combatants.sort((a, b) => b.initiative - a.initiative || a.actorId.localeCompare(b.actorId));
+  enc.order = enc.combatants.map((c) => c.actorId);
+  enc.activeIndex = Math.max(0, enc.order.indexOf(activeId));
+  ctx.store.collection("encounters").put(enc);
+  ctx.ir.emit("combat_add", { actor: adv.id, data: { initiative: init, midCombat: true }, narration: `${adv.name} joins the encounter (init ${init}).` });
+}
+
 export function registerAdversaryIntents(engine: Engine): void {
   const spawn = (ctx: ResolveContext) => {
     const p = ctx.op.params;
     const tier = String(p.tier ?? "minion") as Tier;
     if (!["minion", "elite", "solo"].includes(tier)) throw reject("bad_tier", `tier must be minion|elite|solo (got "${tier}").`, { tier });
+    const reqLevel = Number(p.level ?? 1);
+    const level = Math.max(1, Math.min(30, reqLevel));
     const adv = buildAdversary(ctx, {
       name: String(p.name ?? `${tier} foe`),
       tier,
       role: p.role as string,
       clan: p.clan as string,
-      level: Math.max(1, Math.min(30, Number(p.level ?? 1))),
+      level,
       partySize: p.partySize ? Number(p.partySize) : undefined,
       jutsu: (p.jutsu as string[]) ?? [],
       traits: (p.traits as string[]) ?? [],
@@ -80,9 +101,13 @@ export function registerAdversaryIntents(engine: Engine): void {
     advs(ctx).put(adv);
     ctx.ir.emit("adversary_spawned", {
       actor: adv.id,
-      data: { adversary: { id: adv.id, name: adv.name, tier: adv.tier, level: adv.level, ac: adv.ac, hp: adv.hp, attack: adv.attack, legendary: adv.legendary, phases: adv.phases } },
+      data: {
+        adversary: { id: adv.id, name: adv.name, tier: adv.tier, level: adv.level, ac: adv.ac, hp: adv.hp, attack: adv.attack, legendary: adv.legendary, phases: adv.phases },
+        ...(Number.isFinite(reqLevel) && level !== reqLevel ? { levelClamped: { requested: reqLevel, used: level } } : {}),
+      },
       narration: `${adv.name} (${adv.tier}, L${adv.level}) appears — AC ${adv.ac}, HP ${adv.hp.max}.`,
     });
+    enrollIfCombat(ctx, adv);
   };
   engine.registerHandler("adversary_spawn", spawn);
   engine.registerHandler("adversary_build", spawn);
@@ -111,6 +136,7 @@ export function registerAdversaryIntents(engine: Engine): void {
       data: { adversary: { id: adv.id, name: adv.name, tier: adv.tier, level: adv.level, ac: adv.ac, hp: adv.hp, attack: adv.attack, legendary: adv.legendary, phases: adv.phases }, usingAs: tpl.usingAs },
       narration: `${adv.name} enters — ${tpl.traits?.join(", ") ?? ""}.`,
     });
+    enrollIfCombat(ctx, adv);
   });
 
   engine.registerHandler("adversary_scale", (ctx) => {

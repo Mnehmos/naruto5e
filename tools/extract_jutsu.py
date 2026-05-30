@@ -117,7 +117,9 @@ def derive_effect(rec: dict) -> dict:
     can resolve the mechanical 90% of a cast (attack/save + damage + condition).
     Utility jutsu that don't parse get delivery 'utility' (DM narrates)."""
     desc = re.sub(r"\s+", " ", (rec.get("description") or ""))
+    desc = re.sub(r"(\d+)\s+d(\d+)", r"\1d\2", desc)  # normalize spaced dice "4 d6" -> "4d6" (OCR)
     low = desc.lower()
+    cls = (rec.get("classification") or "").lower()
     effect: dict = {"delivery": "utility"}
 
     # base damage: first "<X>d<Y> ... damage" occurrence
@@ -135,6 +137,19 @@ def derive_effect(rec: dict) -> dict:
                     break
         dmg = {"dice": dice, "type": dtype or "force"}
         break
+    if not dmg:
+        # taijutsu phrasing: dice come AFTER "damage" ("your unarmed damage + 7d4 ...")
+        m2 = re.search(r"damage\s*\+\s*(\d+d\d+)\s*(\w+)?", low)
+        if m2:
+            tword = (m2.group(2) or "").lower()
+            dtype = tword if tword in DAMAGE_TYPES else None
+            if dtype is None:
+                for t in DAMAGE_TYPES:
+                    if t in low:
+                        dtype = t
+                        break
+            # taijutsu/bukijutsu default to bludgeoning; everything else to force
+            dmg = {"dice": m2.group(1), "type": dtype or ("bludgeoning" if cls in ("taijutsu", "bukijutsu") else "force")}
     if dmg:
         effect["damage"] = dmg
 
