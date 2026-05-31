@@ -94,6 +94,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch09_the_name_and_the_chain.md", slug: "act2-ch09-the-name-and-the-chain", arc: "actii", tags: ["Intrigue", "Investigation", "Dice-over-plan"],
     teaser: "Off the official channel, Iwao reads a traitor out of the registry — a natural 20 names Administrator Jōzen, a true-believer who'd burn the village to forge it harder. But knowing isn't proving, and naming him early forces his hand.",
     callout: { kind: "proof", label: "The crit that crowned the scholar", text: "Ninshou nat-20 (27 vs DC 16) — after a week of analysis walls, the dice finally let Iwao be exactly as good as he is, naming the broker with total certainty. Jōzen's model-driven turn hides behind office; being right out loud forces the climax." } },
+  { path: "chapters/act2_ch10_where_it_breaks.md", slug: "act2-ch10-where-it-breaks", arc: "actii", tags: ["Combat", "Climax", "Engine Proof", "Dice-over-plan"],
+    teaser: "The staged 'Cloud' strike comes where it hurts most — a courtyard of children. Iwao falls holding the frame (down, dying, a failed death save) — and the alliance he built catches him. The lie breaks in the light.",
+    callout: { kind: "proof", label: "The hero fell — the engine didn't blink", text: "Iwao dropped to 0 and FAILED his death save (6) live at the climax. No fudge: the rescue came from the watch + the framed Cloud envoy he'd spent the arc learning to trust. He won by not being alone — the thesis made literal by the dice." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
