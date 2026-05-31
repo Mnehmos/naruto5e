@@ -88,6 +88,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch07_the_hand_behind_the_token.md", slug: "act2-ch07-the-hand-behind-the-token", arc: "actii", tags: ["Intrigue", "Alliance", "Dice-over-plan"],
     teaser: "Charged to find the framer, Iwao hits the library's far wall — the forgery's too good to trace — so he trusts an enemy to catch a worse one. Raido's lead: the token was forged by someone who knows the Cloud from the inside.",
     callout: { kind: "proof", label: "The third wall, and borrowed eyes", text: "Ninshou 14 vs 16 — the scholar can't crack it; the answer isn't in any archive. So the hunt turns on trust, not intellect: the framed Cloud envoy (his own model-driven turn) gives the thread the book couldn't — a Cloud-connected forger." } },
+  { path: "chapters/act2_ch08_the_rot_inside.md", slug: "act2-ch08-the-rot-inside", arc: "actii", tags: ["Intrigue", "Investigation", "Engine Proof"],
+    teaser: "The thread Iwao expected to run east turns around and runs home. With Akemi's sensing he traces the disaster's money and muscle to a broker wearing a chain of office — inside the wall.",
+    callout: { kind: "proof", label: "He stopped bringing his weaknesses to the work", text: "Perception 19 (Iwao can't track, so he borrows Akemi's sensing and reads the pattern). Dosu's model-driven turn gives up the inside broker. The rot is in the Stone, not beyond it." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
