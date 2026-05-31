@@ -118,11 +118,12 @@ export function castJutsu(ctx: ResolveContext): void {
   // budget gate (only in combat, when the actor has a TurnBudget)
   const cost = costFromCastingTime(jutsu.castingTime);
   const legendary = ctx.op.params.__legendary === true;
-  if (isCombatant(caster)) {
-    // off-turn lockout: only the active combatant may act, unless this is a
-    // reaction or a Solo's legendary action.
-    const active = activeCombatantId(ctx.store, ctx.room.id);
-    if (active && active !== caster.id && !cost.reaction && !legendary) {
+  // Action-economy + off-turn gates apply ONLY during an active encounter. Out of
+  // combat (scene mode) a leftover turnBudget from a past fight must NOT block casting.
+  const active = activeCombatantId(ctx.store, ctx.room.id);
+  if (active && isCombatant(caster)) {
+    // off-turn lockout: only the active combatant may act, unless reaction/legendary.
+    if (active !== caster.id && !cost.reaction && !legendary) {
       throw reject("off_turn", `It is not ${caster.name}'s turn.`, { active }, ["Only reaction-cost jutsu may be cast off-turn (e.g. a substitution)."]);
     }
     if (!legendary) {
@@ -160,7 +161,7 @@ export function castJutsu(ctx: ResolveContext): void {
 
   // ---- pay costs ----
   caster.chakra.current -= chakraCost;
-  if (isCombatant(caster) && !legendary) spend(caster.turnBudget, cost);
+  if (active && isCombatant(caster) && !legendary) spend(caster.turnBudget, cost);
 
   const casting = actorCasting(caster, jutsu.classification);
   const attackerEl = jutsuElement(jutsu);

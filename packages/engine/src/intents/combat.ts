@@ -242,13 +242,13 @@ export function registerCombatIntents(engine: Engine): void {
     if (enc) {
       enc.status = "ended";
       encounters(ctx).put(enc);
-      // concentration does not persist across encounters — clear it for every combatant
+      // concentration + action-economy do not persist across encounters — clear them for every combatant
       for (const c of enc.combatants) {
         const ref = loadActor(ctx.store, c.actorId);
-        if (ref?.doc.concentration?.length) {
-          ref.doc.concentration = [];
-          saveActor(ctx.store, ref);
-        }
+        if (!ref) continue;
+        ref.doc.concentration = [];
+        delete (ref.doc as any).turnBudget; // out of combat: no action-economy gate (scene actions are free)
+        saveActor(ctx.store, ref);
       }
     }
     const room = rooms(ctx).get(ctx.room.id)!;

@@ -640,6 +640,20 @@ describe("KKG techniques", () => {
     expect(bad.status).toBe("rejected");
     expect(bad.reason.rule).toBe("xp_amount_required");
   });
+
+  it("scene-mode casting is NOT blocked by a leftover turnBudget from a past fight", () => {
+    const pc = mkPC("Drifter");
+    run("jutsu_learn", { jutsu: "fire-release-fox-fire", force: true }, pc);
+    const dummy = (run("adversary_spawn", { name: "Post", tier: "minion", level: 1 }) as any).events[0].data.adversary.id;
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.turnBudget = { action: 0, bonus: 0, reaction: 0, movement: 0, freeInteraction: 0 }; // stale, fully spent (as if left over from a combat)
+    c.chakra = { current: 30, max: 30, temp: 0 };
+    cc.put(c);
+    // no active encounter => scene mode => action economy must NOT apply
+    const r = run("cast", { jutsu: "fire-release-fox-fire", targets: [dummy] }, pc) as any;
+    expect(r.status).toBe("resolved");
+  });
 });
 
 // npc_decide — the NPC analogue of agent_context: assemble a decision prompt
