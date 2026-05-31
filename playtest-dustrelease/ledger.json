@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 46,
-  "chaptersDone": 14,
+  "dayClock": 58,
+  "chaptersDone": 15,
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
@@ -39,11 +39,11 @@
   ],
   "sheet": {
     "level": 5, "inWorldTitle": "Genin (engine rank auto-set 'Chunin' = jutsu-tier B; the TITLE is earned at the Chūnin Exam — divergence flagged bug_1780247960181)", "subclass": "Elementalist",
-    "xp": 1050, "xpToNextLevel": 450, "saveDC": 15, "prof": 4, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
+    "xp": 1200, "xpToNextLevel": 300, "saveDC": 15, "prof": 4, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
     "hp": "32/32", "chakra": "50/50", "ac": 12,
     "ryo": 50, "beltPouchRyo": 20, "missionPoints": 100,
-    "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap", "dust-release-d (Dust Release: Lesser Detachment — AWAKENED Day 46)"],
-    "jutsuKnownCap": 4,
+    "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap", "dust-release-d (Dust: Lesser Detachment — awakened Day 46)", "dust-release-c (Dust: Honed Detachment — Exhibition, Day 56)"],
+    "jutsuKnownCap": 5,
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
