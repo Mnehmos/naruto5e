@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Iwao — The Particle Heir · A Naruto 5e Engine Playtest</title>
+<meta name="description" content="An autonomous, engine-grounded playtest manga: a Dust Release genin of the Hidden Stone, played day by day through a deterministic shinobi TTRPG engine. Every die rolled by the engine; every bug fixed in play." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@500;700;900&family=Shippori+Mincho:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0c0a09; --paper:#f4ecda; --paper2:#e9ddc2; --ink:#171310; --ink-dim:#5a5043;
+  --ember:#e8541d; --ember-soft:#ffae6b; --gold:#cf9b3a; --line:rgba(207,155,58,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--paper);font-family:'Shippori Mincho',serif;line-height:1.75;overflow-x:hidden}
+#bg{position:fixed;inset:0;z-index:0}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(125% 85% at 50% 0%,transparent 42%,rgba(0,0,0,.6) 100%)}
+#bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;background:linear-gradient(90deg,var(--gold),var(--ember));box-shadow:0 0 14px var(--ember)}
+.wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 22px}
+
+/* hero */
+.hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 22px}
+.kicker{font-family:'JetBrains Mono',monospace;letter-spacing:.4em;text-transform:uppercase;font-size:11px;color:var(--ember-soft);opacity:0;animation:rise 1s .1s forwards}
+.hero h1{font-family:'Anton',sans-serif;font-size:clamp(70px,19vw,210px);line-height:.84;margin:14px 0 0;letter-spacing:.02em;
+  background:linear-gradient(180deg,#fff7ea,var(--paper) 50%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 70px rgba(232,84,29,.28);opacity:0;animation:rise 1.2s .25s forwards}
+.hero .tag{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(17px,3.6vw,30px);letter-spacing:.22em;color:var(--paper);margin-top:10px;opacity:0;animation:rise 1.2s .5s forwards}
+.hero .sub{max-width:600px;color:var(--paper2);opacity:0;animation:rise 1.2s .7s forwards;font-size:16px}
+.hero .links{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:0;animation:rise 1.2s .9s forwards}
+.lnk{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ember-soft);text-decoration:none;border:1px solid var(--line);padding:11px 16px;border-radius:3px;transition:.25s;background:rgba(20,16,13,.4);backdrop-filter:blur(4px)}
+.lnk:hover{color:#fff;border-color:var(--ember);box-shadow:0 0 22px rgba(232,84,29,.35);transform:translateY(-2px)}
+.cue{position:absolute;bottom:24px;left:50%;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--ink-dim);opacity:0;animation:rise 1s 1.3s forwards,bob 2.4s 2s ease-in-out infinite}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+/* section frame */
+.sec{position:relative;z-index:2;padding:64px 0 20px}
+.sec h2{font-family:'Anton',sans-serif;font-size:clamp(28px,6vw,52px);letter-spacing:.03em;color:#fff;margin:0 0 4px;text-transform:uppercase}
+.sec .lead{color:var(--ember-soft);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.28em;text-transform:uppercase;margin-bottom:26px}
+
+/* HUD sheet */
+.sheet{border:1px solid var(--line);border-radius:10px;background:linear-gradient(180deg,rgba(24,20,16,.85),rgba(12,10,9,.92));padding:22px 24px;backdrop-filter:blur(8px);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.sheet h3{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 22px}
+.k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+.v{font-family:'Cinzel',serif;font-size:21px;color:var(--paper)}
+.bar{height:7px;border-radius:4px;background:rgba(255,255,255,.08);margin-top:6px;overflow:hidden}.bar>i{display:block;height:100%}
+.bar.hp>i{width:100%;background:linear-gradient(90deg,#e7563b,#ff8a5c)}.bar.ck>i{width:100%;background:linear-gradient(90deg,#3b7fe7,#5cc8ff)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);color:var(--paper2);background:rgba(255,255,255,.03)}
+.chip.k1{color:#fff;border-color:var(--ember);background:rgba(232,84,29,.16);box-shadow:0 0 14px rgba(232,84,29,.25)}
+
+/* manga pages (ink on paper) */
+.page{background:var(--paper);color:var(--ink);border-radius:6px;margin:22px 0;padding:30px 32px 26px;
+  box-shadow:0 24px 70px rgba(0,0,0,.55),inset 0 0 0 2px var(--ink);position:relative;
+  background-image:radial-gradient(rgba(23,19,16,.045) 1px,transparent 1.1px);background-size:7px 7px}
+.page .day{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ember)}
+.page h3{font-family:'Anton',sans-serif;font-size:clamp(26px,5vw,40px);letter-spacing:.02em;color:var(--ink);margin:6px 0 2px;text-transform:uppercase}
+.page .when{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-dim);margin-bottom:18px}
+.panel{border:2px solid var(--ink);border-radius:3px;padding:16px 18px;margin:14px 0;position:relative;background:var(--paper2)}
+.panel.tone{background-image:radial-gradient(rgba(23,19,16,.16) 1.4px,transparent 1.5px);background-size:6px 6px;background-color:var(--paper)}
+.cap{font-family:'Shippori Mincho',serif;font-size:15.5px}
+.cap .first::first-letter{font-family:'Anton',sans-serif;font-size:2.7em;float:left;line-height:.8;margin:4px 8px 0 0;color:var(--ember)}
+.bubble{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:10px 15px;display:inline-block;font-weight:700;margin:4px 0;max-width:90%}
+.who{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);display:block;margin-bottom:2px}
+.sfx{font-family:'Anton',sans-serif;color:var(--ember);font-size:clamp(26px,7vw,52px);letter-spacing:.02em;line-height:.9;transform:rotate(-4deg);text-shadow:2px 2px 0 var(--ink);margin:6px 0}
+.roll{font-family:'JetBrains Mono',monospace;font-size:12px;color:#7a4a1a;background:rgba(232,84,29,.1);border-left:3px solid var(--ember);padding:6px 12px;margin:10px 0;display:block}
+.roll b{color:var(--ink)}
+
+/* journey timeline */
+.tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:22px}
+.ev{position:relative;margin:0 0 22px}
+.ev::before{content:"";position:absolute;left:-29px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--ember);box-shadow:0 0 12px var(--ember)}
+.ev .t{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember-soft)}
+.ev h4{font-family:'Cinzel',serif;margin:3px 0 4px;color:#fff;font-size:18px}
+.ev p{margin:0;color:var(--paper2);font-size:15px}
+.ev code{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);background:rgba(207,155,58,.1);padding:1px 6px;border-radius:4px}
+
+.reveal{opacity:0;transform:translateY(28px);transition:.9s cubic-bezier(.2,.7,.2,1)}.reveal.in{opacity:1;transform:none}
+.foot{position:relative;z-index:2;text-align:center;padding:56px 22px 80px;color:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em}
+.foot a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><div class="vignette"></div><div id="bar"></div>
+
+<header class="hero">
+  <div class="kicker">An autonomous Naruto&nbsp;5e engine playtest</div>
+  <h1>IWAO</h1>
+  <div class="tag">THE PARTICLE HEIR</div>
+  <p class="sub">A boy of the Hidden Stone, born with <b>Dust Release</b> — Jinton, the particle bloodline of the Third Tsuchikage himself. Played day by day through a deterministic shinobi engine. <em>Every die in these pages was rolled by the engine.</em></p>
+  <div class="links">
+    <a class="lnk" href="https://github.com/Mnehmos/naruto5e" target="_blank" rel="noopener">★ The Repo</a>
+    <a class="lnk" href="#chronicle">▣ Read the Chronicle</a>
+    <a class="lnk" href="#journey">⚙ Behind the Dust</a>
+  </div>
+  <div class="cue">scroll ↓</div>
+</header>
+
+<main class="wrap">
+
+  <section class="sec reveal" id="hero-sheet">
+    <h2>The Heir</h2>
+    <div class="lead">engine-validated character sheet · live as of Day 4</div>
+    <div class="sheet">
+      <h3>◆ Iwao — Non-Clan Ninjutsu Specialist</h3>
+      <div class="grid">
+        <div><div class="k">Rank / Level</div><div class="v">Genin · L1</div></div>
+        <div><div class="k">Hit Points</div><div class="v">8 / 8</div><div class="bar hp"><i></i></div></div>
+        <div><div class="k">Chakra</div><div class="v">14 / 14</div><div class="bar ck"><i></i></div></div>
+        <div><div class="k">AC · Save DC</div><div class="v">12 · 14</div></div>
+      </div>
+      <div style="margin-top:16px"><div class="k">Bloodline · Kekkei Genkai</div>
+        <div class="chips"><span class="chip">Earth</span><span class="chip">Wind</span><span class="chip">Fire</span>
+        <span class="chip k1">Dust (Jinton)</span><span class="chip">Lava</span><span class="chip">Scorch</span><span class="chip">Magnet</span></div></div>
+      <div style="margin-top:14px"><div class="k">Jutsu known (3/3)</div>
+        <div class="chips"><span class="chip">Earth: Sand-Coffin Binding</span><span class="chip">Wind: Sickle Weasel</span><span class="chip">Fire: Flaming Trap</span></div></div>
+      <div style="margin-top:14px"><div class="k">Standing</div>
+        <div class="chips"><span class="chip">Iwagakure — rep 9</span><span class="chip">Academy — rep 7</span></div></div>
+      <div style="margin-top:14px"><div class="k">The motif</div>
+        <div class="cap" style="color:var(--paper2);font-size:14px">A cannon with a thimble of powder — godlike in the hands, painfully mortal everywhere else. Control comes free; the bloodline does not.</div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="chronicle">
+    <h2 class="reveal">The Chronicle</h2>
+    <div class="lead reveal">academy, year one · played moment-to-moment, 24 hours a day</div>
+
+    <article class="page reveal">
+      <div class="day">Day 1</div><h3>The Boy With the Quiet Hands</h3>
+      <div class="when">dawn to dark · Iwagakure, the Hidden Stone</div>
+      <div class="panel tone"><p class="cap first">Before the bell, in the Stoneware House, Iwao does the thing his mother taught him when he was small and frightened of his own hands: the morning molding. Three natures up the Ram seal, held steady, not to <em>do</em> anything — only to know it.</p>
+        <span class="roll"><b>Chakra Control 24</b> vs DC 10 — natural 19. Effortless.</span></div>
+      <div class="panel"><span class="who">Ryūen-sensei</span><span class="bubble">"Earth, Wind, and Fire. In a child."</span>
+        <p class="cap">He says it the way other men say the names of the dead. At the back of the room, Ganryū's pencil snaps.</p></div>
+      <div class="panel tone"><p class="cap">The conditioning stair humbles him — his hands are a marvel, his legs are eleven years old.</p>
+        <span class="roll"><b>Athletics 9</b> vs DC 12 — failure. He finishes near the back.</span></div>
+      <div class="panel"><p class="cap">At dinner his father sets down his bowl with the care of a man who handles heavy things for a living.</p>
+        <span class="who">Gennai, his father</span><span class="bubble">"A bloodline isn't a crown. It's a heavier stone. The only question is whether the man carrying it crushes the people beside him. <em>So don't.</em>"</span></div>
+    </article>
+
+    <article class="page reveal">
+      <div class="day">Day 2</div><h3>Two Hit Points</h3>
+      <div class="when">the first sanctioned ninja spar</div>
+      <div class="panel tone"><p class="cap first">Ryūen lets the gloves off: a supervised match, techniques allowed. Iwao draws Rōmaru — loud, broad, and no pushover. He comes to the circle with a real jutsu in his hands.</p></div>
+      <div class="sfx">DON&nbsp;&nbsp;ZUUN—</div>
+      <div class="panel"><p class="cap">Rōmaru goes first. An earth-clone rises from the yard and is <em>already inside Iwao's guard.</em></p>
+        <span class="roll">Rōmaru casts <b>Earth Release: Earth Clone</b> — 6 damage. Iwao: 8 → <b>2 HP</b>.</span></div>
+      <div class="panel tone"><p class="cap"><b>Two hit points.</b> No time to be gentle the slow way — his body cannot afford a second hit. He breathes his father's words and aims to <em>end the moment,</em> not to break the boy.</p></div>
+      <div class="sfx">FWAaSH—!!</div>
+      <div class="panel"><span class="roll">Iwao casts <b>Wind Release: Sickle Weasel</b> — hit AC 13, <b>31 slashing</b>. Rōmaru down. A spar knockout, a half-second before the sensei's shout.</span>
+        <p class="cap">He stands swaying at 2 HP over a classmate he very nearly hurt for real — and understands his father, all at once and forever.</p></div>
+    </article>
+
+    <article class="page reveal">
+      <div class="day">Day 3</div><h3>The Nature He Was Told Not to Touch</h3>
+      <div class="when">the forbidden reach</div>
+      <div class="panel tone"><p class="cap first">Behind the equipment shed, alone, he reaches past wind, past fire, past earth, for the place where all three are meant to fuse — the bloodline itself.</p>
+        <span class="roll"><b>Chakra Control 11</b> vs DC 16 — failure. The three natures catch wrong.</span></div>
+      <div class="sfx">…shhhhk.</div>
+      <div class="panel"><p class="cap">His fingertips go dead-numb; a coin-sized patch of the wall behind him sighs into grey powder and is simply <em>gone</em> — unmade, not broken. For one heartbeat he tastes what the legend actually is, and it is not glory. It is <b>deletion</b>, and it does not care whose hand it's in.</p></div>
+      <div class="panel tone"><span class="who">Ryūen, white to the lips</span><span class="bubble">"Never alone. Never unsupervised. Not for <em>years.</em>"</span>
+        <p class="cap">The reframe the whole story turns on: his control comes free; <b>Dust must be earned.</b></p></div>
+    </article>
+
+    <article class="page reveal">
+      <div class="day">Day 4</div><h3>If He Can't Touch It, He'll Read It</h3>
+      <div class="when">the particle frame</div>
+      <div class="panel tone"><p class="cap first">Forbidden to practice the bloodline, Iwao goes at it the only way that has ever obeyed him — with his head. He talks his way into the restricted stacks and reads like a starving thing.</p>
+        <span class="roll"><b>History 19</b> vs DC 15 — he finds the key.</span></div>
+      <div class="panel"><p class="cap">Dust fusion isn't <em>sequence</em> — it's <b>simultaneity.</b> Three natures held in perfect, equal balance at the same instant: a lattice the old texts call the <em>particle frame.</em> It's why Day 3 failed. And it takes most people <em>years.</em> His mind is the one road the village's impatience cannot pave for him.</p></div>
+      <div class="panel tone"><span class="who">Akemi, dragging him out by the collar</span><span class="bubble">"Brains need dumplings. You're eleven. Come on."</span>
+        <p class="cap">She keeps him human — the quiet jutsu she is best at.</p></div>
+    </article>
+    <p class="reveal" style="text-align:center;color:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em">…the chronicle continues, one played day at a time.</p>
+  </section>
+
+  <section class="sec" id="journey">
+    <h2 class="reveal">Behind the Dust</h2>
+    <div class="lead reveal">the engineering journey — bugs found & fixed while playing</div>
+    <div class="tl">
+      <div class="ev reveal"><div class="t">Genesis · fix</div><h4>You couldn't be born the bloodline you needed</h4>
+        <p><code>create_character</code> rolled affinity/KKG blindly — Dust (Jinton) was effectively unrollable, which broke the whole premise. Fixed in engine source: a <code>kkg</code> param pins the bloodline deterministically. Commit <code>4253221</code>.</p></div>
+      <div class="ev reveal"><div class="t">Combat · fix</div><h4>Why did every NPC only throw punches?</h4>
+        <p><code>agent_context</code> read a PC-only field, so kitted adversaries always showed "0 jutsu castable" — nudging the DM toward freeform. Fixed so foes surface their real techniques. Commit <code>af5d2be</code>. Confirmed live in Day 2's spar.</p></div>
+      <div class="ev reveal"><div class="t">Method</div><h4>Played, not narrated</h4>
+        <p>Every check, spar, cast, and rest is a real engine roll. Resources deplete and recover; the village's regard for Iwao climbs through a nightly world-tick where the Tsuchikage literally watches over him. Narration never runs ahead of the dice.</p></div>
+      <div class="ev reveal"><div class="t">In flight</div><h4>The climb ahead</h4>
+        <p>Academy days → the first <em>sanctioned</em> Dust awakening → graduation & a three-genin squad → D-rank missions → the Exhibition → the Chūnin Exam. Logged here as we go.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  IWAO · THE PARTICLE HEIR &nbsp;—&nbsp; an autonomous Naruto 5e engine playtest &nbsp;·&nbsp;
+  <a href="https://github.com/Mnehmos/naruto5e" target="_blank" rel="noopener">github.com/Mnehmos/naruto5e</a><br>
+  every die rolled by the engine.
+</footer>
+
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+const c=document.getElementById('bg');const r=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});
+r.setPixelRatio(Math.min(devicePixelRatio,2));
+const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,100);cam.position.z=26;
+const N=3800,base=new Float32Array(N*3),pos=new Float32Array(N*3),col=new Float32Array(N*3);
+const pal=[[1,.96,.86],[.85,.64,.25],[.91,.33,.11],[.95,.88,.74]];
+for(let i=0;i<N;i++){const rad=8+Math.pow(Math.random(),.6)*16,th=Math.random()*6.28,ph=Math.acos(2*Math.random()-1);
+ const x=rad*Math.sin(ph)*Math.cos(th),y=rad*Math.cos(ph)*.6,z=rad*Math.sin(ph)*Math.sin(th);
+ base[i*3]=x;base[i*3+1]=y;base[i*3+2]=z;pos.set([x,y,z],i*3);col.set(pal[(Math.random()*pal.length)|0],i*3);}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));
+const tc=document.createElement('canvas');tc.width=tc.height=64;const tx=tc.getContext('2d');
+const gr=tx.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,'#fff');gr.addColorStop(.4,'rgba(255,210,160,.7)');gr.addColorStop(1,'rgba(255,160,90,0)');
+tx.fillStyle=gr;tx.fillRect(0,0,64,64);
+const m=new THREE.PointsMaterial({size:.42,map:new THREE.CanvasTexture(tc),vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.9});
+const pts=new THREE.Points(g,m);s.add(pts);
+let sc=0,mx=0,my=0,t=0;
+addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;sc=h>0?scrollY/h:0;document.getElementById('bar').style.width=(100*sc)+'%'});
+function rs(){r.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}addEventListener('resize',rs);rs();
+(function loop(){t+=.004;const p=g.attributes.position.array;
+ for(let i=0;i<N;i++){const j=i*3;p[j+1]=base[j+1]+Math.sin(t*.5+i)*.5;}
+ g.attributes.position.needsUpdate=true;pts.rotation.y=t*.5+sc*2.2;pts.rotation.x=sc*.5;
+ cam.position.x+=(mx*6-cam.position.x)*.04;cam.position.y+=(-my*4-cam.position.y)*.04;cam.lookAt(0,0,0);
+ m.opacity=.5+.4*(1-sc);r.render(s,cam);requestAnimationFrame(loop);})();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
