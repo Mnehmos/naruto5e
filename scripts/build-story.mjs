@@ -70,6 +70,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch01_the_assistant.md", slug: "act2-ch01-the-assistant", arc: "actii", tags: ["Teaching", "Dice-over-plan", "Engine Proof"],
     teaser: "The Academy sends for the heir — not as a student, as help. A boy molds chakra like a fist, and Iwao learns he cannot teach by control.",
     callout: { kind: "proof", label: "Dice-over-plan proof", text: "Iwao's Chakra Control check to defuse + teach the boy came up 11 vs DC 15 — a failure. The prodigy can't teach by control; the resolution was a human turn (he showed the boy his scarred hands and named his finals loss), not a re-rolled win." } },
+  { path: "chapters/act2_ch02_the_mission_desk.md", slug: "act2-ch02-the-mission-desk", arc: "actii", tags: ["Mission Desk", "Intrigue", "Engine Proof"],
+    teaser: "A clerk's day at the mission desk — and the eastern-road reports don't add up. Iwao sees the thing the village has decided not to know yet.",
+    callout: { kind: "proof", label: "The world the DM didn't script", text: "Both NPCs — Raido the Cloud envoy and Kazan the mission clerk — took their own turns: real model declarations conformed and resolved through the engine. The DM set the pressure; the characters chose their own words." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
