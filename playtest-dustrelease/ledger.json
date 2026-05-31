@@ -3,13 +3,13 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 4,
-  "chaptersDone": 3,
+  "dayClock": 5,
+  "chaptersDone": 4,
   "arcFlags": { "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years." },
   "arc": "Academy — Day One",
   "relationships": {
     "family": "Tsuru/Gennai/Mai bonds warming (dinner Day 1, defining beats)",
-    "akemi": "friendly (sits with him)", "tobari": "friendly",
+    "akemi": "close friend & humanizing counterweight ('brains need dumplings'); senses his chakra", "tobari": "friendly",
     "ganryu": "rivalry seeded, disposition -1 ('the wind cut that leaf, not you')",
     "romaru": "wary respect after Day-2 spar (+1, 'you're not soft')",
     "ryuen": "mentor bond deepening (caught the Day-3 forbidden Dust reach; protective, fear-driven)"
@@ -40,7 +40,7 @@
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
-  "standing": { "iwagakure": { "reputation": 7, "favor": 0 }, "iwa_academy": { "reputation": 6, "favor": 0 } },
+  "standing": { "iwagakure": { "reputation": 9, "favor": 0 }, "iwa_academy": { "reputation": 7, "favor": 0 } },
   "npcs": {
     "onoki": "npc_9cc97845", "soun": "npc_80d2fd85", "tetsuna": "npc_98b5e513",
     "ryuen": "npc_c83497dd", "kanna": "npc_af2cd0e0",
