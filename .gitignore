@@ -1,6 +1,9 @@
 node_modules/
 dist/
 data/
+# Local secrets (API keys). The committed template is .env.example.
+.env
+.env.local
 *.db
 *.db-*
 *.tsbuildinfo

@@ -1,4 +1,5 @@
 import readline from "node:readline";
+import { loadEnv } from "@naruto5e/shared";
 import { DMBrain } from "./dm.js";
 
 /**
@@ -7,6 +8,7 @@ import { DMBrain } from "./dm.js";
  *   NARUTO_ENGINE_URL=http://localhost:8970 npm run --workspace @naruto5e/harness start -- <roomId>
  */
 async function main(): Promise<void> {
+  loadEnv(); // populate process.env from repo-root .env
   const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8970";
   const roomId = process.argv[2] ?? "demo";
   const dm = new DMBrain(engineUrl);

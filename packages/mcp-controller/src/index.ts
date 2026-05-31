@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { loadEnv } from "@naruto5e/shared";
 import { EngineClient } from "./client.js";
 import { registerTools } from "./tools.js";
 
@@ -18,6 +19,7 @@ export function buildController(engineUrl: string): { server: McpServer; client:
 }
 
 async function main(): Promise<void> {
+  loadEnv(); // populate process.env from repo-root .env (OpenAI key, models, engine URL)
   const engineUrl = process.env.NARUTO_ENGINE_URL ?? "http://localhost:8970";
   const { server } = buildController(engineUrl);
   const transport = new StdioServerTransport();
