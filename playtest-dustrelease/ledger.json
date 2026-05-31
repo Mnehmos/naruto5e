@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 28,
-  "chaptersDone": 12,
+  "dayClock": 45,
+  "chaptersDone": 13,
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
@@ -38,10 +38,10 @@
     "22:30 sleep (long rest)"
   ],
   "sheet": {
-    "level": 3, "rank": "Genin", "subclass": "Elementalist",
-    "xp": 400, "xpToNextLevel": 200, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
-    "hp": "20/20", "chakra": "32/32", "ac": 12,
-    "ryo": 0, "beltPouchRyo": 20, "missionPoints": 0,
+    "level": 4, "rank": "Genin", "subclass": "Elementalist",
+    "xp": 800, "xpToNextLevel": 200, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
+    "hp": "26/26", "chakra": "41/41", "ac": 12,
+    "ryo": 50, "beltPouchRyo": 20, "missionPoints": 100,
     "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap"],
     "jutsuKnownCap": 3,
     "affinity": ["Earth", "Wind", "Fire"],
