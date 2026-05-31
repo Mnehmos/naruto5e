@@ -4,8 +4,26 @@
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
   "dayClock": 90,
-  "chaptersDone": 17,
+  "chaptersDone": 18,
   "arcStatus": "VOLUME ONE COMPLETE — Academy → graduation → D-ranks → true Dust awakening → Exhibition → Chūnin Exam (paper/survival/finals). Finals: valiant LOSS to Hayato the Lone Blade (failed STR save, dropped to 0, stabilized). Ōnoki withheld promotion — judged, not won; 'never narrated for free' honored. Title remains Genin (resolves the engine rank-by-level divergence in-fiction). The dice owned the climax. Recovery long rest taken (full HP/chakra).",
+  "actII": {
+    "arc": "Act II — The Associate",
+    "premise": "Iwao is a graduated Genin, NOT promoted after the finals, serving as a Genin field-assistant / teaching aide. The world opens up; small missions with large implications; a region quietly tightening toward conflict.",
+    "engineReconciliation": "Engine restarted to load the buildout (141 actions). Validated LIVE: long rest CLEARED the finals-lingering Prone (conditions fix); passiveStanding:false silenced the off-screen reputation drip; milestone-gated standing; autonomous NPC loop ran with REAL model declarations the DM adjudicates (resolve off = primary path). Clock advanced 6→90 to match the manga; strictTemporal ON (maxUnauthorizedDays 1) so Act II time is lived.",
+    "legacyNote": "char.rank field still reads 'Chunin' (legacy auto-derive from before the rank-decouple fix); in-world TITLE is Genin. The decouple keeps title/tier separate for all future characters/levels. A character_set_rank migration intent is a future engine follow-up.",
+    "newActors": {
+      "kazan_missiondesk": "npc_563a0763 — suppresses how many road reports are going missing; uses the heir as labor (iwagakure)",
+      "dosu_syndicate": "npc_8883fd84 — keeps roads moving, hides caravan losses, hires muscle (road_syndicate)",
+      "raido_kumo": "npc_5251c1ab — courteous Cloud observer measuring whether the Dust woke earlier than reported (kumogakure)",
+      "gomei_missingnin": "npc_2441ef66 — believes a clean war kinder than a rotting peace; SEEDED a border-incident scheme (goal completed on the opening downtime tick); now shadows the eastern caravans after dark (rogues)",
+      "doki_garrison": "npc_2486c7f4 — inflates eastern-road danger to win reinforcements (border_garrison)",
+      "kosuke_student": "npc_2f79e6f6 — 8yo first-year who worships the heir and molds chakra 'like a fist'; the Act-II thesis student (iwa_academy)"
+    },
+    "returningGoals": "Ōnoki (measure the heir near responsibility w/o isolating him), Kurikara (teach him to carry w/o clenching; persona set), Tetsuna (use him to teach restraint not terror), Ganryū (surpass honestly), Akemi (keep him human).",
+    "tensionMap": "Eastern caravans coming in thin/late; mission desk (Kazan) suppressing the reports; syndicate (Dosu) hiding losses + hiring muscle; garrison (Doki) clamoring for men; a Cloud envoy (Raido) measuring the bloodline; a missing-nin (Gomei) engineering a border incident. The powder is laid, not yet lit.",
+    "chaptersDone": ["act2_ch01_the_assistant.md — Day 90, the Academy summons; Iwao FAILS to teach Kosuke by control (Chakra Control 11 vs DC15) and turns to a human truth instead. Theme opened: can he help someone grow without making them proof of himself?"],
+    "craftRules": "PROSE keeps dice OOC (Engine Log footer + callouts), never in narrative. COMBAT narrated as UFC-style play-by-play with exact rolls/damage/HP/proximity-to-death in the OOC log."
+  },
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
@@ -13,7 +31,7 @@
     "trustWound": "Day 5 — failed the tactics drill by treating teammates as variables; Akemi names it: he holds everyone at arm's length because he fears his own hands. Teamwork is his real growth edge before graduation/squad.",
     "deferredAwakening": "Day 23 — first sanctioned Dust attempt before Ōnoki FUMBLED (nat-1); the bloodline refused him; Ōnoki caught the backlash and gave the true key: hold the natures like a FRAME, not a fist — trust, not control (the same lesson as the cell). Dust ladder still NOT learned; the real awakening waits until he integrates 'trust the natures'. Convergence point: bloodline-mastery == the trust/teamwork arc."
   },
-  "arc": "Academy — Day One",
+  "arc": "Act II — The Associate",
   "relationships": {
     "family": "Tsuru/Gennai/Mai bonds warming (dinner Day 1, defining beats)",
     "akemi": "closest friend; named his blind spot (Day 5): he won't trust teammates because he fears his own hands. The story's emotional anchor.", "tobari": "cell-mate; friendly",

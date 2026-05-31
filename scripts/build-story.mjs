@@ -29,6 +29,7 @@ const ARCS = {
   genin: { ord: "II", title: "Genin & Mission Arc", sub: "The headband earned, the work of D-ranks, and the true Dust awakening" },
   chunin: { ord: "III", title: "Chūnin Exam Arc", sub: "Paper, wasteland, and the loss that proved the engine would not lie" },
   afterword: { ord: "✦", title: "Afterword — The Audit Trail", sub: "How the deterministic engine constrained the AI Dungeon Master" },
+  actii: { ord: "ACT II", title: "Act II — The Associate", sub: "A Genin field-assistant, the world opening up, and a region quietly beginning to tighten" },
 };
 
 const PROOF_TAGS = new Set(["Engine Proof", "Dice-over-plan"]);
@@ -66,6 +67,9 @@ const MANIFEST = [
     callout: { kind: "proof", label: "The protagonist lost", text: "Iwao failed the save against Hayato's Rock Tank, dropped to 0 HP, and was not promoted. The engine refused the expected climax — and the story is sharper for the scar." } },
   { path: "week99_debrief.md", slug: "debrief-volume-one", arc: "afterword", debrief: true, badge: "Debrief", tags: ["Engine Proof", "Audit Trail"],
     teaser: "Not a chapter — the reason the story is trustworthy. The thesis, the three dice-over-plan proofs, the five findings, and the verdict: the engine held." },
+  { path: "chapters/act2_ch01_the_assistant.md", slug: "act2-ch01-the-assistant", arc: "actii", tags: ["Teaching", "Dice-over-plan", "Engine Proof"],
+    teaser: "The Academy sends for the heir — not as a student, as help. A boy molds chakra like a fist, and Iwao learns he cannot teach by control.",
+    callout: { kind: "proof", label: "Dice-over-plan proof", text: "Iwao's Chakra Control check to defuse + teach the boy came up 11 vs DC 15 — a failure. The prodigy can't teach by control; the resolution was a human turn (he showed the boy his scarred hands and named his finals loss), not a re-rolled win." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
@@ -228,7 +232,7 @@ function renderIndex(items) {
   <div class="eyebrow">A Naruto 5e AI-DM playtest manga</div>
   <h1>VOLUME ONE</h1>
   <div class="vol">The Particle Heir</div>
-  <p class="blurb">Follow Iwao's first ninety days — from Academy prodigy to Genin finalist: the failed awakening, the team that taught him trust, the mission road, the Chūnin Exam, and the loss that proved the engine would not lie.</p>
+  <p class="blurb">Follow Iwao's first ninety days — from Academy prodigy to Genin finalist: the failed awakening, the team that taught him trust, the mission road, the Chūnin Exam, and the loss that proved the engine would not lie. <em>Act II is underway: the world opens up.</em></p>
   <div class="cta">
     ${firstSlug ? `<a class="btn solid" href="chapters/${firstSlug}.html">▶ Start Reading</a>` : ""}
     ${debrief ? `<a class="btn" href="chapters/${debrief.entry.slug}.html">✦ The Debrief</a>` : ""}

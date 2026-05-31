@@ -9,7 +9,7 @@ The stadium was carved into the side of the mountain, and on the day of the fina
 ## The Duel
 And for three rounds Iwao held it alone — the thing Kurikara swore he could not do, the thing he had spent two weeks learning. He opened Hayato's guard with the **Honed Detachment** and unmade pieces of him, clean and controlled, the crowd going silent at the sight of the dust *aimed.* He trusted the three natures themselves to be the other ends of his frame — earth, wind, fire pulling against each other, holding still in his open hand — and for three rounds it *worked,* and he took the Lone Blade from fifty to ten, alone, in front of the continent.
 
-But Hayato was a tier of cruelty Iwao had never had to be. The earth came up under Iwao like the cliff standing, and the second time it took him off his feet, and the third time he did not get up. *(The final exchange: Hayato's Earth Release: Rock Tank — Iwao failed the save and dropped to 0, unconscious and dying. The proctors stopped the match. Iwao lost.)*
+But Hayato was a tier of cruelty Iwao had never had to be. The earth came up under Iwao like the cliff standing, and the second time it took him off his feet, and the third time he did not get up. The proctors stopped the match before the stone could finish what it had started. Iwao had lost.
 
 The medics had him breathing before the dust of the ring had settled. He woke on a stretcher to the roar of a crowd cheering a boy who was not him, and the first thing he felt, under the failure, was a strange and unexpected peace.
 
