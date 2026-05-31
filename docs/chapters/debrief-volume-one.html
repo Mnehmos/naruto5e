@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Playtest Debrief — Volume One · Iwao — The Particle Heir</title>
+<meta name="description" content="Not a chapter — the reason the story is trustworthy. The thesis, the three dice-over-plan proofs, the five findings, and the verdict: the engine held." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@500;700;900&family=Shippori+Mincho:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/story.css">
+</head>
+<body class="is-debrief">
+<div class="vignette"></div><div id="bar"></div>
+<div class="topbar">
+  <a class="home" href="../index.html"><b>◆</b> Iwao · The Particle Heir</a>
+  <nav><a class="btn" href="../story.html">▣ Index</a><a class="btn" href="../index.html">↩ Journey</a></nav>
+</div>
+<article class="chapter-page">
+  <header class="chapter-hero reveal">
+    <a class="back-link" href="../story.html">← Volume One Index</a>
+    <p class="eyebrow">meta · after Day 90 · the engineering log behind the manga</p>
+    <h1>Playtest Debrief — Volume One</h1>
+    <p class="chapter-dek">Not a chapter — the reason the story is trustworthy. The thesis, the three dice-over-plan proofs, the five findings, and the verdict: the engine held.</p>
+    <div class="tagrow"><span class="tag proof">Engine Proof</span><span class="tag">Audit Trail</span></div>
+  </header>
+  <nav class="chapter-nav ">
+      <a class="" href="day85-90-finals.html">← Previous</a>
+      <a class="mid" href="../story.html">Index</a>
+      <a class="disabled" href="#">Next →</a>
+    </nav>
+  
+  <section class="chapter-body reveal">
+        <p>This is not a chapter of the story. It is the reason the story is trustworthy.</p>
+        <p>Everything in <em>Iwao: The Particle Heir</em> was played, not written. A language model held the Dungeon Master's chair and narrated; a deterministic TypeScript engine — the naruto5e MCP server — owned every number. The DM never rolled a die in its head, never decided a save succeeded because the plot wanted it to, never granted a level because the scene felt earned. It <em>asked the engine,</em> and the engine answered with the same indifference it shows everyone. Volume One is what came out the other side. This debrief is the audit trail.</p>
+        <h2>The thesis under test</h2>
+        <p>The project's claim is narrow and falsifiable: <strong>an LLM should parse intent and narrate consequence, but it should not be trusted with state.</strong> State — dice, chakra pools, jutsu legality, action economy, HP, XP, persistence — belongs to code that cannot be talked out of the rules. The interesting question is not "can an LLM run a satisfying campaign" (it can, and will cheerfully fudge to do so). It is: <em>can a campaign be run where the LLM is structurally forbidden from fudging, and is the result still good?</em> Volume One says yes — and that the constraint makes it better, not worse.</p>
+        <h2>The dice owned the story — three proofs</h2>
+        <p>The cleanest evidence that the engine, not the author, was in charge is the set of moments where the dice <strong>contradicted the obvious narrative plan</strong> and the story bent to them instead of the reverse:</p>
+        <ul>
+        <li><strong>Day 23 — the deferred awakening.</strong> The plan, the pacing, the dignitaries all pointed at the heir awakening the Dust Release before the Third Tsuchikage. The d20 came up a natural 1. The bloodline <em>refused him.</em> Rather than retcon the roll, the awakening was deferred twenty-three in-story days and the failure became the spine of the arc — Ōnoki turning a fumble into the real lesson (<em>hold the natures like a frame, not a fist</em>). A scripted story never fumbles its own climax. This one did, and was better for it.</li>
+        <li><strong>The mid-term — a failure that passed.</strong> Iwao's tactical plan failed its INT check under pressure. He passed the evaluation anyway, because he had left gaps and <em>trusted his cell to cover them</em> — and they rolled well enough to do it. The engine refused to let him win by being smart; it let him win by not being alone. The theme was discovered in the dice, not imposed on them.</li>
+        <li><strong>The finals — a genuine loss.</strong> The campaign's climax was a defeat. Iwao failed a STR save against Hayato's Rock Tank and dropped to 0 HP in front of the continent. There was no authorial reflex to save him. He lost, was stabilized, and the <em>verdict</em> (promotion withheld) was reasoned forward from the honest result rather than backward from a desired one. The protagonist of the manga did not win his own tournament. The engine wouldn't let him, and the story is sharper for the scar.</li>
+        </ul>
+        <p>If the LLM had owned state, none of these happen — the model's overwhelming bias is toward narrative satisfaction, and all three of these moments are the engine overruling that bias.</p>
+        <h2>The development loop — the real differentiator</h2>
+        <p>The unusual part of this project is not the campaign; it is that <strong>the campaign was a QA harness.</strong> The agent played in earnest, and when the engine did something wrong, it ran the full loop without leaving the chair:</p>
+        <blockquote><strong>play → detect contradiction → file structured bug → patch the engine source → add a regression test → resume the same save.</strong></blockquote>
+        <p>Five findings surfaced this way over Volume One. Each was filed to Agent Synch (project <code>naruto5e-playtest</code>), fixed in <code>packages/engine/src</code>, and — where it was a true defect — pinned by a regression test so it can never silently return.</p>
+        <h3>The findings</h3>
+        <ol start="1">
+        <li><strong><code>create_character</code> had no way to specify a Kekkei Genkai</strong> — <code>bug_1780212505469</code> <em>(high · fixed, commit <code>4253221</code>)</em></li>
+        </ol>
+        <p>You could not author a character <em>with</em> a bloodline; genesis was random-only. For a campaign whose entire premise is a specific reborn bloodline, this was disqualifying. <strong>Fix:</strong> added <code>kkg</code> / <code>affinities</code> params to the intent, a <code>findKKGRecipe()</code> + <code>rollGenesis(opts)</code> path in <code>affinity.ts</code> that pins recipe elements deterministically and skips random expansion, and <code>unknown_kkg</code> / <code>unknown_affinity</code> validation rejections. Regression test: authored-genesis pins Dust = Earth+Wind+Fire; an unknown KKG name is rejected.</p>
+        <ol start="2">
+        <li><strong><code>agent_context</code> hid kitted adversaries' jutsu</strong> — <code>bug_1780214524649</code> <em>(high · fixed, commit <code>af5d2be</code>)</em></li>
+        </ol>
+        <p>This was the root cause of a symptom that had nagged for days: <em>why do NPCs only ever freeform?</em> The context builder read <code>doc.jutsuKnown</code> only, while spawned adversaries stored their loadout under <code>doc.jutsu</code>. So the NPC-driving layer never saw their techniques and fell back to improvisation every time. <strong>Fix:</strong> one line — <code>doc.jutsuKnown ?? doc.jutsu ?? []</code>. Regression test: a kitted adversary's jutsu now surface in its agent context. (Small diff, large behavioral payoff — the enemies started fighting like ninja.)</p>
+        <ol start="3">
+        <li><strong><code>turnBudget</code> persisted after combat ended</strong> — <code>bug_1780248689058</code> <em>(medium · fixed, commit <code>560e96e</code>)</em></li>
+        </ol>
+        <p>Found <strong>live</strong>, mid-exam: after a combat resolved, scene-mode jutsu casts were being blocked by a stale "no action left this turn" gate that should only exist inside initiative. <strong>Fix:</strong> the action-economy and chakra-spend gates in <code>jutsu.ts</code> now apply only when there is an active combatant (<code>if (active &amp;&amp; isCombatant(caster))</code>), and <code>end_combat</code> in <code>combat.ts</code> clears <code>turnBudget</code> for every combatant on the way out. Regression test: scene-mode casting is not blocked by a stale post-combat budget. This is the loop at its best — the bug was discovered <em>because the agent was genuinely trying to cast in a scene,</em> not because anyone was looking for it.</p>
+        <ol start="4">
+        <li><strong>Standing inflation on every rest</strong> — <code>bug_1780245857774</code> <em>(low · open, resolved in design)</em></li>
+        </ol>
+        <p>The world-tick advances NPC goals on each long rest, and one consequence type auto-grants the player reputation — so fame crept upward whether or not it was earned. Rather than suppress the tick, this was resolved <em>thematically</em> and is now load-bearing in the fiction: <strong>reputation = renown</strong> (passive fame the bloodline draws whether deserved or not — explicitly "not the point"), while <strong>favor = the Will of Stone</strong> (DM-awarded only, for defining moments). The engine's two standing tracks map cleanly onto the story's two kinds of regard. Left open as a design note rather than patched.</p>
+        <ol start="5">
+        <li><strong>Rank auto-derived from level</strong> — <code>bug_1780247960181</code> <em>(low · closed in fiction)</em></li>
+        </ol>
+        <p>At L5 the engine auto-set the character's rank to "Chunin," which collided with a title that is supposed to be <em>earned at the exam.</em> This one resolved itself the best possible way: at the finals, Ōnoki <strong>withheld promotion.</strong> The in-world title stays Genin, which now matches the adjudicated result exactly — so the divergence closed on its own through honest play, with the engine's <code>rank</code> field treated as a jutsu-tier indicator only. The story did the engine's bookkeeping for it.</p>
+        <h3>One feature, built to spec mid-run</h3>
+        <p>Not a bug, but worth logging: the engine had <strong>no XP or leveling system</strong> when the campaign began, and the player asked for one explicitly — <em>"please dont forget to integrate xp awards and leveling. add it to the engine if you must."</em> So it was added (commit <code>69ceb9f</code>): a new <code>progression.ts</code> (<code>xpThreshold(L) = 50·(L−1)·L</code>, <code>levelForXp</code>, <code>xpToNext</code>), an <code>xp</code> field on the character domain, and an <code>award_xp</code> intent that adds XP, emits an event, and auto-levels across every threshold it crosses. From then on every level was <em>earned through a logged award</em> — small for a quiet milestone, larger for the finals loss — never hand-set. The progression visible in the HUD is a sum of real awards, auditable in the ledger.</p>
+        <h3>Still open (honest housekeeping)</h3>
+        <ul>
+        <li><strong>Prone lingers through a long rest.</strong> After the finals, <code>end_combat</code> and a subsequent long rest both restored HP/chakra correctly but left the <code>Prone</code> condition attached. Cosmetic — it doesn't affect pools or legality — but a long rest should clear knocked-prone status. Logged, not patched, to avoid end-of-arc scope creep. It's the kind of thing the next playthrough's loop will pick up.</li>
+        </ul>
+        <h2>What the regression suite proves</h2>
+        <p>Every true defect above is now a test in <code>packages/engine/src/regression.test.ts</code>, green alongside the rest of the suite. That is the difference between "we played and found bugs" and "we played, found bugs, and made the engine permanently incapable of regressing them." The bugs became <em>assets</em> — each one a guarantee. A playthrough that doesn't harden the engine is just a game; one that does is a development methodology that happens to produce a manga as its artifact.</p>
+        <h2>The verdict</h2>
+        <p>The engine held. Across ~90 in-story days — Academy drills, graduation, D-rank missions, two false starts and one true awakening of the deadliest bloodline in the setting, a public exhibition, and a three-stage Chūnin Exam ending in a duel — <strong>state was never fabricated, dice were never overridden, and the one time the protagonist's victory and the dice disagreed, the dice won.</strong> The LLM did what LLMs are good at: it read intent, it narrated, it found the human shape in the numbers. The engine did what code is good at: it refused to lie. The seam between them is the whole product.</p>
+        <p>Iwao did not become a chūnin. That sentence is the proof. A system willing to write it is a system you can trust with the ones where he succeeds.</p>
+        <p><em>— End of the Volume One playtest. The save persists. The loop is open. Volume Two begins whenever the next die is cast.</em></p>
+  </section>
+  <details class="engine-log" open>
+      <summary>⚙ Engine Log · State Ledger</summary>
+      <div class="log-body">
+        <p class="log-line">PLAYTEST DEBRIEF · Volume One · campaign camp_e3ca139f · hero char_9314ed6b (Iwao, L6, XP 1700).</p>
+        <p class="log-line">FIDELITY: 3 dice-over-plan proofs (Day-23 nat-1 deferred awakening · mid-term failed-INT teamwork win · finals failed-STR-save LOSS). Engine owned all state; no overrides.</p>
+        <p class="log-line">FINDINGS (5): KKG-param bug_1780212505469/4253221 (high, +test) · agent_context-jutsu bug_1780214524649/af5d2be (high, +test) · turnBudget-persist bug_1780248689058/560e96e (medium, found LIVE, +test) · standing-inflation bug_1780245857774 (low, design-resolved: renown vs Will-of-Stone) · rank-by-level bug_1780247960181 (low, closed in-fiction by withheld promotion).</p>
+        <p class="log-line">FEATURE built to spec mid-run: XP/leveling system, commit 69ceb9f (progression.ts + award_xp + auto-level).</p>
+        <p class="log-line">OPEN: Prone lingers through long rest (cosmetic; logged, unpatched).</p>
+        <p class="log-line">REGRESSION: all true defects pinned in regression.test.ts (suite green).</p>
+        <p class="log-line">LOOP: play → detect → file (Agent Synch naruto5e-playtest) → patch (packages/engine/src) → regress → resume. The campaign was the QA harness; the manga is its artifact.</p>
+      </div>
+    </details>
+  <nav class="chapter-nav bottom">
+      <a class="" href="day85-90-finals.html">← Previous</a>
+      <a class="mid" href="../story.html">Index</a>
+      <a class="disabled" href="#">Next →</a>
+    </nav>
+  <footer class="chap-foot">Every die in these pages was rolled by the engine · <a href="https://github.com/Mnehmos/naruto5e" target="_blank" rel="noopener">github.com/Mnehmos/naruto5e</a></footer>
+</article>
+<script>
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;document.getElementById('bar').style.width=(h>0?100*scrollY/h:0)+'%'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
