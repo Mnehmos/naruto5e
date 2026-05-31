@@ -105,6 +105,9 @@ function parseChapter(raw) {
     const t = line.trim();
     if (t === "") { flushAll(); continue; }
     if (t === "---") { flushAll(); html.push('<hr class="strata">'); continue; }
+    // OOC interjection: a line wrapped in [OOC … ] — the dice/damage/HP, shown inline in the
+    // reading flow but clearly set apart as out-of-character (never woven into the narrative).
+    if (/^\[OOC\b[\s\S]*\]$/i.test(t)) { flushAll(); html.push(`<aside class="ooc">${inline(t.replace(/^\[\s*/, "").replace(/\s*\]$/, ""))}</aside>`); continue; }
     let m;
     if ((m = t.match(/^#{1,2}\s+(.*)/))) { flushAll(); html.push(`<h2>${inline(m[1])}</h2>`); continue; }
     if ((m = t.match(/^###\s+(.*)/))) { flushAll(); html.push(`<h3>${inline(m[1])}</h3>`); continue; }
@@ -153,12 +156,12 @@ function renderChapter(entry, parsed, prev, next) {
   const dek = entry.teaser || parsed.teaserAuto;
   const head = HEAD(`${parsed.title} · Iwao — The Particle Heir`, dek).replace(/ASSETS\//g, "../assets/");
   const logBlock = parsed.logHtml
-    ? `<details class="engine-log"${entry.debrief ? " open" : ""}>
-      <summary>⚙ Engine Log · State Ledger</summary>
-      <div class="log-body">
+    ? `<section class="ooc-ledger">
+      <div class="ooc-tag">OOC · State Ledger — the engine's truth for this chapter</div>
+      <div class="ooc-body">
         ${parsed.logHtml}
       </div>
-    </details>`
+    </section>`
     : "";
   return `${head}
 <body class="${entry.debrief ? "is-debrief" : ""}">

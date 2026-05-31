@@ -136,16 +136,22 @@ a{color:var(--ember-soft)}
 .callout.proof{border-color:var(--gold);background:linear-gradient(180deg,rgba(207,155,58,.12),rgba(207,155,58,.04))}
 .callout.proof .lbl{color:var(--gold)}
 
-/* engine log — visually secondary, preserved provenance */
-.engine-log{margin-top:26px;border:1px solid var(--line);border-radius:8px;background:rgba(18,14,11,.66);overflow:hidden}
-.engine-log>summary{cursor:pointer;list-style:none;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--gold);padding:14px 18px;display:flex;align-items:center;gap:10px}
-.engine-log>summary::-webkit-details-marker{display:none}
-.engine-log>summary::before{content:"▸";color:var(--ember);transition:.2s}
-.engine-log[open]>summary::before{transform:rotate(90deg)}
-.engine-log .log-body{padding:4px 20px 18px;border-top:1px solid var(--line)}
-.engine-log .log-line{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;color:var(--paper2);margin:10px 0}
-.engine-log .log-line b{color:#fff}
+/* OOC interjection — dice / damage / HP shown INLINE in the reading flow, but clearly set
+   apart as out-of-character (mono, dashed ochre box). The story prose never carries numbers. */
+.chapter-body .ooc{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.8em;line-height:1.55;
+  color:#7a521a;background:rgba(207,155,58,.12);border:1px dashed rgba(154,90,30,.55);border-radius:6px;
+  padding:9px 14px;margin:1.25em 0;display:block;letter-spacing:.01em;max-width:74ch}
+.chapter-body .ooc::before{content:"⊘ ";font-weight:700;color:#9a5a1e}
+.chapter-body .ooc strong{color:#5a2a0a}
+
+/* OOC state ledger — the chapter's engine truth, visible (not hidden), out-of-character */
+.ooc-ledger{margin-top:28px;border:1px dashed rgba(207,155,58,.5);border-radius:8px;background:rgba(18,14,11,.55);padding:4px 18px 14px}
+.ooc-ledger .ooc-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);padding:13px 0 6px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.ooc-ledger .log-line{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;color:var(--paper2);margin:9px 0}
+.ooc-ledger .log-line b{color:#fff}
+/* debrief (dark body): keep the inline OOC legible */
+.is-debrief .chapter-body .ooc{color:var(--ember-soft);background:rgba(232,84,29,.1);border-color:rgba(232,84,29,.45)}
+.is-debrief .chapter-body .ooc::before{color:var(--gold)}
 
 .chap-foot{position:relative;z-index:2;text-align:center;padding:34px 22px 50px;color:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em}
 .chap-foot a{color:var(--gold);text-decoration:none}

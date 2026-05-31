@@ -37,6 +37,8 @@ He failed.
 
 He did the thing he knew how to do — the thing he was *best* at in all the world. He reached for Kosuke's clenched, sputtering mold with his own flawless control, meaning to take it, to steady it, to *fix* it the way he could fix any chakra problem put in front of his perfect hands. He tried to pour his own discipline into the boy's fists.
 
+[OOC · Chakra Control — d20 **5**, +6 = **11** vs DC 15 · **FAILURE.** The prodigy cannot teach by control.]
+
 It did not take. Of course it did not take. You cannot hand a child your open hand by closing yours around his. Kosuke felt the older boy's chakra press into his and did what any frightened thing does when squeezed — he clenched *harder,* and the sick shimmer flared, and the leaf went to ash and a thin welt of heat snapped across the boy's own knuckles. Kosuke yelped, more startled than hurt, and snatched his hands back, and looked up at the legend of Iwagakure with the beginning of tears and the worse beginning of *shame* — because the dust-heir had come to fix him, and he had failed at being fixed.
 
 The whole room had gone quiet in the particular way rooms do when something has happened the rules did not account for.
