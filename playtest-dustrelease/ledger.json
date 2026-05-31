@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 90,
-  "chaptersDone": 18,
+  "dayClock": 95,
+  "chaptersDone": 24,
   "arcStatus": "VOLUME ONE COMPLETE — Academy → graduation → D-ranks → true Dust awakening → Exhibition → Chūnin Exam (paper/survival/finals). Finals: valiant LOSS to Hayato the Lone Blade (failed STR save, dropped to 0, stabilized). Ōnoki withheld promotion — judged, not won; 'never narrated for free' honored. Title remains Genin (resolves the engine rank-by-level divergence in-fiction). The dice owned the climax. Recovery long rest taken (full HP/chakra).",
   "actII": {
     "arc": "Act II — The Associate",
@@ -21,7 +21,16 @@
     },
     "returningGoals": "Ōnoki (measure the heir near responsibility w/o isolating him), Kurikara (teach him to carry w/o clenching; persona set), Tetsuna (use him to teach restraint not terror), Ganryū (surpass honestly), Akemi (keep him human).",
     "tensionMap": "Eastern caravans coming in thin/late; mission desk (Kazan) suppressing the reports; syndicate (Dosu) hiding losses + hiring muscle; garrison (Doki) clamoring for men; a Cloud envoy (Raido) measuring the bloodline; a missing-nin (Gomei) engineering a border incident. The powder is laid, not yet lit.",
-    "chaptersDone": ["act2_ch01_the_assistant.md — Day 90, the Academy summons; Iwao FAILS to teach Kosuke by control (Chakra Control 11 vs DC15) and turns to a human truth instead. Theme opened: can he help someone grow without making them proof of himself?"],
+    "openingArcComplete": "Days 90-95, Ch.1-6, played day-by-day under STRICT TEMPORAL MODE (every required block lived + resolved before the clock advanced — no time-skips). All dice OOC (inline [OOC ...] brackets + state-ledger), OpenAI TTS narration per chapter, NPC declarations are real model turns the DM adjudicated. Iwao recovered to full each rest.",
+    "chaptersDone": [
+      "Ch.1 The Assistant (D90): teach Kosuke; Chakra Control 11 vs 15 FAIL -> human turn (showed scars, named the finals loss).",
+      "Ch.2 The Mission Desk (D91): Raido (Cloud) probes at the gate; Perception 14 vs 14 catches the eastern-road report discrepancy; Kazan deflects.",
+      "Ch.3 The Little Escort (D92): Perception 16 vs 15 sees a staged 'accident' as a response-timing probe; Iwao gives the watchers a blank page; Gomei withdraws (needs_dm_repair->narration).",
+      "Ch.4 Road Work (D93): Nature 12 vs 15 FAIL (no tracker's eye) but History 23 vs 14 recognizes staged-ambush geometry; Doki seizes it for reinforcements, tainting the alarm.",
+      "Ch.5 Caravan Under Rain (D94): COMBAT set-piece (3 bandits + Ren elite +20). Iwao 38->15; held the frame, out-lasted/drove off Ren by control (no kills); Perception 16 found a planted Cloud token = manufactured provocation to frame Kumo for war.",
+      "Ch.6 The Report Nobody Wants (D95): trusted Kurikara over the desk; Persuasion 11 vs 15 FAIL (can't sway the room) but Ninshou 24 vs 15 lays the irrefutable case; Onoki's 'measure' goal completed -> grants Iwao standing + a charge to FIND the framer."
+    ],
+    "liveTension": "Gomei (missing-nin) abandoned the find-able frame, now building 'an incident that needs no discovering.' Raido (Cloud) realizes he's being framed, wrote home. Iwao holds the planted token + Onoki's charge: hunt the hand, eyes before blood. Escalation Layer 2->3.",
     "craftRules": "PROSE keeps dice OOC (Engine Log footer + callouts), never in narrative. COMBAT narrated as UFC-style play-by-play with exact rolls/damage/HP/proximity-to-death in the OOC log."
   },
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
