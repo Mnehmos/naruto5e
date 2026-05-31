@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 45,
-  "chaptersDone": 13,
+  "dayClock": 46,
+  "chaptersDone": 14,
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
@@ -38,12 +38,12 @@
     "22:30 sleep (long rest)"
   ],
   "sheet": {
-    "level": 4, "rank": "Genin", "subclass": "Elementalist",
-    "xp": 800, "xpToNextLevel": 200, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
-    "hp": "26/26", "chakra": "41/41", "ac": 12,
+    "level": 5, "inWorldTitle": "Genin (engine rank auto-set 'Chunin' = jutsu-tier B; the TITLE is earned at the Chūnin Exam — divergence flagged bug_1780247960181)", "subclass": "Elementalist",
+    "xp": 1050, "xpToNextLevel": 450, "saveDC": 15, "prof": 4, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
+    "hp": "32/32", "chakra": "50/50", "ac": 12,
     "ryo": 50, "beltPouchRyo": 20, "missionPoints": 100,
-    "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap"],
-    "jutsuKnownCap": 3,
+    "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap", "dust-release-d (Dust Release: Lesser Detachment — AWAKENED Day 46)"],
+    "jutsuKnownCap": 4,
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
@@ -56,7 +56,8 @@
       { "day": 2, "size": "medium(+3)", "moment": "Ended the spar without crushing Rōmaru even at 2 HP — carried the heavier stone, didn't crush the one beside him." },
       { "days": "6-7", "size": "small(+1)", "moment": "Said 'help'; learned blind trust (3 then 5 steps); climbed to the quarry to seek the cost of his gift." },
       { "day": 20, "size": "medium(+2)", "moment": "Mid-term eval: his plan FAILED under pressure, but he'd left gaps and trusted his cell — Akemi & Tobari covered the breach and they passed together. Succeeded by the creed, not by control." },
-      { "day": 23, "size": "small(+1)", "moment": "Failed the awakening utterly before the Third Tsuchikage (nat-1) and did not break — stood in the wreck and asked to be taught." }
+      { "day": 23, "size": "small(+1)", "moment": "Failed the awakening utterly before the Third Tsuchikage (nat-1) and did not break — stood in the wreck and asked to be taught." },
+      { "day": 46, "size": "large(+3) — FILLS to 10/10", "moment": "The true Dust awakening: wielded the deadliest bloodline in history to SHIELD a fallen Ganryū, not to crush — held the frame, not the fist. The Hidden Stone's creed fully embodied." }
     ]
   },
   "npcs": {
