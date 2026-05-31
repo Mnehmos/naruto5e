@@ -36,14 +36,16 @@
     "22:30 sleep (long rest)"
   ],
   "sheet": {
-    "level": 1, "rank": "Genin",
-    "hp": "8/8", "chakra": "14/14", "ac": 12,
+    "level": 2, "rank": "Genin",
+    "xp": 200, "xpToNextLevel": 100, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
+    "hp": "14/14", "chakra": "23/23", "ac": 12,
     "ryo": 0, "beltPouchRyo": 20, "missionPoints": 0,
     "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap"],
     "jutsuKnownCap": 3,
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
+  "progression": "XP system added to engine (commit 69ceb9f): award_xp earns XP scaled small->large for engine-grounded beats; auto-levels at thresholds. L1->L2 on Day 8 (first week, 200 XP) lifted HP 8->14, Chakra 14->23 — easing the glass-cannon. Note: jutsuKnownCap still 3 at L2 (Ninjutsu Specialist gains jutsu slots at later levels); to learn the Dust ladder he'll free a slot (jutsu_forget) or hit a cap-growth level.",
   "renown": { "iwagakure": 15, "iwa_academy": 10, "note": "FAME — passive, drawn by the bloodline whether earned or not (engine 'reputation'); the unearned hype. NOT the point." },
   "willOfStone": {
     "what": "Iwagakure's Will of Fire: carry weight without breaking; never crush the people you carry it beside. DM-AWARDED only, for defining moments, scaled small(1)/medium(2-3)/large(4-5). Engine track: iwagakure FAVOR (cap 10). THIS is what Iwao earns.",
