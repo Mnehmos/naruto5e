@@ -652,6 +652,56 @@ describe("npc_decide assembles an NPC decision prompt", () => {
   });
 });
 
+// Durable NPC-agent layer: prompt slices (persona/directive/secrets/journal),
+// npc_compose assembly, and the rest-bounded tick surfacing agent prompts.
+describe("NPC agent layer", () => {
+  it("npc_compose stacks persona -> directive -> secrets -> state -> journal, then the situation", () => {
+    const npcId = (run("npc_create", {
+      name: "Kakashi",
+      authorityId: "leaf",
+      persona: "You are Kakashi Hatake, a laconic jonin.",
+      directive: "Test the genin; reveal little.",
+      goals: [{ text: "evaluate the squad", drive: "train", intensity: 2 }],
+    }) as any).events[0].data.npc.id;
+    run("npc_add_secret", { npcId, text: "You already know they passed." });
+    run("npc_add_journal", { npcId, entry: "Watched them spar at dawn." });
+
+    const c = run("npc_compose", { npcId, situation: "The genin await your verdict." }) as any;
+    expect(c.status).toBe("resolved");
+    const data = c.events[0].data;
+    const sys = data.messages.find((m: any) => m.role === "system").content;
+    expect(sys.indexOf("Kakashi Hatake")).toBeLessThan(sys.indexOf("Test the genin")); // persona before directive
+    expect(sys.indexOf("Test the genin")).toBeLessThan(sys.indexOf("PRIVATE")); // directive before secrets
+    expect(sys).toMatch(/already know they passed/);
+    expect(sys).toMatch(/Watched them spar/);
+    expect(data.slicesIncluded).toEqual(expect.arrayContaining(["persona", "directive", "secrets", "state", "journal"]));
+    expect(data.messages.at(-1)).toMatchObject({ role: "user" });
+    expect(data.messages.at(-1).content).toContain("verdict");
+  });
+
+  it("npc_set_agent configures model; secret add/remove round-trips", () => {
+    const npcId = (run("npc_create", { name: "Anko" }) as any).events[0].data.npc.id;
+    run("npc_set_agent", { npcId, persona: "You are Anko.", model: "gpt-5.4-mini", autoOnTurn: true });
+    const added = run("npc_add_secret", { npcId, text: "secret A" }) as any;
+    const secretId = added.events[0].data.secret.id;
+    const removed = run("npc_remove_secret", { npcId, secretId }) as any;
+    expect(removed.events[0].data.count).toBe(0);
+    expect((run("npc_compose", { npcId }) as any).events[0].data.model).toBe("gpt-5.4-mini");
+  });
+
+  it("a rest-bounded tick surfaces composed prompts ONLY for configured agent-NPCs", () => {
+    mkPC("Naruto");
+    run("npc_create", { name: "AgentNin", persona: "You are a watchful nin.", goals: [{ text: "shadow the squad", drive: "scheme" }] });
+    run("npc_create", { name: "PlainNin" }); // no persona/directive -> not an agent
+    const t = run("tick_run", { trigger: "long" }) as any;
+    expect(t.status).toBe("resolved");
+    const tick = t.events.find((e: any) => e.type === "tick").data.tick;
+    expect(tick.agentPrompts.length).toBe(1);
+    expect(tick.agentPrompts[0].name).toBe("AgentNin");
+    expect(tick.agentPrompts[0].messages.some((m: any) => m.role === "system" && /watchful nin/.test(m.content))).toBe(true);
+  });
+});
+
 // Campaign/world layer above rooms.
 describe("campaign management", () => {
   it("creates, advances the clock, logs, and composes a dashboard", () => {

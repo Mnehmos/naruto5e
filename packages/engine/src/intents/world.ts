@@ -2,7 +2,7 @@ import { newId, reject, rollExpression } from "@naruto5e/shared";
 import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import type { Character } from "../domain/character.js";
-import { NpcRelationshipSchema, NpcSchema, NpcGoalSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
+import { NpcRelationshipSchema, NpcSchema, NpcGoalSchema, NpcSecretSchema, NpcJournalSchema, VendorSchema, StolenItemSchema, HeatStateSchema, CorpseSchema, DECAY_ORDER, type Corpse, type HeatState, type NpcRelationship, type Vendor } from "../domain/world.js";
 import { applyStandingDelta, getLedger } from "../rules/standing.js";
 import { dispositionTier, familiarityTier, salientMemories } from "../rules/npc.js";
 import { resolveSpeech, type Volume } from "../rules/social.js";
@@ -12,6 +12,113 @@ function coll<T extends { id: string }>(ctx: ResolveContext, name: string) {
 }
 function relId(npcId: string, actorId: string) {
   return `${npcId}:${actorId}`;
+}
+
+/**
+ * Shared situational read for an NPC — the single source of truth behind both
+ * npc_decide (the decision menu) and npc_compose (the agent prompt's state/scene
+ * slices). Pure read over store: dominant goal, who's present + how the NPC
+ * regards each, threats, and the legal social-move menu.
+ */
+export function npcSituation(ctx: ResolveContext, npc: any) {
+  const room = ctx.room.id;
+  const npcId = npc.id;
+  const rels = coll<NpcRelationship>(ctx, "npc_relationships");
+  const goals = (npc.goals ?? [])
+    .filter((g: any) => !g.done)
+    .sort((a: any, b: any) => (b.intensity ?? 1) - (a.intensity ?? 1) || (b.progress ?? 0) - (a.progress ?? 0));
+  const dominant = goals[0];
+  const pcs = ctx.store.collection<any>("characters").find((c) => c.roomId === room && !c.dead);
+  const foes = ctx.store.collection<any>("adversaries").find((a) => a.roomId === room && !a.dead);
+  const peers = ctx.store.collection<any>("npcs").find((n) => n.roomId === room && n.id !== npcId);
+  const distFt = (o: any) =>
+    !npc.position || !o.position ? undefined : Math.max(Math.abs(npc.position.x - o.position.x), Math.abs(npc.position.y - o.position.y)) * 5;
+  const regard = pcs.map((c: any) => {
+    const rel = rels.get(relId(npcId, c.id));
+    const salient = salientMemories(rel?.memories ?? [], { limit: 3 });
+    let standing: any = null;
+    if (npc.authorityId) {
+      const l = getLedger(ctx.store, c.id, npc.authorityId);
+      if (l) standing = { reputation: l.reputation, hostile: l.hostile };
+    }
+    return {
+      actorId: c.id,
+      name: c.name,
+      attitude: dispositionTier(rel?.disposition ?? 0),
+      closeness: familiarityTier(rel?.familiarity ?? 0),
+      interactionCount: rel?.interactionCount ?? 0,
+      distanceFt: distFt(c),
+      remembers: salient.map((m) => m.summary),
+      ...(standing ? { standing } : {}),
+    };
+  });
+  const actions: { type: string; label: string; paramsHint: string }[] = [
+    { type: "social_speak", label: "Speak", paramsHint: "{ text, volume?(whisper|talk|shout), topics?[] } — say something; eavesdrop-aware + remembered." },
+    { type: "npc_interact", label: "Shift stance", paramsHint: "{ npcId, actorId, beat, dispositionDelta?, familiarityDelta?, importance? } — register how this beat changes how the NPC feels about a PC." },
+  ];
+  if (npc.position) actions.push({ type: "move", label: "Reposition", paramsHint: "{ to:{x,y} | distance } — approach, withdraw, or patrol." });
+  if (dominant) actions.push({ type: "npc_set_goal", label: "Advance goal", paramsHint: `{ npcId, goal:{ id:"${dominant.id}", progress:<0..100> } } — push the "${dominant.text}" agenda.` });
+  if ((npc.knownFacts ?? []).length) actions.push({ type: "social_speak", label: "Reveal/withhold a fact", paramsHint: "{ text } — choose whether to share what the NPC knows." });
+
+  const goalLine = dominant
+    ? `Driving goal: "${dominant.text}" (drive: ${dominant.drive}, intensity ${dominant.intensity ?? 1}, ${dominant.progress ?? 0}% done)${dominant.targetActorId ? `, aimed at ${dominant.targetActorId}` : ""}.`
+    : "No active agenda — react to the scene.";
+  const factsLine = (npc.knownFacts ?? []).length ? `Knows: ${npc.knownFacts.join("; ")}.` : "";
+  const presentLine = regard.length
+    ? `Present: ${regard.map((r) => `${r.name} (regards as ${r.attitude}, ${r.closeness}${r.remembers.length ? `; recalls: ${r.remembers.join(", ")}` : ""})`).join(" · ")}.`
+    : "No player characters present.";
+  const threatsLine = foes.length ? `Threats in the room: ${foes.map((f: any) => f.name).join(", ")}.` : "";
+  const stateBlock = [`You are ${npc.name}${npc.authorityId ? `, affiliated with ${npc.authorityId}` : ""}.`, goalLine, factsLine].filter(Boolean).join(" ");
+  const sceneLine = [presentLine, threatsLine].filter(Boolean).join(" ");
+  const contextSummary = [
+    `${npc.name} decides what to do next.` + (npc.authorityId ? ` (Affiliation: ${npc.authorityId}.)` : ""),
+    goalLine,
+    factsLine,
+    presentLine,
+    threatsLine,
+    `Choose ONE move that best serves the goal and how the NPC feels about who's present, then submit it as a normal intent.`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return { goals, dominant, regard, foes, peers, actions, distFt, stateBlock, sceneLine, contextSummary };
+}
+
+/**
+ * Build a provider-ready messages[] from an NPC's agent config + situation. Pure
+ * (no store), so both npc_compose and the rest-bounded tick reuse it. Slice order
+ * mirrors the rpg.mcp composer: persona -> directive -> secrets -> state ->
+ * recent journal (system), then the DM situation (or the auto scene) as the user turn.
+ */
+export function composeNpcMessages(
+  npc: any,
+  sit: ReturnType<typeof npcSituation>,
+  situation?: string,
+  journalLimit = 5,
+): { messages: { role: "system" | "user"; content: string }[]; slicesIncluded: string[]; estimatedTokens: number } {
+  const systemParts: string[] = [];
+  const slicesIncluded: string[] = [];
+  const add = (name: string, text?: string) => {
+    if (text && text.trim()) {
+      systemParts.push(text.trim());
+      slicesIncluded.push(name);
+    }
+  };
+  add("persona", npc.persona ?? `You are ${npc.name}, a person in this world.`);
+  add("directive", npc.directive);
+  if ((npc.secrets ?? []).length) add("secrets", `PRIVATE — known only to you (never state these outright):\n${npc.secrets.map((s: any) => `- ${s.text}`).join("\n")}`);
+  add("state", sit.stateBlock);
+  const recentJournal = (npc.journal ?? []).slice(-journalLimit);
+  if (recentJournal.length) add("journal", `Recently, you:\n${recentJournal.map((j: any) => `- ${j.entry}`).join("\n")}`);
+
+  const closing =
+    "\n\n--- HOW TO RESPOND ---\nStay in character. Briefly declare ONE thing you do, the way a player at the table declares an action " +
+    '("I step between them and lower my voice.", "I demand to see their papers."). The DM rolls dice and narrates the outcome.';
+  const messages: { role: "system" | "user"; content: string }[] = [];
+  if (systemParts.length) messages.push({ role: "system", content: systemParts.join("\n\n") + closing });
+  const userContent = (situation ?? "").trim() || `${sit.sceneLine}\n\nWhat do you do?`;
+  messages.push({ role: "user", content: userContent });
+
+  return { messages, slicesIncluded, estimatedTokens: Math.ceil(messages.reduce((n, m) => n + m.content.length + 8, 0) / 4) };
 }
 
 /**
@@ -25,9 +132,102 @@ export function registerWorldIntents(engine: Engine): void {
     const goals = ((ctx.op.params.goals as any[]) ?? []).map((g) =>
       NpcGoalSchema.parse({ id: g.id ?? newId("goal"), text: String(g.text ?? "an unstated aim"), drive: g.drive, targetActorId: g.targetActorId, targetAuthorityId: g.targetAuthorityId, intensity: g.intensity ?? 1 }),
     );
-    const npc = NpcSchema.parse({ id: (ctx.op.params.id as string) || newId("npc"), roomId: ctx.room.id, name: String(ctx.op.params.name ?? "NPC"), authorityId: ctx.op.params.authorityId as string, goals, position: ctx.op.params.position as any });
+    const p = ctx.op.params;
+    const npc = NpcSchema.parse({
+      id: (p.id as string) || newId("npc"),
+      roomId: ctx.room.id,
+      name: String(p.name ?? "NPC"),
+      authorityId: p.authorityId as string,
+      goals,
+      position: p.position as any,
+      persona: p.persona != null ? String(p.persona) : undefined,
+      directive: p.directive != null ? String(p.directive) : undefined,
+      model: p.model != null ? String(p.model) : undefined,
+      autoOnTurn: p.autoOnTurn === true,
+    });
     coll(ctx, "npcs").put(npc);
     ctx.ir.emit("npc_created", { data: { npc }, narration: `${npc.name} enters the world${goals.length ? ` (pursuing ${goals.length} goal${goals.length === 1 ? "" : "s"})` : ""}.` });
+  });
+
+  // npc_set_agent — upsert the durable agent config (persona/directive/model/
+  // autoOnTurn) on an NPC, so it can be invoked to act in character.
+  engine.registerHandler("npc_set_agent", (ctx) => {
+    const p = ctx.op.params;
+    const npc = coll<any>(ctx, "npcs").get(String(p.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${p.npcId}".`, {}, ["Create the NPC first (npc_manage create)."]);
+    if (p.persona !== undefined) npc.persona = String(p.persona);
+    if (p.directive !== undefined) npc.directive = String(p.directive);
+    if (p.model !== undefined) npc.model = String(p.model);
+    if (p.autoOnTurn !== undefined) npc.autoOnTurn = p.autoOnTurn === true;
+    coll(ctx, "npcs").put(npc);
+    ctx.ir.emit("npc_agent", {
+      data: { npcId: npc.id, persona: npc.persona, directive: npc.directive, model: npc.model ?? null, autoOnTurn: npc.autoOnTurn },
+      narration: `${npc.name}'s agent is configured${npc.model ? ` (${npc.model})` : ""}.`,
+    });
+  });
+
+  // npc_add_secret / npc_remove_secret — agent-private knowledge (guarded; injected
+  // into the agent prompt, never narrated by the engine).
+  engine.registerHandler("npc_add_secret", (ctx) => {
+    const npc = coll<any>(ctx, "npcs").get(String(ctx.op.params.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${ctx.op.params.npcId}".`, {}, ["Create the NPC first."]);
+    const secret = NpcSecretSchema.parse({ id: newId("secret"), text: String(ctx.op.params.text ?? "") });
+    npc.secrets = npc.secrets ?? [];
+    npc.secrets.push(secret);
+    coll(ctx, "npcs").put(npc);
+    ctx.ir.emit("npc_secret", { data: { npcId: npc.id, secret, count: npc.secrets.length } });
+  });
+  engine.registerHandler("npc_remove_secret", (ctx) => {
+    const npc = coll<any>(ctx, "npcs").get(String(ctx.op.params.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${ctx.op.params.npcId}".`, {}, ["Create the NPC first."]);
+    const id = String(ctx.op.params.secretId ?? "");
+    npc.secrets = (npc.secrets ?? []).filter((s: any) => s.id !== id);
+    coll(ctx, "npcs").put(npc);
+    ctx.ir.emit("npc_secret", { data: { npcId: npc.id, removed: id, count: npc.secrets.length } });
+  });
+
+  // npc_add_journal / npc_get_journal — the NPC's first-person rolling memory.
+  engine.registerHandler("npc_add_journal", (ctx) => {
+    const npc = coll<any>(ctx, "npcs").get(String(ctx.op.params.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${ctx.op.params.npcId}".`, {}, ["Create the NPC first."]);
+    const entry = NpcJournalSchema.parse({ id: newId("jrnl"), entry: String(ctx.op.params.entry ?? "") });
+    npc.journal = npc.journal ?? [];
+    npc.journal.push(entry);
+    coll(ctx, "npcs").put(npc);
+    ctx.ir.emit("npc_journal", { data: { npcId: npc.id, entry, count: npc.journal.length } });
+  });
+  engine.registerHandler("npc_get_journal", (ctx) => {
+    const npc = coll<any>(ctx, "npcs").get(String(ctx.op.params.npcId ?? ""));
+    if (!npc) throw reject("entity_not_found", `No NPC "${ctx.op.params.npcId}".`, {}, ["Create the NPC first."]);
+    const limit = Number(ctx.op.params.limit ?? 10);
+    const entries = (npc.journal ?? []).slice(-limit);
+    ctx.ir.emit("npc_journal", { data: { npcId: npc.id, entries, count: (npc.journal ?? []).length } });
+  });
+
+  // npc_compose — assemble the agent's prompt slices into a provider-ready
+  // messages[] (the engine half of "invoke an NPC"). READ-ONLY; the controller/
+  // harness sends these messages to the model. Slice order mirrors the rpg.mcp
+  // composer: persona -> directive -> secrets -> state -> recent journal, then the
+  // DM-supplied situation as the user turn. The engine hosts no LLM.
+  engine.registerHandler("npc_compose", (ctx) => {
+    const npcId = String(ctx.op.params.npcId ?? "");
+    const npc = coll<any>(ctx, "npcs").get(npcId);
+    if (!npc) throw reject("entity_not_found", `No NPC "${npcId}".`, { npcId }, ["Create the NPC first (npc_manage create)."]);
+    const sit = npcSituation(ctx, npc);
+    const { messages, slicesIncluded, estimatedTokens } = composeNpcMessages(npc, sit, String(ctx.op.params.situation ?? ""), Number(ctx.op.params.journalLimit ?? 5));
+    ctx.ir.emit("npc_prompt", {
+      actor: npcId,
+      data: {
+        npcId,
+        name: npc.name,
+        model: npc.model ?? null, // controller falls back to NARUTO_NPC_MODEL
+        messages,
+        slicesIncluded,
+        estimatedTokens,
+        affordances: { actions: sit.actions },
+      },
+      narration: `Composed ${npc.name}'s agent prompt (${slicesIncluded.join(", ") || "situation only"}).`,
+    });
   });
 
   // npc_set_goal — upsert (or remove) a goal the NPC pursues off-screen; the tick
@@ -125,73 +325,25 @@ export function registerWorldIntents(engine: Engine): void {
     const npcId = String(ctx.op.params.npcId ?? "");
     const npc = coll<any>(ctx, "npcs").get(npcId);
     if (!npc) throw reject("entity_not_found", `No NPC "${npcId}".`, { npcId }, ["Create the NPC first (npc_manage create)."]);
-    const room = ctx.room.id;
-    const rels = coll<NpcRelationship>(ctx, "npc_relationships");
     const focusId = String(ctx.op.params.observerActorId ?? ctx.op.params.actorId ?? "");
-
-    // dominant goal: highest-intensity, not-yet-done, first
-    const goals = (npc.goals ?? []).filter((g: any) => !g.done).sort((a: any, b: any) => (b.intensity ?? 1) - (a.intensity ?? 1) || (b.progress ?? 0) - (a.progress ?? 0));
-    const dominant = goals[0];
-
-    // who is present (PCs first — that's whom an NPC reacts to), then foes, then peers
-    const pcs = ctx.store.collection<any>("characters").find((c) => c.roomId === room && !c.dead);
-    const foes = ctx.store.collection<any>("adversaries").find((a) => a.roomId === room && !a.dead);
-    const peers = ctx.store.collection<any>("npcs").find((n) => n.roomId === room && n.id !== npcId);
-    const distFt = (o: any) => {
-      if (!npc.position || !o.position) return undefined;
-      return Math.max(Math.abs(npc.position.x - o.position.x), Math.abs(npc.position.y - o.position.y)) * 5;
-    };
-    // how this NPC regards each present PC (its own memory drives the read)
-    const regard = pcs.map((c: any) => {
-      const rel = rels.get(relId(npcId, c.id));
-      const salient = salientMemories(rel?.memories ?? [], { limit: 3 });
-      let standing: any = null;
-      if (npc.authorityId) {
-        const l = getLedger(ctx.store, c.id, npc.authorityId);
-        if (l) standing = { reputation: l.reputation, hostile: l.hostile };
-      }
-      return {
-        actorId: c.id,
-        name: c.name,
-        attitude: dispositionTier(rel?.disposition ?? 0),
-        closeness: familiarityTier(rel?.familiarity ?? 0),
-        interactionCount: rel?.interactionCount ?? 0,
-        distanceFt: distFt(c),
-        remembers: salient.map((m) => m.summary),
-        ...(standing ? { standing } : {}),
-      };
-    });
-
-    // legal social moves an NPC can attempt right now (submit as ordinary intents)
-    const actions: { type: string; label: string; paramsHint: string }[] = [
-      { type: "social_speak", label: "Speak", paramsHint: "{ text, volume?(whisper|talk|shout), topics?[] } — say something; eavesdrop-aware + remembered." },
-      { type: "npc_interact", label: "Shift stance", paramsHint: "{ npcId, actorId, beat, dispositionDelta?, familiarityDelta?, importance? } — register how this beat changes how the NPC feels about a PC." },
-    ];
-    if (npc.position) actions.push({ type: "move", label: "Reposition", paramsHint: "{ to:{x,y} | distance } — approach, withdraw, or patrol." });
-    if (dominant) actions.push({ type: "npc_set_goal", label: "Advance goal", paramsHint: `{ npcId, goal:{ id:"${dominant.id}", progress:<0..100> } } — push the "${dominant.text}" agenda.` });
-    if ((npc.knownFacts ?? []).length) actions.push({ type: "social_speak", label: "Reveal/withhold a fact", paramsHint: "{ text } — choose whether to share what the NPC knows." });
-
-    const lines = [
-      `${npc.name} decides what to do next.` + (npc.authorityId ? ` (Affiliation: ${npc.authorityId}.)` : ""),
-      dominant ? `Driving goal: "${dominant.text}" (drive: ${dominant.drive}, intensity ${dominant.intensity ?? 1}, ${dominant.progress ?? 0}% done)${dominant.targetActorId ? `, aimed at ${dominant.targetActorId}` : ""}.` : "No active agenda — react to the scene.",
-      (npc.knownFacts ?? []).length ? `Knows: ${npc.knownFacts.join("; ")}.` : "",
-      regard.length ? `Present: ${regard.map((r) => `${r.name} (regards as ${r.attitude}, ${r.closeness}${r.remembers.length ? `; recalls: ${r.remembers.join(", ")}` : ""})`).join(" · ")}.` : "No player characters present.",
-      foes.length ? `Threats in the room: ${foes.map((f: any) => f.name).join(", ")}.` : "",
-      `Choose ONE move that best serves the goal and how the NPC feels about who's present, then submit it as a normal intent.`,
-    ].filter(Boolean);
-
+    const s = npcSituation(ctx, npc);
     ctx.ir.emit("npc_decision", {
       actor: npcId,
       data: {
         npc: { id: npc.id, name: npc.name, authorityId: npc.authorityId, knownFacts: npc.knownFacts ?? [], position: npc.position },
-        goals,
-        dominantGoal: dominant ?? null,
-        scene: { mode: ctx.room.mode, present: regard, threats: foes.map((f: any) => ({ id: f.id, name: f.name, distanceFt: distFt(f) })), peers: peers.map((p: any) => ({ id: p.id, name: p.name })) },
+        goals: s.goals,
+        dominantGoal: s.dominant ?? null,
+        scene: {
+          mode: ctx.room.mode,
+          present: s.regard,
+          threats: s.foes.map((f: any) => ({ id: f.id, name: f.name, distanceFt: s.distFt(f) })),
+          peers: s.peers.map((p: any) => ({ id: p.id, name: p.name })),
+        },
         focusActorId: focusId || null,
-        affordances: { actions },
-        contextSummary: lines.join(" "),
+        affordances: { actions: s.actions },
+        contextSummary: s.contextSummary,
       },
-      narration: lines.join(" "),
+      narration: s.contextSummary,
     });
   });
 

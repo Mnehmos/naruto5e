@@ -48,6 +48,13 @@ export const NpcGoalSchema = z.object({
 });
 export type NpcGoal = z.infer<typeof NpcGoalSchema>;
 
+// A first-person journal entry the NPC keeps (what they did/observed last). Fed
+// back into the agent prompt so an invoked NPC remembers across turns.
+export const NpcJournalSchema = z.object({ id: z.string(), entry: z.string() });
+// A private fact known ONLY to the NPC (a secret the agent guards). Injected into
+// the system prompt but never narrated by the engine.
+export const NpcSecretSchema = z.object({ id: z.string(), text: z.string() });
+
 export const NpcSchema = z.object({
   id: z.string(),
   kind: z.literal("npc").default("npc"),
@@ -57,6 +64,13 @@ export const NpcSchema = z.object({
   knownFacts: z.array(z.string()).default([]),
   goals: z.array(NpcGoalSchema).default([]),
   position: z.object({ x: z.number(), y: z.number() }).optional(), // for spatial/social-stealth
+  // ── durable agent config (the prompt slices an LLM is invoked with) ──
+  persona: z.string().optional(), // DM-authored identity / voice
+  directive: z.string().optional(), // DM-authored behavioral instructions
+  secrets: z.array(NpcSecretSchema).default([]), // agent-private knowledge
+  journal: z.array(NpcJournalSchema).default([]), // first-person rolling memory
+  model: z.string().optional(), // overrides NARUTO_NPC_MODEL at invoke time
+  autoOnTurn: z.boolean().default(false), // auto-invoke when this NPC's turn comes up
 });
 export type Npc = z.infer<typeof NpcSchema>;
 

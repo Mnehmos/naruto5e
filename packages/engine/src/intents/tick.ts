@@ -4,6 +4,7 @@ import type { ResolveContext } from "./registry.js";
 import type { Npc } from "../domain/world.js";
 import { DECAY_ORDER, NpcRelationshipSchema, type Corpse, type NpcRelationship, type StolenItem } from "../domain/world.js";
 import { applyStandingDelta } from "../rules/standing.js";
+import { npcSituation, composeNpcMessages } from "./world.js";
 
 export type Magnitude = "small" | "medium" | "large";
 
@@ -31,6 +32,10 @@ const DECAY_STEPS: Record<Magnitude, number> = { small: 0, medium: 1, large: 2 }
 export interface TickResult {
   magnitude: Magnitude;
   agentsCalled: { npcId: string; name: string; action: string }[];
+  // Composed prompts for in-scope LLM agent-NPCs (those with a persona/directive),
+  // surfaced so the controller can invoke them on this rest/downtime and feed
+  // their in-character action back as narration + a journal entry.
+  agentPrompts: { npcId: string; name: string; model: string | null; messages: { role: string; content: string }[] }[];
   resolved: { op: string; detail: string }[];
   consequenceDeltas: {
     standing: { authorityId: string; charId: string; reputationDelta: number; why: string }[];
@@ -45,6 +50,7 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
   const tick: TickResult = {
     magnitude,
     agentsCalled: [],
+    agentPrompts: [],
     resolved: [],
     consequenceDeltas: { standing: [], heatDecay: [], corpseDecay: [], economyDrift: [], npcMemories: [] },
   };
@@ -148,6 +154,16 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
       digest.push(`${npc.name} left a message while you rested.`);
     }
     tick.agentsCalled.push({ npcId: npc.id, name: npc.name, action });
+  }
+
+  // ---- LLM agent-NPCs in scope: surface a composed prompt for the controller to
+  // invoke (the deterministic advance above is the always-on fallback; this adds
+  // the in-character action + journal when the LLM tier is wired). ----
+  for (const npc of inScope) {
+    if (!(npc.persona || npc.directive)) continue; // only configured agents
+    const sit = npcSituation(ctx, npc);
+    const { messages } = composeNpcMessages(npc, sit, `Time has passed (a ${magnitude} rest). What did you do while the party rested?`);
+    tick.agentPrompts.push({ npcId: npc.id, name: npc.name, model: npc.model ?? null, messages });
   }
 
   // ---- economy drift (downtime restocks; long: minor) ----
