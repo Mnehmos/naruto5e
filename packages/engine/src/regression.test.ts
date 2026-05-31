@@ -856,6 +856,44 @@ describe("conditions clear on rest / combat-end", () => {
   });
 });
 
+// Task 7: strict temporal mode — the engine refuses to let the DM compress lived time.
+describe("strict temporal mode (anti-time-compression)", () => {
+  it("rejects an unauthorized multi-day jump but accepts an authorized one", () => {
+    const pc = mkPC("Iwao");
+    const camp = (run("campaign_create", { name: "Iwagakure", party: [pc], strictTemporal: true, maxUnauthorizedDays: 1 }) as any).events[0].data.campaign.id as string;
+    const rej = run("campaign_advance_day", { campaignId: camp, days: 14 }) as any;
+    expect(rej.status).toBe("rejected");
+    expect(rej.reason.rule).toBe("time_compression");
+    expect((run("campaign_get", { campaignId: camp }) as any).events[0].data.campaign.day).toBe(1); // unchanged
+    const okAdv = run("campaign_advance_day", { campaignId: camp, days: 14, compressionAuthorized: true }) as any;
+    expect(okAdv.status).toBe("resolved");
+    expect((run("campaign_get", { campaignId: camp }) as any).events[0].data.campaign.day).toBe(15);
+  });
+
+  it("blocks day-advance until required attention blocks are resolved", () => {
+    const pc = mkPC("Iwao");
+    const camp = (run("campaign_create", { name: "Academy", party: [pc], strictTemporal: true }) as any).events[0].data.campaign.id as string;
+    run("campaign_plan_day", { campaignId: camp, blocks: [{ label: "08:00 Chakra Control" }, { label: "free period", requiredAttention: false }] });
+    const rej = run("campaign_advance_day", { campaignId: camp, days: 1 }) as any;
+    expect(rej.status).toBe("rejected");
+    expect(rej.reason.rule).toBe("unresolved_blocks");
+    const open = (run("campaign_get", { campaignId: camp }) as any).events[0].data.openBlocks;
+    const required = open.find((b: any) => b.requiredAttention);
+    run("campaign_resolve_block", { campaignId: camp, blockId: required.id, digest: "drilled leaf-floating; rivalry beat with Ganryū" });
+    const okAdv = run("campaign_advance_day", { campaignId: camp, days: 1 }) as any;
+    expect(okAdv.status).toBe("resolved");
+    expect((run("campaign_get", { campaignId: camp }) as any).events[0].data.campaign.day).toBe(2);
+  });
+
+  it("non-strict campaigns still advance freely (back-compat)", () => {
+    const pc = mkPC("Hero");
+    const camp = (run("campaign_create", { name: "Open", party: [pc] }) as any).events[0].data.campaign.id as string;
+    const r = run("campaign_advance_day", { campaignId: camp, days: 30 }) as any;
+    expect(r.status).toBe("resolved");
+    expect((run("campaign_get", { campaignId: camp }) as any).events[0].data.campaign.day).toBe(31);
+  });
+});
+
 // bug_1780245857774: the rest-embedded tick minted directed-goal reputation EVERY rest
 // (unbounded). Now standing is milestone-gated and silenceable via passiveStanding.
 describe("standing inflation gate", () => {

@@ -196,14 +196,16 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     {
       description:
         "Campaign/world layer above rooms (unifies scenes, party, missions=quests, and per-authority Standing=factions under one arc + world clock + journal). Actions: " +
-        "create {name, party?, arc?, activeRoomId?, scenes?, factionsOfNote?}; " +
-        "get {campaignId, journalLimit?} -> dashboard (party summary + active missions + standings of note + recent journal); " +
-        "set {campaignId, arc?, activeRoomId?, addParty?, removeParty?, addScene?, addLocation?, factionsOfNote?}; " +
-        "advance_day {campaignId, days?, arc?} -> advance the world clock; " +
+        "create {name, party?, arc?, activeRoomId?, scenes?, factionsOfNote?, strictTemporal?, maxUnauthorizedDays?}; " +
+        "get {campaignId, journalLimit?} -> dashboard (party + missions + standings + journal + open time blocks); " +
+        "set {campaignId, arc?, activeRoomId?, addParty?, removeParty?, addScene?, addLocation?, factionsOfNote?, strictTemporal?, maxUnauthorizedDays?}; " +
+        "plan_day {campaignId, blocks:[{label, location?, requiredAttention?, actorsInScope?, startsAt?}], replace?} -> lay out the day's attention schedule; " +
+        "resolve_block {campaignId, blockId, digest?, resolvedIntents?} -> mark a scheduled block as lived (unblocks time); " +
+        "advance_day {campaignId, days?, arc?, compressionAuthorized?} -> advance the world clock (STRICT MODE: rejects skipping past unresolved required blocks or > maxUnauthorizedDays unless compressionAuthorized:true); " +
         "log {campaignId, beat} -> append a day-stamped journal beat.",
       inputSchema: {
         roomId: z.string(),
-        action: z.enum(["create", "get", "set", "advance_day", "log"]),
+        action: z.enum(["create", "get", "set", "plan_day", "resolve_block", "advance_day", "log"]),
         campaignId: z.string().optional(),
         name: z.string().optional(),
         arc: z.string().optional(),
@@ -218,10 +220,18 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         beat: z.string().optional(),
         days: z.number().optional(),
         journalLimit: z.number().optional(),
+        strictTemporal: z.boolean().optional(),
+        maxUnauthorizedDays: z.number().optional(),
+        blocks: z.array(z.record(z.any())).optional(),
+        blockId: z.string().optional(),
+        digest: z.string().optional(),
+        resolvedIntents: z.number().optional(),
+        replace: z.boolean().optional(),
+        compressionAuthorized: z.boolean().optional(),
       },
     },
     async ({ roomId, action, ...rest }) => {
-      const type = { create: "campaign_create", get: "campaign_get", set: "campaign_set", advance_day: "campaign_advance_day", log: "campaign_log" }[action];
+      const type = { create: "campaign_create", get: "campaign_get", set: "campaign_set", plan_day: "campaign_plan_day", resolve_block: "campaign_resolve_block", advance_day: "campaign_advance_day", log: "campaign_log" }[action];
       return ok(await client.submitIntent({ roomId, type, params: rest }));
     },
   );
