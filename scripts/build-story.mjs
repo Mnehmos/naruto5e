@@ -79,6 +79,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch04_road_work.md", slug: "act2-ch04-road-work", arc: "actii", tags: ["Mission", "Intrigue", "Dice-over-plan"],
     teaser: "Sent east to fix a road, Iwao can't read the tampered ground — but his scholar's mind recognizes the reshaped bend as textbook ambush geometry. A true warning, easily discounted.",
     callout: { kind: "proof", label: "Two rolls, one character", text: "Nature 12 vs 15 (fail) + History 23 vs 14 (success): the dice drew Iwao exactly — no woodsman's eye, but the boy who loves the battle-histories finds the war before the trackers do." } },
+  { path: "chapters/act2_ch05_caravan_under_rain.md", slug: "act2-ch05-caravan-under-rain", arc: "actii", tags: ["Combat", "Caravan", "Engine Proof", "Dice-over-plan"],
+    teaser: "The geometry comes off the page. An ambush at the killing-bend, a hired blade faster than him — and Iwao wins not by crushing but by holding the frame. Then he finds the planted token.",
+    callout: { kind: "proof", label: "The fight the dice fought", text: "Every blow rolled live: Ren's two DEX saves (22, 20), the 15-slash that took Iwao to 15 HP, the 41-rolled Sand-Coffin. Iwao out-lasted a +20 blade through control — no kills — then read the wreck (Perception 16) and found a planted Cloud token: a manufactured war." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
