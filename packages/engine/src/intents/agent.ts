@@ -5,6 +5,7 @@ import { loadActor } from "../rules/actor.js";
 import { activeEncounter } from "../rules/turn.js";
 import { blockedComponents, INCAPACITATING } from "../rules/conditions.js";
 import { jutsuElement } from "../rules/combat.js";
+import { RESOURCE_HINTS, tipLines, spendHints } from "../rules/hints.js";
 
 /**
  * The LLM-agent seam (tier-3 ergonomics). agent_context is a READ-ONLY tool that
@@ -87,7 +88,7 @@ export function registerAgentIntents(engine: Engine): void {
         identity: { id: doc.id, name: doc.name, kind: ref.coll, clan: doc.clan, className: doc.className, rank: doc.rank, level: doc.level, tier: doc.tier, team: myTeam, traits: [...(doc.traits ?? []), ...(doc.clanTraits ?? [])], affinity: doc.affinity ?? [] },
         vitals: { hp: doc.hp, chakra: doc.chakra, ac: doc.ac, conditions: doc.conditions ?? [], position: doc.position, turnBudget: doc.turnBudget },
         scene: { mode: inCombat ? "combat" : "scene", myTurn, round: enc?.round, activeTurn: enc ? enc.order[enc.activeIndex] : undefined, allies, threats },
-        affordances: { canAct, jutsu, basicActions, ...(incap ? { incapacitatedBy: incap } : {}) },
+        affordances: { canAct, jutsu, basicActions, spendHints: spendHints(inCombat ? "combat" : "scene"), ...(incap ? { incapacitatedBy: incap } : {}) },
         casting: doc.casting,
       },
       narration:
@@ -95,6 +96,18 @@ export function registerAgentIntents(engine: Engine): void {
         `HP ${doc.hp?.current ?? "?"}/${doc.hp?.max ?? "?"}, chakra ${doc.chakra?.current ?? "?"}/${doc.chakra?.max ?? "?"}. ` +
         `${threats.length} threat(s), ${allies.length} ally(ies); ${jutsu.filter((j: any) => j.castable).length}/${jutsu.length} jutsu castable. ` +
         (canAct ? "Decide their move and submit it (cast/attack/...)." : `Cannot act${incap ? ` (${incap})` : " (not their turn)"}.`),
+    });
+  });
+
+  // hints — context FRONTLOADING: a queryable guide to every resource and HOW TO SPEND IT.
+  // The DM/LLM reads this once to learn the verbs ("you can buy slots with fame", "a teacher
+  // can lift the clan lock", "strict time needs plan_day/resolve_block") instead of guessing.
+  engine.registerHandler("hints", (ctx) => {
+    const topic = ctx.op.params.topic ? String(ctx.op.params.topic).toLowerCase() : undefined;
+    const resources = topic ? RESOURCE_HINTS.filter((h) => h.resource.toLowerCase().includes(topic) || h.via.some((v) => v.toLowerCase().includes(topic))) : RESOURCE_HINTS;
+    ctx.ir.emit("hints", {
+      data: { resources, tips: tipLines() },
+      narration: "Resources & how to spend them — " + resources.map((h) => `${h.resource}: ${h.via[0]}`).join(" · ") + ".",
     });
   });
 }

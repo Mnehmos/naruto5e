@@ -171,6 +171,33 @@ export function registerAcquisitionIntents(engine: Engine): void {
     ctx.ir.emit("scroll_granted", { actor: student.id, data: { scroll }, narration: `${student.name} receives a ${scroll.forbidden ? "forbidden " : ""}scroll teaching ${j.name}.` });
   });
 
+  // jutsu_buy_scroll — the RYO/market path to a technique: buy a jutsu scroll for money
+  // (price scales by rank), optionally gated by a village archive's standing. Distinct from
+  // buy_slot (fame→capacity), favor_unlock (favor→off-affinity), and teach (relationship→tuition).
+  const RANK_SCROLL_PRICE: Record<string, number> = { E: 50, D: 150, C: 400, B: 1200, A: 3000, S: 8000 };
+  engine.registerHandler("jutsu_buy_scroll", (ctx) => {
+    const student = loadStudent(ctx);
+    const j = requireJutsu(ctx, String(ctx.op.params.jutsu ?? ""));
+    const price = ctx.op.params.priceRyo != null ? Number(ctx.op.params.priceRyo) : RANK_SCROLL_PRICE[j.rank] ?? 200;
+    const force = ctx.op.params.force === true;
+    const requires = ctx.op.params.requires as { authorityId?: string; minReputation?: number } | undefined;
+    if (requires?.authorityId && !force) {
+      const rep = getLedger(ctx.store, student.id, requires.authorityId)?.reputation ?? 0;
+      if (requires.minReputation != null && rep < requires.minReputation) {
+        throw reject("access_denied", `The ${requires.authorityId} archive won't sell the ${j.name} scroll below ${requires.minReputation} standing (you have ${rep}).`, { have: rep, need: requires.minReputation }, ["Earn the village's trust, or find a black-market seller (a fence)."]);
+      }
+    }
+    if (student.ryo < price && !force) {
+      throw reject("insufficient_ryo", `The ${j.name} scroll costs ${price} Ryo; ${student.name} has ${student.ryo}.`, { price, have: student.ryo }, ["Earn Ryo (missions/loot/fencing), buy a lower-rank scroll, or get TAUGHT it instead (jutsu_teach)."]);
+    }
+    student.ryo = Math.max(0, student.ryo - price);
+    const scroll = { id: newId("scroll"), name: `Scroll: ${j.name}`, type: "scroll", teaches: j.id, forbidden: ctx.op.params.forbidden === true, reusable: false, qty: 1 };
+    student.equipment = student.equipment ?? [];
+    student.equipment.push(scroll);
+    chars(ctx).put(student);
+    ctx.ir.emit("scroll_bought", { actor: student.id, data: { jutsu: j.id, name: j.name, price, ryoLeft: student.ryo, scroll }, narration: `${student.name} buys the ${j.name} scroll for ${price} Ryo (study it to learn).` });
+  });
+
   // jutsu_slot_buy — purchase technique SLOTS with FAME (reputation) through a social leader.
   // Fame is political capital here: a leader expands your sanctioned repertoire, and it costs
   // standing. Escalates with how much capacity you've already been granted.

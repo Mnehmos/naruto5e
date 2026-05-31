@@ -377,11 +377,14 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         "Grow a character's arsenal through social/world channels (each lifts the gates it legitimately can). Actions:\n" +
         "• teach {studentId, jutsu, teacherId?, via?, requires?, bypass?, viaFavor?, force?} — a tutor/teacher/special-trainer/Kage/school imparts a technique. A same-clan teacherId lifts the clan lock; a medical sensei lifts the class lock; via:'kage' lifts everything; requires:{authorityId,minReputation?,minRank?} gates a VAULT/archive on standing; viaFavor lifts off-affinity. The teacher↔student bond is recorded.\n" +
         "• study_scroll {actorId, jutsu?|scroll?} — learn from a jutsu scroll in the pack (a forbidden scroll lifts clan/affinity); consumed unless reusable.\n" +
+        "• buy_scroll {actorId, jutsu, priceRyo?, requires?, forbidden?} — the RYO/market path: buy a jutsu scroll for money (price scales by rank; a village archive can gate on standing). Then study_scroll to learn it.\n" +
         "• grant_scroll {actorId, jutsu, forbidden?, reusable?} — mint a jutsu scroll into the pack (reward/loot/vault withdrawal).\n" +
-        "• buy_slot {actorId, authorityId, slots?, costPerSlot?} — PURCHASE technique slots with FAME (reputation) through a social leader; spends standing (political capital) to expand the sanctioned repertoire.",
+        "• buy_slot {actorId, authorityId, slots?, costPerSlot?} — PURCHASE technique slots with FAME (reputation) through a social leader; spends standing (political capital) to expand the sanctioned repertoire.\n" +
+        "Distinct paths: RYO buys gear/scrolls; FAME buys slots; FAVOR (favor_unlock) buys off-affinity; a TEACHER/Kage grants past gates; STANDING opens vaults.",
       inputSchema: {
         roomId: z.string(),
-        action: z.enum(["teach", "study_scroll", "grant_scroll", "buy_slot"]),
+        action: z.enum(["teach", "study_scroll", "buy_scroll", "grant_scroll", "buy_slot"]),
+        priceRyo: z.number().optional(),
         actorId: z.string().optional(),
         studentId: z.string().optional(),
         jutsu: z.string().optional(),
@@ -400,7 +403,7 @@ export function registerTools(server: McpServer, client: EngineClient): void {
       },
     },
     async ({ roomId, action, ...rest }) => {
-      const type = { teach: "jutsu_teach", study_scroll: "study_scroll", grant_scroll: "jutsu_scroll_grant", buy_slot: "jutsu_slot_buy" }[action];
+      const type = { teach: "jutsu_teach", study_scroll: "study_scroll", buy_scroll: "jutsu_buy_scroll", grant_scroll: "jutsu_scroll_grant", buy_slot: "jutsu_slot_buy" }[action];
       return ok(await client.submitIntent({ roomId, type, params: rest }));
     },
   );
@@ -598,6 +601,16 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     "list_actions",
     { description: "List every engine action verb (the full intent vocabulary) — use when unsure what to submit.", inputSchema: {} },
     async () => ok(await client.listActions()),
+  );
+
+  server.registerTool(
+    "hints",
+    {
+      description:
+        "Resource cheat-sheet — what each resource IS and HOW TO SPEND it (chakra, action economy, technique slots, fame/reputation, favor, downtime, ryo, XP, Will of Fire, time). Read this to learn the verbs: e.g. you can BUY technique slots with fame (jutsu_acquire buy_slot), be TAUGHT a jutsu past its gate by a Kage/teacher/scroll (jutsu_acquire), spend DOWNTIME to train, and strict time needs plan_day/resolve_block before advancing. Optional topic filters (e.g. 'fame', 'jutsu', 'downtime').",
+      inputSchema: { roomId: z.string(), topic: z.string().optional() },
+    },
+    async ({ roomId, topic }) => ok(await client.submitIntent({ roomId, type: "hints", params: { topic } })),
   );
   server.registerTool(
     "end_combat",

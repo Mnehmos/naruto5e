@@ -955,6 +955,27 @@ describe("jutsu acquisition", () => {
     expect(after.equipment.filter((e: any) => e.teaches).length).toBe(0); // scroll spent
   });
 
+  it("the RYO market sells jutsu scrolls (distinct from fame/favor/teaching); refused when broke", () => {
+    const pc = mkPC("Buyer");
+    setCap(pc, 5);
+    const cc = (engine as any).store.collection("characters");
+    const jut = findJutsu((j: any) => ["E", "D"].includes(j.rank));
+    const c0 = cc.get(pc);
+    c0.ryo = 0;
+    cc.put(c0);
+    const broke = run("jutsu_buy_scroll", { jutsu: jut.id }, pc) as any;
+    expect(broke.status).toBe("rejected");
+    expect(broke.reason.rule).toBe("insufficient_ryo");
+    const c1 = cc.get(pc);
+    c1.ryo = 5000;
+    cc.put(c1);
+    const r = run("jutsu_buy_scroll", { jutsu: jut.id }, pc) as any;
+    expect(r.status).toBe("resolved");
+    const after = engine.getEntity("characters", pc) as any;
+    expect(after.equipment.some((e: any) => e.teaches === jut.id)).toBe(true); // scroll now in the pack
+    expect(after.ryo).toBeLessThan(5000); // Ryo spent
+  });
+
   it("buys technique slots with FAME (reputation) through a social leader", () => {
     const pc = mkPC("Climber");
     setCap(pc, 3);
@@ -966,6 +987,27 @@ describe("jutsu acquisition", () => {
     expect(r.status).toBe("resolved");
     expect((engine.getEntity("characters", pc) as any).jutsuKnownCap).toBe(4); // +1 slot
     expect((engine.getEntity("standings", `${pc}:iwa`) as any).reputation).toBeLessThan(40); // fame spent
+  });
+});
+
+// Resource-hint frontloading: the model can learn "you can spend X via Y" up front.
+describe("resource hints (context frontloading)", () => {
+  it("the hints intent returns the full resource spend-guide, filterable by topic", () => {
+    const all = (run("hints", {}) as any).events[0].data;
+    expect(all.resources.length).toBeGreaterThan(8);
+    expect(all.resources.some((h: any) => h.resource === "Technique slots")).toBe(true);
+    expect(all.resources.some((h: any) => h.resource === "Downtime")).toBe(true);
+    expect(all.resources.some((h: any) => h.resource === "Fame (Reputation)")).toBe(true);
+    expect(all.tips.some((t: string) => /fame/i.test(t) && /buy_slot/i.test(t))).toBe(true);
+    const filtered = (run("hints", { topic: "downtime" }) as any).events[0].data;
+    expect(filtered.resources.some((h: any) => h.resource === "Downtime")).toBe(true);
+  });
+
+  it("agent_context frontloads spend hints in its affordances", () => {
+    const pc = mkPC("Hinted");
+    const d = (run("agent_context", {}, pc) as any).events[0].data;
+    expect(Array.isArray(d.affordances.spendHints)).toBe(true);
+    expect(d.affordances.spendHints.length).toBeGreaterThan(0);
   });
 });
 
