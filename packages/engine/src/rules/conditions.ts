@@ -1,3 +1,5 @@
+import type { Ability } from "./skills.js";
+
 /** The Ch.8 condition list (plus Exhaustion tracked as a level). */
 export const CONDITIONS = [
   "Blinded",
@@ -73,8 +75,8 @@ export const SAVE_TO_END = new Set<string>([
 ]);
 
 /** Resolve the save ability for a condition (explicit tag wins, else the default). */
-export function conditionSaveAbility(name: string, explicit?: string): string {
-  return explicit ?? CONDITION_SAVE[name] ?? "con";
+export function conditionSaveAbility(name: string, explicit?: string): Ability {
+  return (explicit ?? CONDITION_SAVE[name] ?? "con") as Ability;
 }
 
 /** Components a condition blocks (mobility for restrained/grappled, etc.). */

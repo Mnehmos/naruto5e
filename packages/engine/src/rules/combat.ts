@@ -17,9 +17,15 @@ const BEATS: Record<string, string> = {
 };
 
 const ELEMENT_KEYWORDS = ["Fire", "Water", "Wind", "Earth", "Lightning", "Ice"];
+/** Kekkei Genkai natures — matched only as an EXACT keyword (a KKG technique tags
+ *  its bloodline), so a "Fire Storm" jutsu isn't mistaken for Storm Release. */
+const KKG_ELEMENTS = ["Wood", "Lava", "Boil", "Storm", "Explosion", "Scorch", "Magnet", "Plasma", "Tempest", "Dust", "Ice"];
 
-/** Pull the element keyword from a jutsu (keywords first, then name/description). */
+/** Pull the element from a jutsu: a KKG nature via exact keyword first, else a base
+ *  element by name/keyword/description text. */
 export function jutsuElement(jutsu: any): string | undefined {
+  const kw = (jutsu.keywords ?? []).map((k: string) => String(k).toLowerCase());
+  for (const el of KKG_ELEMENTS) if (kw.includes(el.toLowerCase())) return el;
   const hay = `${(jutsu.keywords ?? []).join(" ")} ${jutsu.name ?? ""} ${jutsu.description ?? ""}`;
   for (const el of ELEMENT_KEYWORDS) if (new RegExp(`\\b${el}\\b`, "i").test(hay)) return el;
   // Ice resolves as Water for the advantage cycle

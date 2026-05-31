@@ -11,9 +11,10 @@ import {
   setAbilitiesByMethod,
   type BuildSelections,
 } from "../rules/character.js";
-import { rollGenesis, deriveKKG } from "../rules/affinity.js";
+import { rollGenesis, deriveKKG, RANK_JUTSU_CAP } from "../rules/affinity.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
 import { learnGate } from "../rules/learn.js";
+import { jutsuElement } from "../rules/combat.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -119,20 +120,28 @@ export function registerCharacterIntents(engine: Engine): void {
     char.built = true;
     // genesis roll: affinities (clan grant + rarity-rolled), KKG, special traits
     const genesis = rollGenesis(char, ctx.rng);
-    // optional: auto-learn a rank/affinity-legal damage kit up to the known cap
+    // opt-in baseline kit: ONE rank-appropriate signature per base affinity + ONE
+    // per Kekkei Genkai (the "standard, then their choice" model). Picks the
+    // highest-rank-<=-cap, highest-damage legal technique for each nature/KKG.
     if (ctx.op.params.autoLoadout) {
       const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
       const RV: Record<string, number> = { E: 0, D: 1, C: 2, B: 3, A: 4, S: 5 };
+      const capV = RV[RANK_JUTSU_CAP[char.rank] ?? "C"] ?? 2;
       const avg = (d?: string) => {
         const m = /(\d+)d(\d+)/.exec(d ?? "");
         return m ? (Number(m[1]) * (Number(m[2]) + 1)) / 2 : 0;
       };
-      const picks = ctx.engine.content.jutsu
-        .filter((j: any) => (j.effect?.damage || j.effect?.healing) && !char.jutsuKnown.includes(j.id) && learnGate(char, j, clanNames).ok)
-        .sort((a: any, b: any) => (RV[b.rank] ?? 0) - (RV[a.rank] ?? 0) || avg(b.effect?.damage?.dice) - avg(a.effect?.damage?.dice));
-      for (const j of picks) {
-        if (char.jutsuKnown.length >= char.jutsuKnownCap) break;
-        char.jutsuKnown.push(j.id);
+      const pickBest = (pred: (j: any) => boolean) =>
+        ctx.engine.content.jutsu
+          .filter((j: any) => (RV[j.rank] ?? 9) <= capV && !char.jutsuKnown.includes(j.id) && learnGate(char, j, clanNames).ok && pred(j))
+          .sort((a: any, b: any) => (RV[b.rank] ?? 0) - (RV[a.rank] ?? 0) || avg(b.effect?.damage?.dice) - avg(a.effect?.damage?.dice))[0];
+      const learn = (j: any) => {
+        if (j && char.jutsuKnown.length < char.jutsuKnownCap && !char.jutsuKnown.includes(j.id)) char.jutsuKnown.push(j.id);
+      };
+      for (const el of char.affinity ?? []) learn(pickBest((j) => jutsuElement(j) === el && j.effect?.damage));
+      for (const kkg of char.kkg ?? []) {
+        const short = String(kkg).split(" ")[0];
+        learn(pickBest((j) => (j.keywords ?? []).includes("KKG") && String(jutsuElement(j)).toLowerCase() === short.toLowerCase()));
       }
     }
     chars(ctx).put(char);

@@ -535,6 +535,52 @@ describe("damage IR rolled == raw dice total", () => {
   });
 });
 
+// KKG techniques — catalog present, element-locked to the bloodline, 3-element +75%.
+describe("KKG techniques", () => {
+  it("are catalog-present and locked to KKG holders", () => {
+    const c = (engine as any).content;
+    const ice = c.getJutsu("ice-release-d");
+    expect(ice).toBeTruthy();
+    expect(ice.effect.damage.dice).toBe("2d6");
+    const pc = mkPC("Hot");
+    const cc = (engine as any).store.collection("characters");
+    const ch = cc.get(pc);
+    ch.affinity = ["Fire"];
+    ch.kkg = [];
+    ch.rank = "Jonin";
+    cc.put(ch);
+    const blocked = run("jutsu_learn", { jutsu: "ice-release-d" }, pc) as any;
+    expect(blocked.status).toBe("rejected");
+    expect(blocked.reason.rule).toBe("off_affinity");
+    const ch2 = cc.get(pc);
+    ch2.kkg = ["Ice (Hyoton)"];
+    ch2.affinity = ["Water", "Wind"];
+    cc.put(ch2);
+    expect((run("jutsu_learn", { jutsu: "ice-release-d" }, pc) as any).status).toBe("resolved");
+  });
+
+  it("3-element Dust hits markedly harder than a 2-element KKG at the same rank", () => {
+    const c = (engine as any).content;
+    const avg = (s: string) => {
+      const m = /(\d+)d(\d+)/.exec(s)!;
+      return Number(m[1]) * (Number(m[2]) + 1) / 2;
+    };
+    expect(avg(c.getJutsu("dust-release-s").effect.damage.dice)).toBeGreaterThan(avg(c.getJutsu("ice-release-s").effect.damage.dice) * 1.5);
+  });
+
+  it("autoLoadout grants a signature per affinity + per KKG", () => {
+    const r = run("character_create", {
+      name: "Yukihime", clan: "Yuki", className: "Ninjutsu Specialist", background: "Hard Worker", level: 7,
+      abilities: { method: "manual", scores: { str: 10, dex: 14, con: 14, int: 16, wis: 12, cha: 8 } },
+      bgAbilityChoice: "dex", classSkillChoices: ["Nature", "Stealth", "Perception"], autoLoadout: true,
+    }) as any;
+    const ch = engine.getEntity("characters", r.events[0].data.character.id) as any;
+    const known: string[] = ch.jutsuKnown ?? [];
+    expect(known.some((id) => id.startsWith("ice-release-"))).toBe(true); // KKG signature
+    expect(known.length).toBeGreaterThanOrEqual(2); // + affinity signatures
+  });
+});
+
 // Campaign/world layer above rooms.
 describe("campaign management", () => {
   it("creates, advances the clock, logs, and composes a dashboard", () => {

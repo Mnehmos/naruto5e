@@ -26,6 +26,10 @@ export const KKG_RECIPES: { name: string; elements: Element[] }[] = [
   { name: "Explosion (Bakuton)", elements: ["Earth", "Lightning"] },
   { name: "Scorch (Shakuton)", elements: ["Fire", "Wind"] },
   { name: "Magnet (Jiton)", elements: ["Wind", "Earth"] },
+  { name: "Plasma", elements: ["Fire", "Lightning"] },
+  { name: "Tempest", elements: ["Wind", "Lightning"] },
+  // 3-element advanced bloodline (rolled 3 natures): the apex KKG.
+  { name: "Dust (Jinton)", elements: ["Earth", "Wind", "Fire"] },
 ];
 
 /** Rarity curve for the NUMBER of affinities rolled at genesis (per-mille weights). */

@@ -20077,5 +20077,2692 @@
         "type": "slashing"
       }
     }
+  },
+  {
+    "id": "ice-release-d",
+    "name": "Ice Release: Lesser Glacier",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Ice",
+      "Hyoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Ice Release Kekkei Genkai (Water + Wind)",
+    "description": "A Ice Release bloodline art (Water + Wind). The user shapes Ice chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 cold damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "cold"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ice-release-c",
+    "name": "Ice Release: Honed Glacier",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Ice",
+      "Hyoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Ice Release Kekkei Genkai (Water + Wind)",
+    "description": "A Ice Release bloodline art (Water + Wind). The user shapes Ice chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 cold damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "cold"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ice-release-b",
+    "name": "Ice Release: Greater Glacier",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Ice",
+      "Hyoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Ice Release Kekkei Genkai (Water + Wind)",
+    "description": "A Ice Release bloodline art (Water + Wind). The user shapes Ice chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 cold damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "cold"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ice-release-a",
+    "name": "Ice Release: Grand Glacier",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Ice",
+      "Hyoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Ice Release Kekkei Genkai (Water + Wind)",
+    "description": "A Ice Release bloodline art (Water + Wind). The user shapes Ice chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 cold damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "cold"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "ice-release-s",
+    "name": "Ice Release: Ultimate Glacier",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Ice",
+      "Hyoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Ice Release Kekkei Genkai (Water + Wind)",
+    "description": "A Ice Release bloodline art (Water + Wind). The user shapes Ice chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 cold damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "cold"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wood-release-d",
+    "name": "Wood Release: Lesser Forest",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Wood",
+      "Mokuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Wood Release Kekkei Genkai (Earth + Water)",
+    "description": "A Wood Release bloodline art (Earth + Water). The user shapes Wood chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 bludgeoning damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "bludgeoning"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wood-release-c",
+    "name": "Wood Release: Honed Forest",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Wood",
+      "Mokuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Wood Release Kekkei Genkai (Earth + Water)",
+    "description": "A Wood Release bloodline art (Earth + Water). The user shapes Wood chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 bludgeoning damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "bludgeoning"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wood-release-b",
+    "name": "Wood Release: Greater Forest",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Wood",
+      "Mokuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Wood Release Kekkei Genkai (Earth + Water)",
+    "description": "A Wood Release bloodline art (Earth + Water). The user shapes Wood chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 bludgeoning damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "bludgeoning"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wood-release-a",
+    "name": "Wood Release: Grand Forest",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Wood",
+      "Mokuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Wood Release Kekkei Genkai (Earth + Water)",
+    "description": "A Wood Release bloodline art (Earth + Water). The user shapes Wood chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 bludgeoning damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "bludgeoning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "wood-release-s",
+    "name": "Wood Release: Ultimate Forest",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Wood",
+      "Mokuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Wood Release Kekkei Genkai (Earth + Water)",
+    "description": "A Wood Release bloodline art (Earth + Water). The user shapes Wood chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 bludgeoning damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "bludgeoning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lava-release-d",
+    "name": "Lava Release: Lesser Eruption",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Lava",
+      "Yoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Lava Release Kekkei Genkai (Fire + Earth)",
+    "description": "A Lava Release bloodline art (Fire + Earth). The user shapes Lava chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "fire"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lava-release-c",
+    "name": "Lava Release: Honed Eruption",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Lava",
+      "Yoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Lava Release Kekkei Genkai (Fire + Earth)",
+    "description": "A Lava Release bloodline art (Fire + Earth). The user shapes Lava chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "fire"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lava-release-b",
+    "name": "Lava Release: Greater Eruption",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Lava",
+      "Yoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Lava Release Kekkei Genkai (Fire + Earth)",
+    "description": "A Lava Release bloodline art (Fire + Earth). The user shapes Lava chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lava-release-a",
+    "name": "Lava Release: Grand Eruption",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Lava",
+      "Yoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Lava Release Kekkei Genkai (Fire + Earth)",
+    "description": "A Lava Release bloodline art (Fire + Earth). The user shapes Lava chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "lava-release-s",
+    "name": "Lava Release: Ultimate Eruption",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Lava",
+      "Yoton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Lava Release Kekkei Genkai (Fire + Earth)",
+    "description": "A Lava Release bloodline art (Fire + Earth). The user shapes Lava chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "boil-release-d",
+    "name": "Boil Release: Lesser Mist",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Boil",
+      "Futton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Boil Release Kekkei Genkai (Water + Fire)",
+    "description": "A Boil Release bloodline art (Water + Fire). The user shapes Boil chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 acid damage (half on a success) and, on a failure, is Blinded.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "acid"
+      },
+      "conditions": [
+        {
+          "name": "Blinded",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "boil-release-c",
+    "name": "Boil Release: Honed Mist",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Boil",
+      "Futton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Boil Release Kekkei Genkai (Water + Fire)",
+    "description": "A Boil Release bloodline art (Water + Fire). The user shapes Boil chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 acid damage (half on a success) and, on a failure, is Blinded.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "acid"
+      },
+      "conditions": [
+        {
+          "name": "Blinded",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "boil-release-b",
+    "name": "Boil Release: Greater Mist",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Boil",
+      "Futton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Boil Release Kekkei Genkai (Water + Fire)",
+    "description": "A Boil Release bloodline art (Water + Fire). The user shapes Boil chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 acid damage (half on a success) and, on a failure, is Blinded.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "acid"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Blinded",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "boil-release-a",
+    "name": "Boil Release: Grand Mist",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Boil",
+      "Futton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Boil Release Kekkei Genkai (Water + Fire)",
+    "description": "A Boil Release bloodline art (Water + Fire). The user shapes Boil chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 acid damage (half on a success) and, on a failure, is Blinded.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "acid"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Blinded",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "boil-release-s",
+    "name": "Boil Release: Ultimate Mist",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Boil",
+      "Futton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Boil Release Kekkei Genkai (Water + Fire)",
+    "description": "A Boil Release bloodline art (Water + Fire). The user shapes Boil chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 acid damage (half on a success) and, on a failure, is Blinded.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "acid"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Blinded",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "storm-release-d",
+    "name": "Storm Release: Lesser Laser",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Storm",
+      "Ranton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Storm Release Kekkei Genkai (Lightning + Water)",
+    "description": "A Storm Release bloodline art (Lightning + Water). The user shapes Storm chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "storm-release-c",
+    "name": "Storm Release: Honed Laser",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Storm",
+      "Ranton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Storm Release Kekkei Genkai (Lightning + Water)",
+    "description": "A Storm Release bloodline art (Lightning + Water). The user shapes Storm chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "storm-release-b",
+    "name": "Storm Release: Greater Laser",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Storm",
+      "Ranton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Storm Release Kekkei Genkai (Lightning + Water)",
+    "description": "A Storm Release bloodline art (Lightning + Water). The user shapes Storm chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "storm-release-a",
+    "name": "Storm Release: Grand Laser",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Storm",
+      "Ranton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Storm Release Kekkei Genkai (Lightning + Water)",
+    "description": "A Storm Release bloodline art (Lightning + Water). The user shapes Storm chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "storm-release-s",
+    "name": "Storm Release: Ultimate Laser",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Storm",
+      "Ranton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Storm Release Kekkei Genkai (Lightning + Water)",
+    "description": "A Storm Release bloodline art (Lightning + Water). The user shapes Storm chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explosion-release-d",
+    "name": "Explosion Release: Lesser Detonation",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Explosion",
+      "Bakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Explosion Release Kekkei Genkai (Earth + Lightning)",
+    "description": "A Explosion Release bloodline art (Earth + Lightning). The user shapes Explosion chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 force damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "force"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explosion-release-c",
+    "name": "Explosion Release: Honed Detonation",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Explosion",
+      "Bakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Explosion Release Kekkei Genkai (Earth + Lightning)",
+    "description": "A Explosion Release bloodline art (Earth + Lightning). The user shapes Explosion chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 force damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "force"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explosion-release-b",
+    "name": "Explosion Release: Greater Detonation",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Explosion",
+      "Bakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Explosion Release Kekkei Genkai (Earth + Lightning)",
+    "description": "A Explosion Release bloodline art (Earth + Lightning). The user shapes Explosion chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 force damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explosion-release-a",
+    "name": "Explosion Release: Grand Detonation",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Explosion",
+      "Bakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Explosion Release Kekkei Genkai (Earth + Lightning)",
+    "description": "A Explosion Release bloodline art (Earth + Lightning). The user shapes Explosion chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 force damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "explosion-release-s",
+    "name": "Explosion Release: Ultimate Detonation",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Explosion",
+      "Bakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Explosion Release Kekkei Genkai (Earth + Lightning)",
+    "description": "A Explosion Release bloodline art (Earth + Lightning). The user shapes Explosion chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 force damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "scorch-release-d",
+    "name": "Scorch Release: Lesser Sear",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Scorch",
+      "Shakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Scorch Release Kekkei Genkai (Fire + Wind)",
+    "description": "A Scorch Release bloodline art (Fire + Wind). The user shapes Scorch chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "fire"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "scorch-release-c",
+    "name": "Scorch Release: Honed Sear",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Scorch",
+      "Shakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Scorch Release Kekkei Genkai (Fire + Wind)",
+    "description": "A Scorch Release bloodline art (Fire + Wind). The user shapes Scorch chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "fire"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "scorch-release-b",
+    "name": "Scorch Release: Greater Sear",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Scorch",
+      "Shakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Scorch Release Kekkei Genkai (Fire + Wind)",
+    "description": "A Scorch Release bloodline art (Fire + Wind). The user shapes Scorch chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "scorch-release-a",
+    "name": "Scorch Release: Grand Sear",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Scorch",
+      "Shakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Scorch Release Kekkei Genkai (Fire + Wind)",
+    "description": "A Scorch Release bloodline art (Fire + Wind). The user shapes Scorch chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "scorch-release-s",
+    "name": "Scorch Release: Ultimate Sear",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Scorch",
+      "Shakuton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Scorch Release Kekkei Genkai (Fire + Wind)",
+    "description": "A Scorch Release bloodline art (Fire + Wind). The user shapes Scorch chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 fire damage (half on a success) and, on a failure, is Burned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "fire"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Burned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "magnet-release-d",
+    "name": "Magnet Release: Lesser Iron Sand",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Magnet",
+      "Jiton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Magnet Release Kekkei Genkai (Wind + Earth)",
+    "description": "A Magnet Release bloodline art (Wind + Earth). The user shapes Magnet chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 force damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "force"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "magnet-release-c",
+    "name": "Magnet Release: Honed Iron Sand",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Magnet",
+      "Jiton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Magnet Release Kekkei Genkai (Wind + Earth)",
+    "description": "A Magnet Release bloodline art (Wind + Earth). The user shapes Magnet chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 force damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "force"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "magnet-release-b",
+    "name": "Magnet Release: Greater Iron Sand",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Magnet",
+      "Jiton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Magnet Release Kekkei Genkai (Wind + Earth)",
+    "description": "A Magnet Release bloodline art (Wind + Earth). The user shapes Magnet chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 force damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "magnet-release-a",
+    "name": "Magnet Release: Grand Iron Sand",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Magnet",
+      "Jiton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Magnet Release Kekkei Genkai (Wind + Earth)",
+    "description": "A Magnet Release bloodline art (Wind + Earth). The user shapes Magnet chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 force damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "magnet-release-s",
+    "name": "Magnet Release: Ultimate Iron Sand",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Magnet",
+      "Jiton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Magnet Release Kekkei Genkai (Wind + Earth)",
+    "description": "A Magnet Release bloodline art (Wind + Earth). The user shapes Magnet chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 force damage (half on a success) and, on a failure, is Restrained.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Restrained",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "plasma-release-d",
+    "name": "Plasma Release: Lesser Arc",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Plasma",
+      "Purazuma",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Plasma Release Kekkei Genkai (Fire + Lightning)",
+    "description": "A Plasma Release bloodline art (Fire + Lightning). The user shapes Plasma chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "plasma-release-c",
+    "name": "Plasma Release: Honed Arc",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Plasma",
+      "Purazuma",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Plasma Release Kekkei Genkai (Fire + Lightning)",
+    "description": "A Plasma Release bloodline art (Fire + Lightning). The user shapes Plasma chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "plasma-release-b",
+    "name": "Plasma Release: Greater Arc",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Plasma",
+      "Purazuma",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Plasma Release Kekkei Genkai (Fire + Lightning)",
+    "description": "A Plasma Release bloodline art (Fire + Lightning). The user shapes Plasma chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "plasma-release-a",
+    "name": "Plasma Release: Grand Arc",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Plasma",
+      "Purazuma",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Plasma Release Kekkei Genkai (Fire + Lightning)",
+    "description": "A Plasma Release bloodline art (Fire + Lightning). The user shapes Plasma chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "plasma-release-s",
+    "name": "Plasma Release: Ultimate Arc",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Plasma",
+      "Purazuma",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Plasma Release Kekkei Genkai (Fire + Lightning)",
+    "description": "A Plasma Release bloodline art (Fire + Lightning). The user shapes Plasma chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 lightning damage (half on a success) and, on a failure, is Stunned.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Stunned",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tempest-release-d",
+    "name": "Tempest Release: Lesser Gale",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Tempest",
+      "Arashi",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Tempest Release Kekkei Genkai (Wind + Lightning)",
+    "description": "A Tempest Release bloodline art (Wind + Lightning). The user shapes Tempest chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 2d6 lightning damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "2d6",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tempest-release-c",
+    "name": "Tempest Release: Honed Gale",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Tempest",
+      "Arashi",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Tempest Release Kekkei Genkai (Wind + Lightning)",
+    "description": "A Tempest Release bloodline art (Wind + Lightning). The user shapes Tempest chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 3d8 lightning damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "3d8",
+        "type": "lightning"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tempest-release-b",
+    "name": "Tempest Release: Greater Gale",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Tempest",
+      "Arashi",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Tempest Release Kekkei Genkai (Wind + Lightning)",
+    "description": "A Tempest Release bloodline art (Wind + Lightning). The user shapes Tempest chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 5d8 lightning damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tempest-release-a",
+    "name": "Tempest Release: Grand Gale",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Tempest",
+      "Arashi",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Tempest Release Kekkei Genkai (Wind + Lightning)",
+    "description": "A Tempest Release bloodline art (Wind + Lightning). The user shapes Tempest chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 7d8 lightning damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "7d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tempest-release-s",
+    "name": "Tempest Release: Ultimate Gale",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Tempest",
+      "Arashi",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Tempest Release Kekkei Genkai (Wind + Lightning)",
+    "description": "A Tempest Release bloodline art (Wind + Lightning). The user shapes Tempest chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 11d8 lightning damage (half on a success) and, on a failure, is Prone.",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "11d8",
+        "type": "lightning"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      },
+      "conditions": [
+        {
+          "name": "Prone",
+          "save": "dex"
+        }
+      ]
+    }
+  },
+  {
+    "id": "dust-release-d",
+    "name": "Dust Release: Lesser Detachment",
+    "classification": "Ninjutsu",
+    "rank": "D",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 6,
+    "keywords": [
+      "Dust",
+      "Jinton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Dust Release Kekkei Genkai (Earth + Wind + Fire)",
+    "description": "A Dust Release bloodline art (Earth + Wind + Fire). The user shapes Dust chakra into a lesser attack; each creature in the area makes a Dexterity saving throw, taking 4d6 force damage (half on a success).",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "4d6",
+        "type": "force"
+      }
+    }
+  },
+  {
+    "id": "dust-release-c",
+    "name": "Dust Release: Honed Detachment",
+    "classification": "Ninjutsu",
+    "rank": "C",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 9,
+    "keywords": [
+      "Dust",
+      "Jinton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Dust Release Kekkei Genkai (Earth + Wind + Fire)",
+    "description": "A Dust Release bloodline art (Earth + Wind + Fire). The user shapes Dust chakra into a honed attack; each creature in the area makes a Dexterity saving throw, taking 5d8 force damage (half on a success).",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "5d8",
+        "type": "force"
+      }
+    }
+  },
+  {
+    "id": "dust-release-b",
+    "name": "Dust Release: Greater Detachment",
+    "classification": "Ninjutsu",
+    "rank": "B",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 13,
+    "keywords": [
+      "Dust",
+      "Jinton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Dust Release Kekkei Genkai (Earth + Wind + Fire)",
+    "description": "A Dust Release bloodline art (Earth + Wind + Fire). The user shapes Dust chakra into a greater attack; each creature in the area makes a Dexterity saving throw, taking 9d8 force damage (half on a success).",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "9d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 15,
+        "shape": "sphere"
+      }
+    }
+  },
+  {
+    "id": "dust-release-a",
+    "name": "Dust Release: Grand Detachment",
+    "classification": "Ninjutsu",
+    "rank": "A",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 18,
+    "keywords": [
+      "Dust",
+      "Jinton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Dust Release Kekkei Genkai (Earth + Wind + Fire)",
+    "description": "A Dust Release bloodline art (Earth + Wind + Fire). The user shapes Dust chakra into a grand attack; each creature in the area makes a Dexterity saving throw, taking 12d8 force damage (half on a success).",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "12d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      }
+    }
+  },
+  {
+    "id": "dust-release-s",
+    "name": "Dust Release: Ultimate Detachment",
+    "classification": "Ninjutsu",
+    "rank": "S",
+    "castingTime": "1 Action",
+    "range": "60 feet",
+    "duration": "Instant",
+    "components": [
+      "HS"
+    ],
+    "componentsRaw": "HS",
+    "cost": 24,
+    "keywords": [
+      "Dust",
+      "Jinton",
+      "KKG",
+      "Kekkei Genkai",
+      "Ninjutsu"
+    ],
+    "prerequisites": "Dust Release Kekkei Genkai (Earth + Wind + Fire)",
+    "description": "A Dust Release bloodline art (Earth + Wind + Fire). The user shapes Dust chakra into a ultimate attack; each creature in the area makes a Dexterity saving throw, taking 19d8 force damage (half on a success).",
+    "source": {
+      "document": "KKG Technique Compendium (generated baseline)",
+      "page": 0
+    },
+    "nameVerified": true,
+    "rankVerified": true,
+    "costVerified": false,
+    "classificationVerified": true,
+    "componentsVerified": false,
+    "effect": {
+      "delivery": "save",
+      "saveAbility": "dex",
+      "halfOnSave": true,
+      "damage": {
+        "dice": "19d8",
+        "type": "force"
+      },
+      "area": {
+        "size": 20,
+        "shape": "sphere"
+      }
+    }
   }
 ]
