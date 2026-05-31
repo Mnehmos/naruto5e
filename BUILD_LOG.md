@@ -507,3 +507,76 @@ Engine (tier 1) + MCP controller (tier 2) + DM harness (tier 3) + a web renderer
 spanning all 14 rulebook chapters + the seven layered systems + the content tools
 + the tick. 63 Vitest tests pass; `npm run build` (full typecheck) is clean; the
 dev server boots on SQLite and serves the app. See PLAYTEST.md to run it.
+
+---
+
+## Phase 12 — Autonomous worldbuilding buildout ✅ (RUNNABLE, COMMITTED)
+
+Surfaced by the Volume One playtest + a six-agent cited audit. Closes the open
+findings and the autonomous-NPC loop. 171 tests pass; tsc clean.
+
+**Engine fixes (commit 35c250b):**
+- **Rank decouple** (`bug_1780247960181`): the in-world rank TITLE (`char.rank`) is no
+  longer auto-promoted by leveling. `deriveCharacter` sets a separate level-derived
+  `char.rankTier`; `jutsuRankCap()` takes the more-permissive of (tier, title) so a
+  strong-but-un-promoted Genin still grows their jutsu ladder while an exam-earned title
+  persists. (Honors the playtest: Iwao stays Genin, but his Dust ladder can still grow.)
+- **Conditions lifecycle** (per spec): transient conditions end three ways — duration
+  expiry (`conditionStates.rounds`, already worked), spending action economy (NEW
+  `stand`/`stand_up`/`get_up`: half-speed to rise from Prone), and **end_combat** (now
+  clears ALL transient conditions, not just Prone). A long rest also clears them. Only
+  special status (`PERSISTENT_STATUS` = Petrified) survives. Fixes Prone lingering forever.
+- **Standing inflation** (`bug_1780245857774`): the rest-embedded tick minted directed-goal
+  reputation every rest. Now MILESTONE-gated (first advance / 25-pt band / completion) and
+  silenceable via `passiveStanding:false`.
+- **Affinity** (`bug_1780240027806`): the MCP `spawn_adversary` inputSchema omitted `affinity`
+  (the SDK stripped it). Added; the engine already persisted/read it.
+
+**Strict temporal mode (commit 9361e8f, Task 7):** `CampaignSchema` gains `strictTemporal`,
+`maxUnauthorizedDays`, and a sub-day `TimeBlock` schedule. `campaign_advance_day` rejects
+skipping past unresolved required blocks or > maxUnauthorizedDays without
+`compressionAuthorized`. `campaign_plan_day` / `campaign_resolve_block` lay out and live the
+schedule. The structural anti-time-compression guardrail (an Academy day must be planned and
+each required block resolved before the calendar moves).
+
+**Jutsu acquisition (commit 21489be):** grow arsenals through social/world channels, each
+lifting only the gates it legitimately can. `jutsu_teach` (tutor/teacher/trainer/Kage/school +
+standing-gated vault via `requires`); `study_scroll` + `jutsu_buy_scroll` (the Ryo/market path)
++ `jutsu_scroll_grant`; `jutsu_slot_buy` (purchase technique SLOTS with FAME/reputation through
+a social leader). Distinct paths: **Ryo** buys gear/scrolls · **fame** buys slots · **favor**
+unlocks off-affinity · a **teacher/Kage** grants past gates · **standing** opens vaults.
+
+**Resource-hint frontloading (commit f68e318):** `rules/hints.ts` (RESOURCE_HINTS) + a `hints`
+intent/tool + `agent_context.affordances.spendHints` — the model learns "you have THIS
+resource, spend it THIS way via THIS intent" up front (incl. Downtime as a first-class resource).
+
+**The autonomous NPC intent loop (commit 6c…, Tasks 2-4) — and how it's adjudicated:**
+
+> **The DM authors pressure. Characters author intent. The engine authors consequence. The DM
+> reconciles the result into story.**
+
+The seam matters: NPCs use the **same tool surface** as natural-language chat. The PRIMARY path
+is the cheap one — an NPC agent call is just *"what do you do?" → "I do this."* The DM (the
+orchestrating LLM holding this MCP tool surface) then ADJUDICATES that declaration exactly like
+it adjudicates a player's natural language: it submits the matching intent(s) through the engine.
+The LLM agent call is never more expensive than a one-line declaration. (This mirrors
+`mnehmos.rpg.mcp`'s agent runtime: invoke = compose → call model → emit the declaration as an
+event; the DM/consumer resolves it. No bespoke per-NPC pipeline.)
+
+For HEADLESS/autonomous runs (cron, no DM-LLM in the loop) there is an OPT-IN deterministic
+adjudicator so the world still moves unattended: `npc-intent.ts` (pure `conformNpcDeclaration`:
+declaration → one legal intent | `needs_dm_repair`) + `npc-loop.ts` (conform → submit → journal
+declaration+outcome). Wired as opt-in: `tick_run resolve:true`, `npc_manage invoke resolve:true`,
+the `npc_turn` tool, and the `tick_resolve` batch seam (previously dead code). Default tick/rest
+behavior is declare-only (DM adjudicates). A declaration is an ATTEMPT, not an outcome — only the
+engine's result is canon.
+
+**autoOnTurn (commit 047bf41, Task 6):** adversaries gain optional agent config; combat
+`advance` flags `data.needsAgentTurn` for an autonomous combatant so the controller can run its
+turn through the loop (`advance_turn auto:true` / `npc_turn`). The engine never calls an LLM and
+never advances invisibly — auto is opt-in.
+
+**Ephemeral vs durable actors (Tasks 5, 8):** ephemeral foes are instant via `batch`
+(adversary_spawn ×N + combat_start with `$bind` refs) — no agent setup; promote to a durable NPC
+only when they recur. Durable off-camera actors advance goals across multiple rests with
+persisted consequences.

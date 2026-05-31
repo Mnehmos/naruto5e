@@ -9,14 +9,20 @@ const NPC_MODEL = () => process.env.NARUTO_NPC_MODEL ?? "gpt-5.4-mini";
 
 /**
  * After a rest/tick, the engine emits tick.agentPrompts — composed prompts for the in-scope
- * LLM agent-NPCs. Invoke each through OpenAI (the engine hosts no LLM), then CONFORM the
- * declaration to a legal engine intent and SUBMIT it so the NPC's off-screen action becomes
- * ground truth (not just journal prose). declaration + outcome are journaled together; an
- * unconformable declaration is recorded as needs_dm_repair and mutates nothing. The
- * deterministic embedded tick already advanced goals/standing, so this is additive and the
- * world still moves with no API key. Pass resolve:false to fall back to journal-only.
+ * LLM agent-NPCs. Each is a cheap "what do you do?" call: invoke the model (the engine hosts
+ * no LLM) and record the NPC's declaration ("I do this").
+ *
+ * PRIMARY path (default): the declaration is journaled and returned — the DM (the orchestrating
+ * LLM with this MCP tool surface) ADJUDICATES it the same way it adjudicates a player's natural
+ * language: read "I do this", submit the matching intent(s) through the engine. NPCs use the
+ * same tool surface as the player; the DM is the adjudicator.
+ *
+ * OPT-IN (resolve:true): for HEADLESS/autonomous runs (cron, no DM-LLM in the loop), conform the
+ * declaration deterministically (npc-loop/npc-intent) and submit it so the world still moves
+ * unattended. This is a fallback for the DM's adjudication, not the assumed path. Either way the
+ * deterministic embedded tick already advanced goals/standing, so the world moves with no key.
  */
-async function invokeTickAgents(client: EngineClient, roomId: string, result: any, resolve = true): Promise<{ invoked: any[]; note?: string }> {
+async function invokeTickAgents(client: EngineClient, roomId: string, result: any, resolve = false): Promise<{ invoked: any[]; note?: string }> {
   const ev = (result.events ?? []).find((e: any) => e.type === "rest" || e.type === "tick");
   const prompts: any[] = ev?.data?.tick?.agentPrompts ?? [];
   if (!prompts.length) return { invoked: [] };
@@ -684,10 +690,10 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   );
   server.registerTool(
     "tick_run",
-    { description: "Run a standalone world tick (the rest tool embeds this automatically). trigger short|long|downtime sets magnitude. Advances off-screen NPC goals AND invokes in-scope agent-NPCs (OpenAI), CONFORMING each declaration to a legal intent and resolving it through the engine (declaration+outcome journaled) — returned under npcAgents. resolve:false journals only. passiveStanding:false silences the off-screen reputation drip. Returns tick + playerDigest.", inputSchema: { roomId: z.string(), trigger: z.string().optional(), resolve: z.boolean().optional(), passiveStanding: z.boolean().optional() } },
+    { description: "Run a standalone world tick (rest embeds this automatically). trigger short|long|downtime sets magnitude. Always advances off-screen NPC goals deterministically, and invokes in-scope agent-NPCs for a cheap 'what do you do?' — their declarations come back under npcAgents for YOU (the DM) to adjudicate via the tool surface (the primary path). resolve:true is the OPT-IN headless mode: deterministically conform+submit each declaration so the world moves unattended (cron/no DM). passiveStanding:false silences the off-screen reputation drip. Returns tick + playerDigest.", inputSchema: { roomId: z.string(), trigger: z.string().optional(), resolve: z.boolean().optional(), passiveStanding: z.boolean().optional() } },
     async ({ roomId, trigger, resolve, passiveStanding }) => {
       const result = await client.submitIntent({ roomId, type: "tick_run", params: { trigger, passiveStanding } });
-      const npcAgents = await invokeTickAgents(client, roomId, result, resolve !== false);
+      const npcAgents = await invokeTickAgents(client, roomId, result, resolve === true);
       return ok({ ...result, npcAgents });
     },
   );
