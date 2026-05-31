@@ -894,6 +894,81 @@ describe("strict temporal mode (anti-time-compression)", () => {
   });
 });
 
+// Jutsu acquisition — growing an arsenal through social/world channels (teach / scroll /
+// vault / fame-bought slots), each lifting only the gates it legitimately can.
+describe("jutsu acquisition", () => {
+  const setCap = (pc: string, cap: number) => {
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.jutsuKnownCap = cap;
+    cc.put(c);
+  };
+  const findJutsu = (pred: (j: any) => boolean) => (engine as any).content.jutsu.find(pred);
+
+  it("a Kage grant lifts every gate; a plain tutor is still refused by the rank cap", () => {
+    const pc = mkPC("Iwao");
+    setCap(pc, 5);
+    const bRank = findJutsu((j: any) => j.rank === "B");
+    expect(bRank).toBeTruthy();
+    const refused = run("jutsu_teach", { studentId: pc, jutsu: bRank.id, via: "teacher" }) as any;
+    expect(refused.status).toBe("rejected");
+    expect(refused.reason.rule).toBe("rank_too_high"); // a tutor can't lift the rank gate
+    const granted = run("jutsu_teach", { studentId: pc, jutsu: bRank.id, via: "kage" }) as any;
+    expect(granted.status).toBe("resolved");
+    expect((engine.getEntity("characters", pc) as any).jutsuKnown).toContain(bRank.id);
+  });
+
+  it("teaching respects the technique-slot cap unless forced", () => {
+    const pc = mkPC("Full");
+    setCap(pc, 0);
+    const lo = findJutsu((j: any) => ["E", "D"].includes(j.rank));
+    const capped = run("jutsu_teach", { studentId: pc, jutsu: lo.id, via: "kage" }) as any; // kage lifts LEARN gates, not slot capacity
+    expect(capped.status).toBe("rejected");
+    expect(capped.reason.rule).toBe("jutsu_known_cap");
+    const forced = run("jutsu_teach", { studentId: pc, jutsu: lo.id, via: "kage", force: true }) as any;
+    expect(forced.status).toBe("resolved");
+  });
+
+  it("a vault/archive gates on standing: refused without reputation, granted with it", () => {
+    const pc = mkPC("Seeker");
+    setCap(pc, 5);
+    const jut = findJutsu((j: any) => ["E", "D", "C"].includes(j.rank));
+    const refused = run("jutsu_teach", { studentId: pc, jutsu: jut.id, via: "vault", requires: { authorityId: "iwa_vault", minReputation: 50 }, bypass: ["affinity", "clan"] }) as any;
+    expect(refused.status).toBe("rejected");
+    expect(refused.reason.rule).toBe("access_denied");
+    run("grant_reputation", { authorityId: "iwa_vault", amount: 60 }, pc);
+    const granted = run("jutsu_teach", { studentId: pc, jutsu: jut.id, via: "vault", requires: { authorityId: "iwa_vault", minReputation: 50 }, bypass: ["affinity", "clan"] }) as any;
+    expect(granted.status).toBe("resolved");
+    expect((engine.getEntity("characters", pc) as any).jutsuKnown).toContain(jut.id);
+  });
+
+  it("a granted (forbidden) jutsu scroll teaches its technique and is consumed", () => {
+    const pc = mkPC("Reader");
+    setCap(pc, 5);
+    const jut = findJutsu((j: any) => ["E", "D", "C"].includes(j.rank));
+    run("jutsu_scroll_grant", { jutsu: jut.id, forbidden: true }, pc);
+    expect((engine.getEntity("characters", pc) as any).equipment.filter((e: any) => e.teaches).length).toBe(1);
+    const r = run("study_scroll", { jutsu: jut.id }, pc) as any;
+    expect(r.status).toBe("resolved");
+    const after = engine.getEntity("characters", pc) as any;
+    expect(after.jutsuKnown).toContain(jut.id);
+    expect(after.equipment.filter((e: any) => e.teaches).length).toBe(0); // scroll spent
+  });
+
+  it("buys technique slots with FAME (reputation) through a social leader", () => {
+    const pc = mkPC("Climber");
+    setCap(pc, 3);
+    const broke = run("jutsu_slot_buy", { authorityId: "iwa", slots: 1 }, pc) as any;
+    expect(broke.status).toBe("rejected");
+    expect(broke.reason.rule).toBe("insufficient_fame");
+    run("grant_reputation", { authorityId: "iwa", amount: 40 }, pc);
+    const r = run("jutsu_slot_buy", { authorityId: "iwa", slots: 1 }, pc) as any;
+    expect(r.status).toBe("resolved");
+    expect((engine.getEntity("characters", pc) as any).jutsuKnownCap).toBe(4); // +1 slot
+    expect((engine.getEntity("standings", `${pc}:iwa`) as any).reputation).toBeLessThan(40); // fame spent
+  });
+});
+
 // bug_1780245857774: the rest-embedded tick minted directed-goal reputation EVERY rest
 // (unbounded). Now standing is milestone-gated and silenceable via passiveStanding.
 describe("standing inflation gate", () => {

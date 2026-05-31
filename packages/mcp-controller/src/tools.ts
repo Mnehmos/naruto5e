@@ -365,8 +365,44 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   // ---- Phase 2: jutsu + combat ----------------------------------------
   server.registerTool(
     "learn_jutsu",
-    { description: "Teach a character a jutsu (validates the Jutsu Known cap + keyword gates).", inputSchema: { roomId: z.string(), actorId: z.string(), jutsu: z.string() } },
+    { description: "Self-study: a character learns a jutsu on their own (validates the Jutsu Known cap + rank/clan/class/affinity gates). For TAUGHT acquisition (a teacher/Kage/scroll lifts a gate), use jutsu_acquire instead.", inputSchema: { roomId: z.string(), actorId: z.string(), jutsu: z.string() } },
     async ({ roomId, actorId, jutsu }) => ok(await client.submitIntent({ roomId, actorId, type: "jutsu_learn", params: { jutsu } })),
+  );
+
+  // jutsu acquisition — grow an arsenal through the WORLD, not just self-study.
+  server.registerTool(
+    "jutsu_acquire",
+    {
+      description:
+        "Grow a character's arsenal through social/world channels (each lifts the gates it legitimately can). Actions:\n" +
+        "• teach {studentId, jutsu, teacherId?, via?, requires?, bypass?, viaFavor?, force?} — a tutor/teacher/special-trainer/Kage/school imparts a technique. A same-clan teacherId lifts the clan lock; a medical sensei lifts the class lock; via:'kage' lifts everything; requires:{authorityId,minReputation?,minRank?} gates a VAULT/archive on standing; viaFavor lifts off-affinity. The teacher↔student bond is recorded.\n" +
+        "• study_scroll {actorId, jutsu?|scroll?} — learn from a jutsu scroll in the pack (a forbidden scroll lifts clan/affinity); consumed unless reusable.\n" +
+        "• grant_scroll {actorId, jutsu, forbidden?, reusable?} — mint a jutsu scroll into the pack (reward/loot/vault withdrawal).\n" +
+        "• buy_slot {actorId, authorityId, slots?, costPerSlot?} — PURCHASE technique slots with FAME (reputation) through a social leader; spends standing (political capital) to expand the sanctioned repertoire.",
+      inputSchema: {
+        roomId: z.string(),
+        action: z.enum(["teach", "study_scroll", "grant_scroll", "buy_slot"]),
+        actorId: z.string().optional(),
+        studentId: z.string().optional(),
+        jutsu: z.string().optional(),
+        teacherId: z.string().optional(),
+        via: z.enum(["tutor", "teacher", "trainer", "kage", "school", "vault", "scroll", "training"]).optional(),
+        requires: z.record(z.any()).optional(),
+        bypass: z.array(z.string()).optional(),
+        viaFavor: z.boolean().optional(),
+        scroll: z.string().optional(),
+        forbidden: z.boolean().optional(),
+        reusable: z.boolean().optional(),
+        authorityId: z.string().optional(),
+        slots: z.number().optional(),
+        costPerSlot: z.number().optional(),
+        force: z.boolean().optional(),
+      },
+    },
+    async ({ roomId, action, ...rest }) => {
+      const type = { teach: "jutsu_teach", study_scroll: "study_scroll", grant_scroll: "jutsu_scroll_grant", buy_slot: "jutsu_slot_buy" }[action];
+      return ok(await client.submitIntent({ roomId, type, params: rest }));
+    },
   );
 
   server.registerTool(

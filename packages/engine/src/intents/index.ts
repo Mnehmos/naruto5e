@@ -16,6 +16,7 @@ import { registerTickIntents } from "./tick.js";
 import { registerAdminIntents } from "./admin.js";
 import { registerAgentIntents } from "./agent.js";
 import { registerCampaignIntents } from "./campaign.js";
+import { registerAcquisitionIntents } from "./acquisition.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -39,4 +40,5 @@ export function registerAllHandlers(engine: Engine): void {
   registerAdminIntents(engine); // state management (world_reset / room_reset / character_delete)
   registerAgentIntents(engine); // LLM-agent seam (agent_context: assemble an actor's turn context + legal moves)
   registerCampaignIntents(engine); // campaign/world layer (clock, arc, party, journal, scenes)
+  registerAcquisitionIntents(engine); // jutsu acquisition (teach / scrolls / fame-bought slots)
 }
