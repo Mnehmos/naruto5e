@@ -413,6 +413,50 @@ describe("freeform_attack honors incapacitating conditions", () => {
   });
 });
 
+// Genesis (affinity roll + KKG) and the multi-axis jutsu-learn gate.
+describe("affinity genesis + jutsu-learn gates", () => {
+  it("genesis derives KKG from a clan's combo natures (Yuki -> Water+Wind -> Ice)", () => {
+    const r = run("character_create", {
+      name: "Haku2", clan: "Yuki", className: "Ninjutsu Specialist", background: "Hard Worker",
+      abilities: { method: "manual", scores: { str: 10, dex: 14, con: 14, int: 16, wis: 12, cha: 8 } },
+      bgAbilityChoice: "dex", classSkillChoices: ["Nature", "Stealth", "Perception"],
+    }) as any;
+    const c = engine.getEntity("characters", r.events[0].data.character.id) as any;
+    expect(c.affinity.length).toBeGreaterThanOrEqual(1);
+    expect(c.affinity).toEqual(expect.arrayContaining(["Water", "Wind"]));
+    expect(c.kkg).toContain("Ice (Hyoton)");
+  });
+
+  it("off-affinity elemental jutsu is gated; force (DM) overrides", () => {
+    const pc = mkPC("Mizu");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.affinity = ["Water"]; c.kkg = []; c.rank = "Jonin"; // Water only, high rank (isolate the affinity gate)
+    cc.put(c);
+    const blocked = run("jutsu_learn", { jutsu: "fire-release-fox-fire" }, pc) as any; // Fire
+    expect(blocked.status).toBe("rejected");
+    expect(blocked.reason.rule).toBe("off_affinity");
+    const forced = run("jutsu_learn", { jutsu: "fire-release-fox-fire", force: true }, pc) as any;
+    expect(forced.status).toBe("resolved");
+  });
+
+  it("rank gates a jutsu above the character's ninja-rank cap", () => {
+    const bRank = (engine as any).content.jutsu.find((j: any) => j.rank === "B");
+    expect(bRank).toBeTruthy();
+    const pc = mkPC("Rookie"); // Genin (cap C)
+    const r = run("jutsu_learn", { jutsu: bRank.id }, pc) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("rank_too_high");
+  });
+
+  it("favor_unlock refuses without enough favor (the sanctioned override has a price)", () => {
+    const pc = mkPC("Seeker");
+    const r = run("favor_unlock", { authorityId: "leaf_village", what: "affinity", value: "Fire", favorCost: 3 }, pc) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("insufficient_favor");
+  });
+});
+
 // Campaign/world layer above rooms.
 describe("campaign management", () => {
   it("creates, advances the clock, logs, and composes a dashboard", () => {

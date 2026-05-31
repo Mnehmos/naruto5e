@@ -49,7 +49,7 @@ describe("Phase 8 — jutsu_build (governor) + freeform resolver", () => {
     const broad = ["Perception", "Stealth", "Insight", "Nature", "Investigation", "Survival"];
     const caster = (run("character_create", { name: "Mizuki", clan: "Non-Clan", className: "Ninjutsu Specialist", abilities: { method: "manual", scores: { str: 10, dex: 12, con: 14, int: 16, wis: 12, cha: 8 } }, classSkillChoices: broad, clanSkillChoices: broad, abilityChoices: ["int", "con", "dex"] }) as any).events[0].data.character.id;
     const target = (run("character_create", { name: "Dummy", clan: "Non-Clan", className: "Taijutsu Specialist", abilities: { method: "manual", scores: { str: 12, dex: 10, con: 12, int: 8, wis: 10, cha: 10 } }, classSkillChoices: broad, clanSkillChoices: broad, abilityChoices: ["str", "con", "dex"] }) as any).events[0].data.character.id;
-    run("jutsu_learn", { jutsu: record.id }, caster);
+    run("jutsu_learn", { jutsu: record.id, force: true }, caster); // DM grants the custom jutsu (bypasses rank/affinity gate — pipeline test)
     const cast = run("cast", { jutsu: record.id, targets: [target] }, caster) as any;
     expect(cast.status).toBe("resolved");
     expect(cast.events.map((e: any) => e.type)).toContain("cast");

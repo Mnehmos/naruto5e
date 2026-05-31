@@ -7,6 +7,7 @@ import { actorAC, actorAbilityMod, actorAffinity, actorCasting, loadActor, saveA
 import { RANK_VALUE, clashResolve, elementalAdvantage, jutsuElement, rollDamage } from "../rules/combat.js";
 import { applyDamageDoc, healDoc } from "../rules/resolve.js";
 import { useLegendaryResistance, checkPhaseTransition } from "../rules/adversary.js";
+import { rankAllows, hasElementAccess, RANK_JUTSU_CAP } from "../rules/affinity.js";
 import { blockedComponents, INCAPACITATING } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
 import { activeCombatantId } from "../rules/turn.js";
@@ -317,10 +318,32 @@ export function registerJutsuIntents(engine: Engine): void {
       ctx.ir.emit("jutsu_learned", { actor: c.id, data: { jutsu: j.id, already: true } });
       return;
     }
-    // keyword gates: Hijutsu (clan-only), Medical (needs feature)
+    // multi-axis learn gate (rank · clan · class · affinity). Generic jutsu (no
+    // tags) only face the rank gate. force:true (DM) overrides every gate — the
+    // sanctioned path for off-affinity training / clan-secret tutelage.
+    const force = ctx.op.params.force === true;
     const kws = (j.keywords ?? []).map((k) => k.toLowerCase());
-    if (kws.includes("hijutsu") && j.prerequisites && c.clan && !String(j.prerequisites).toLowerCase().includes(c.clan.toLowerCase())) {
-      // soft gate: only enforce if prerequisites name a clan; otherwise allow
+    const prereq = String(j.prerequisites ?? "").toLowerCase();
+    if (!force) {
+      // RANK: can't learn above your ninja rank's cap
+      if (!rankAllows(c.rank, j.rank)) {
+        throw reject("rank_too_high", `${c.name} is ${c.rank}; ${j.name} is rank ${j.rank} (your cap is ${RANK_JUTSU_CAP[c.rank] ?? "C"}).`, { jutsuRank: j.rank, charRank: c.rank }, ["Rank up first, or pass force:true (DM)."]);
+      }
+      // CLAN: a clan-secret (Hijutsu) whose prerequisites name a clan needs that clan
+      const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
+      const namedClan = clanNames.find((cn) => prereq.includes(cn.toLowerCase()));
+      if (kws.includes("hijutsu") && namedClan && (c.clan ?? "").toLowerCase() !== namedClan.toLowerCase()) {
+        throw reject("clan_locked", `${j.name} is a ${namedClan} clan secret; ${c.name} is ${c.clan ?? "clanless"}.`, { requiredClan: namedClan, clan: c.clan }, ["Only the matching clan learns it (or force:true / favor)."]);
+      }
+      // CLASS: Medical arts require the Medical-Nin class
+      if (kws.includes("medical") && c.className !== "Medical-Nin") {
+        throw reject("class_locked", `${j.name} is a Medical art; only a Medical-Nin can learn it (${c.name} is a ${c.className}).`, { className: c.className }, ["Multiclass into Medical-Nin, or pass force:true."]);
+      }
+      // AFFINITY: an elemental-nature jutsu needs the matching affinity or KKG
+      const el = jutsuElement(j);
+      if (el && el !== "neutral" && !hasElementAccess(c, el)) {
+        throw reject("off_affinity", `${j.name} is ${el}-natured; ${c.name}'s natures are [${(c.affinity ?? []).join(", ") || "none"}]${(c.kkg ?? []).length ? ` (KKG ${c.kkg.join(", ")})` : ""}.`, { element: el, affinity: c.affinity ?? [], kkg: c.kkg ?? [] }, ["Off-affinity is the hard path: force:true (DM) for costly cross-training, or favor_unlock the nature."]);
+      }
     }
     if (c.jutsuKnown.length >= c.jutsuKnownCap && !ctx.op.params.force) {
       throw reject("jutsu_known_cap", `${c.name} knows ${c.jutsuKnown.length}/${c.jutsuKnownCap} jutsu (cap reached).`, { known: c.jutsuKnown.length, cap: c.jutsuKnownCap }, ["Forget a jutsu (jutsu_forget), level up to raise the cap, or pass force:true."]);

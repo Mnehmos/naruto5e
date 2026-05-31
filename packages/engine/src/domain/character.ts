@@ -94,7 +94,9 @@ export const CharacterSchema = z.object({
 
   /** Unique clan resources (Akimichi Calories, dojutsu activation, ...). */
   resources: z.record(z.any()).default({}),
-  affinity: z.array(z.string()).default([]),
+  affinity: z.array(z.string()).default([]), // base chakra natures (rolled at genesis)
+  kkg: z.array(z.string()).default([]), // Kekkei Genkai derived from affinity pairs
+  specialTraits: z.array(z.string()).default([]), // dojutsu stages, latent gifts, etc.
 
   // combat fields (Phase 2)
   position: z.object({ x: z.number(), y: z.number() }).optional(),

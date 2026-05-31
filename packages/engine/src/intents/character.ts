@@ -11,6 +11,8 @@ import {
   setAbilitiesByMethod,
   type BuildSelections,
 } from "../rules/character.js";
+import { rollGenesis, deriveKKG } from "../rules/affinity.js";
+import { getLedger, applyStandingDelta } from "../rules/standing.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -114,13 +116,43 @@ export function registerCharacterIntents(engine: Engine): void {
     // derive while still "unbuilt" so pools fill to max, then mark built
     char = deriveCharacter(char);
     char.built = true;
+    // genesis roll: affinities (clan grant + rarity-rolled), KKG, special traits
+    const genesis = rollGenesis(char, ctx.rng);
     chars(ctx).put(char);
 
     ctx.ir.emit("character_created", {
       actor: char.id,
-      data: { character: summary(char), levelClamped },
-      narration: `${char.name} — ${char.rank} ${char.clan ?? ""} ${char.className ?? ""} (L${char.level}), HP ${char.hp.max}, Chakra ${char.chakra.max}.${levelClamped ? ` (requested level ${levelClamped.requested} clamped to ${levelClamped.clampedTo})` : ""}`,
+      data: { character: summary(char), genesis, levelClamped },
+      narration: `${char.name} — ${char.rank} ${char.clan ?? ""} ${char.className ?? ""} (L${char.level}), HP ${char.hp.max}, Chakra ${char.chakra.max}. Natures: ${genesis.affinity.join("/") || "none"}${genesis.kkg.length ? ` · KKG: ${genesis.kkg.join(", ")}` : ""}${genesis.specialTraits.length ? ` · ${genesis.specialTraits.join(", ")}` : ""}.`,
     });
+  });
+
+  // favor_unlock — the sanctioned override: spend favor with an authority to gain
+  // a new affinity (recomputing KKG), unlock a KKG outright, or grant a special
+  // trait, justified by a narrative arc. This is how off-genesis natures/KKG are
+  // earned (favor "unlocks KKG to those born without it").
+  engine.registerHandler("favor_unlock", (ctx) => {
+    const char = loadChar(ctx, ctx.op.actorId);
+    const authorityId = String(ctx.op.params.authorityId ?? "");
+    if (!authorityId) throw reject("authority_required", "favor_unlock spends favor with an authority — set authorityId.", {}, ["Name the patron/authority whose favor is spent."]);
+    const what = String(ctx.op.params.what ?? "affinity"); // affinity | kkg | trait
+    const value = String(ctx.op.params.value ?? "");
+    const cost = Number(ctx.op.params.favorCost ?? ctx.op.params.cost ?? 3);
+    const justification = String(ctx.op.params.justification ?? "a narrative arc");
+    if (!value) throw reject("value_required", `favor_unlock needs a value (the ${what} to unlock).`, {}, ["Set value (e.g. an element for affinity)."]);
+    const have = getLedger(ctx.store, char.id, authorityId)?.favor ?? 0;
+    if (have < cost) throw reject("insufficient_favor", `${char.name} needs ${cost} favor with ${authorityId} (has ${have}).`, { required: cost, have }, ["Earn favor with that authority first, or lower the cost."]);
+    applyStandingDelta(ctx.store, char.id, authorityId, { favor: -cost, reason: `unlock ${what}: ${value} (${justification})` });
+    if (what === "affinity") {
+      if (!char.affinity.includes(value)) char.affinity.push(value);
+      char.kkg = deriveKKG(char.affinity);
+    } else if (what === "kkg") {
+      if (!char.kkg.includes(value)) char.kkg.push(value);
+    } else if (what === "trait") {
+      if (!char.specialTraits.includes(value)) char.specialTraits.push(value);
+    }
+    chars(ctx).put(char);
+    ctx.ir.emit("favor_unlock", { actor: char.id, data: { what, value, favorSpent: cost, affinity: char.affinity, kkg: char.kkg, specialTraits: char.specialTraits }, narration: `${char.name} spends ${cost} favor with ${authorityId} to unlock ${what} "${value}" — ${justification}.` });
   });
 
   // ---- granular 7-step build ops --------------------------------------

@@ -48,7 +48,10 @@ describe("Phase 1 CHECKPOINT — build any legal character end-to-end", () => {
     // skills include clan (Chakra Control, Ninshou), class fixed + 3 chosen, bg (Acrobatics, Athletics)
     expect(c.proficiencies.skills).toEqual(expect.arrayContaining(["Chakra Control", "Ninshou", "Nature", "Stealth", "Perception", "Acrobatics", "Athletics"]));
     expect(c.willOfFire).toBe(true);
-    expect(c.affinity).toEqual(expect.arrayContaining(["Ice"]));
+    // genesis: Yuki's canonical Ice expands to its base natures (Water+Wind), which
+    // derive the Ice (Hyoton) KKG. (Extra rolled natures may add more.)
+    expect(c.affinity).toEqual(expect.arrayContaining(["Water", "Wind"]));
+    expect(c.kkg).toEqual(expect.arrayContaining(["Ice (Hyoton)"]));
   });
 
   it("builds a tanky Taijutsu Specialist with Unarmored Defense (AC = 10 + DEX + CON)", () => {
