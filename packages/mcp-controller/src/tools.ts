@@ -451,8 +451,31 @@ export function registerTools(server: McpServer, client: EngineClient): void {
 
   server.registerTool(
     "advance_turn",
-    { description: "Advance to the next combatant (the turn authority; auto-rolls death saves for the downed).", inputSchema: { roomId: z.string() } },
-    async ({ roomId }) => ok(await client.submitIntent({ roomId, type: "advance" })),
+    {
+      description: "Advance to the next combatant (the turn authority; auto-rolls death saves for the downed). If the next combatant is an autonomous agent (adversary with autoOnTurn), the result carries data.needsAgentTurn — call npc_turn to resolve it, OR pass auto:true to resolve it inline (the model picks + the engine adjudicates its move). Turns never advance invisibly: auto is opt-in.",
+      inputSchema: { roomId: z.string(), auto: z.boolean().optional() },
+    },
+    async ({ roomId, auto }) => {
+      const result = await client.submitIntent({ roomId, type: "advance" });
+      const adv = (result.events ?? []).find((e: any) => e.type === "advance");
+      const sig = adv?.data?.needsAgentTurn;
+      if (auto && sig && process.env.OPENAI_API_KEY) {
+        const composed = await client.submitIntent({ roomId, actorId: sig.actorId, type: "npc_compose", params: { npcId: sig.actorId, situation: "It is your turn in combat. Declare your move." } });
+        const pev = (composed.events ?? []).find((e: any) => e.type === "npc_prompt");
+        if (pev) {
+          try {
+            const { text } = await openaiChat({ model: sig.model ?? NPC_MODEL(), messages: pev.data.messages, timeoutMs: 60_000 });
+            if (text) {
+              const turn = await resolveNpcDeclaration(client, { roomId, npcId: sig.actorId, actorId: sig.actorId, declaration: text, mode: "combat" });
+              return ok({ ...result, agentTurn: { declaration: text, conformance: turn.conformance, resolution: turn.resolution } });
+            }
+          } catch (e) {
+            return ok({ ...result, agentTurn: { error: (e as Error).message } });
+          }
+        }
+      }
+      return ok(result);
+    },
   );
 
   server.registerTool(
@@ -501,8 +524,8 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   server.registerTool(
     "spawn_adversary",
     {
-      description: "Spawn a tier-scaled adversary (minion/elite/solo) via the 8-step build. Solo gets Legendary Actions/Resistance + Phase Transitions; Elite gets an extra action. affinity sets the foe's chakra natures (surfaced in agent_context for elemental-advantage play).",
-      inputSchema: { roomId: z.string(), name: z.string(), tier: z.enum(["minion", "elite", "solo"]), role: z.string().optional(), clan: z.string().optional(), level: z.number(), partySize: z.number().optional(), jutsu: z.array(z.string()).optional(), traits: z.array(z.string()).optional(), affinity: z.array(z.string()).optional() },
+      description: "Spawn a tier-scaled adversary (minion/elite/solo) via the 8-step build. Solo gets Legendary Actions/Resistance + Phase Transitions; Elite gets an extra action. affinity sets the foe's chakra natures (surfaced in agent_context). Give it persona+directive+autoOnTurn to make it an AUTONOMOUS combatant: combat advance then flags needsAgentTurn so its turns resolve through the conform→engine loop (advance_turn auto:true / npc_turn).",
+      inputSchema: { roomId: z.string(), name: z.string(), tier: z.enum(["minion", "elite", "solo"]), role: z.string().optional(), clan: z.string().optional(), level: z.number(), partySize: z.number().optional(), jutsu: z.array(z.string()).optional(), traits: z.array(z.string()).optional(), affinity: z.array(z.string()).optional(), persona: z.string().optional(), directive: z.string().optional(), model: z.string().optional(), autoOnTurn: z.boolean().optional() },
     },
     async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "adversary_spawn", params })),
   );

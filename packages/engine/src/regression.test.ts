@@ -1056,3 +1056,72 @@ describe("standing inflation gate", () => {
     expect(rel.memories.some((m: any) => (m.topics ?? []).includes("undermine"))).toBe(true); // still remembered
   });
 });
+
+// Task 6: autoOnTurn — combat advance flags an autonomous agent's turn (engine stays LLM-free).
+describe("autoOnTurn combat signal", () => {
+  const advanceUntil = (advId: string) => {
+    for (let i = 0; i < 5; i++) {
+      const adv = (run("advance", {}) as any).events.find((e: any) => e.type === "advance");
+      if (adv?.data?.turn === advId) return adv;
+    }
+    return null;
+  };
+
+  it("an autoOnTurn adversary (with persona/directive) flags needsAgentTurn on its turn", () => {
+    const pc = mkPC("Hero");
+    const advId = (run("adversary_spawn", { name: "Sentinel", tier: "elite", level: 3, autoOnTurn: true, persona: "You are a grim sentinel.", directive: "Strike the nearest intruder." }) as any).events[0].data.adversary.id as string;
+    run("combat_start", { combatants: [{ actorId: pc, team: "pc" }, { actorId: advId, team: "enemy" }] });
+    const turn = advanceUntil(advId);
+    expect(turn).toBeTruthy();
+    expect(turn.data.needsAgentTurn).toBeTruthy();
+    expect(turn.data.needsAgentTurn.actorId).toBe(advId);
+  });
+
+  it("a plain adversary does NOT flag needsAgentTurn (no invisible auto-turns)", () => {
+    const pc = mkPC("Hero");
+    const advId = (run("adversary_spawn", { name: "Mook", tier: "minion", level: 2 }) as any).events[0].data.adversary.id as string;
+    run("combat_start", { combatants: [{ actorId: pc, team: "pc" }, { actorId: advId, team: "enemy" }] });
+    const turn = advanceUntil(advId);
+    expect(turn).toBeTruthy();
+    expect(turn.data.needsAgentTurn).toBeUndefined();
+  });
+});
+
+// Tasks 5 + 8: ephemeral DM actors (instant, no agent setup) vs durable off-camera agents.
+describe("ephemeral actors + durable off-camera agency", () => {
+  const batch = (ops: any[]) => engine.resolveIntent({ intentId: `b_${Math.random()}`, roomId: ROOM, type: "batch", params: { ops }, ...base } as any) as any;
+
+  it("a DM spawns ephemeral foes and starts combat in ONE batch (no persistent agent setup)", () => {
+    const pc = mkPC("Hero");
+    const r = batch([
+      { type: "adversary_spawn", params: { name: "Road Bandit", tier: "minion", level: 3 }, bind: "b1" },
+      { type: "adversary_spawn", params: { name: "Road Bandit", tier: "minion", level: 3 }, bind: "b2" },
+      { type: "combat_start", params: { combatants: [{ actorId: "$b1", team: "enemy" }, { actorId: "$b2", team: "enemy" }, { actorId: pc, team: "pc" }] } },
+    ]);
+    expect(r.status).toBe("resolved");
+    const st = engine.getRoomState(ROOM) as any;
+    expect(st.room.mode).toBe("combat");
+    expect(st.encounter.order.length).toBe(3); // both ephemeral bandits + the PC enrolled
+  });
+
+  it("an ephemeral actor can be PROMOTED to a durable NPC (goal + journal persist)", () => {
+    const npcId = (run("npc_create", { name: "Road Bandit (the one who got away)", authorityId: "bandits", persona: "A wary road-bandit who escaped.", goals: [{ text: "avenge the ambush", drive: "undermine", intensity: 1 }] }) as any).events[0].data.npc.id as string;
+    run("npc_add_journal", { npcId, entry: "Survived the bridge ambush; marked the genin." });
+    const npc = engine.getEntity("npcs", npcId) as any;
+    expect(npc.goals.length).toBe(1);
+    expect((npc.journal ?? []).length).toBe(1);
+  });
+
+  it("a durable off-camera actor advances a goal across MULTIPLE rests, persistently", () => {
+    mkPC("Hero");
+    const npcId = (run("npc_create", { name: "Missing-Nin", authorityId: "rogues", goals: [{ text: "close in on the heir", drive: "scheme", intensity: 1 }] }) as any).events[0].data.npc.id as string;
+    const prog = () => (engine.getEntity("npcs", npcId) as any).goals[0].progress ?? 0;
+    expect(prog()).toBe(0);
+    run("tick_run", { magnitude: "medium" });
+    const after1 = prog();
+    expect(after1).toBeGreaterThan(0);
+    run("tick_run", { magnitude: "medium" });
+    run("tick_run", { magnitude: "medium" });
+    expect(prog()).toBeGreaterThan(after1); // accumulates across consecutive rests (persisted to the store)
+  });
+});

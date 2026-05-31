@@ -14,7 +14,7 @@ function advs(ctx: ResolveContext) {
 }
 
 /** Build an adversary statblock from the tier baseline + modifiers (the 8-step build). */
-function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; role?: string; clan?: string; level: number; partySize?: number; jutsu?: string[]; traits?: string[]; affinity?: string[]; id?: string; personalize?: { acMod?: number; attackMod?: number; hpMult?: number; damageMult?: number; dcMod?: number } }): Adversary {
+function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; role?: string; clan?: string; level: number; partySize?: number; jutsu?: string[]; traits?: string[]; affinity?: string[]; id?: string; personalize?: { acMod?: number; attackMod?: number; hpMult?: number; damageMult?: number; dcMod?: number }; persona?: string; directive?: string; model?: string; autoOnTurn?: boolean }): Adversary {
   const base = adversaryBaseline(opts.level);
   const partySize = opts.partySize ?? 4;
   const m = tierMods(opts.tier, partySize);
@@ -56,6 +56,10 @@ function buildAdversary(ctx: ResolveContext, opts: { name: string; tier: Tier; r
     legendary: opts.tier === "solo" ? { actions: Math.max(1, partySize - 1), max: Math.max(1, partySize - 1), resistance: 3 } : undefined,
     phases: opts.tier === "solo" ? { thresholds: [60, 30], crossed: [], current: 1 } : undefined,
     xpMultiplier: m.xpMul,
+    persona: opts.persona,
+    directive: opts.directive,
+    model: opts.model,
+    autoOnTurn: opts.autoOnTurn,
   });
   return adv;
 }
@@ -98,6 +102,10 @@ export function registerAdversaryIntents(engine: Engine): void {
       affinity: (p.affinity as string[]) ?? [],
       personalize: p.personalize as any,
       id: p.id as string,
+      persona: p.persona != null ? String(p.persona) : undefined,
+      directive: p.directive != null ? String(p.directive) : undefined,
+      model: p.model != null ? String(p.model) : undefined,
+      autoOnTurn: p.autoOnTurn === true,
     });
     advs(ctx).put(adv);
     ctx.ir.emit("adversary_spawned", {

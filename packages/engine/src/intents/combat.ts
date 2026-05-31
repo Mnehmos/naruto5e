@@ -222,7 +222,11 @@ export function registerCombatIntents(engine: Engine): void {
           saveActor(ctx.store, sref);
         }
       }
-      ctx.ir.emit("advance", { actor: ref.doc.id, data: { round, activeIndex: idx, turn: ref.doc.id }, narration: `Round ${round}: ${ref.doc.name}'s turn.` });
+      // If the next combatant is an autonomous agent (autoOnTurn + persona/directive), flag it
+      // so the controller can run its turn through the conform→resolve loop. The engine never
+      // calls an LLM and never advances invisibly — it only surfaces the signal.
+      const needsAgentTurn = (ref.doc as any).autoOnTurn && ((ref.doc as any).persona || (ref.doc as any).directive) && !ref.doc.dead ? { actorId: ref.doc.id, name: ref.doc.name, model: (ref.doc as any).model ?? null } : undefined;
+      ctx.ir.emit("advance", { actor: ref.doc.id, data: { round, activeIndex: idx, turn: ref.doc.id, ...(needsAgentTurn ? { needsAgentTurn } : {}) }, narration: `Round ${round}: ${ref.doc.name}'s turn.` + (needsAgentTurn ? " (autonomous agent — resolve its turn)" : "") });
       // damage-over-time conditions (Burned/Bleeding) tick at the START of the turn
       tickDot(ctx, ref);
       // control conditions (Paralyzed/Stunned/...) get a save-to-end + duration tick

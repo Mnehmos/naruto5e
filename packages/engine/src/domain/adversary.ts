@@ -58,5 +58,13 @@ export const AdversarySchema = z.object({
   phases: z.object({ thresholds: z.array(z.number()), crossed: z.array(z.number()), current: z.number() }).optional(),
 
   xpMultiplier: z.number().default(1),
+
+  // ---- agent config (optional): an adversary can be an autonomous combatant ----
+  // When autoOnTurn is set (with a persona/directive), combat `advance` flags needsAgentTurn so
+  // the controller can run the conform→resolve loop for this foe's turn. The engine hosts no LLM.
+  persona: z.string().optional(),
+  directive: z.string().optional(),
+  model: z.string().optional(),
+  autoOnTurn: z.boolean().optional(),
 });
 export type Adversary = z.infer<typeof AdversarySchema>;
