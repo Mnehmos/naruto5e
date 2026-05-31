@@ -14,7 +14,7 @@
     "romaru": "wary respect after Day-2 spar (+1, 'you're not soft')",
     "ryuen": "mentor bond deepening (caught the Day-3 forbidden Dust reach; protective, fear-driven)"
   },
-  "structure": "ONE CHAPTER PER DAY (chapters/dayNNN.md). Every day = full 24h on the schedule, all 7 days/week, played moment-to-moment (single engine calls, react to each result as DM + player). BATCH only for combat setup / bulk utility — never to time-skip a story.",
+  "structure": "ONE CHAPTER PER DAY (chapters/dayNNN.md), authored BY HAND as PURE NARRATIVE-DRIVEN MANGA — no inline mechanics/dice/DC/LOG in the prose; the engine truth lives HERE in ledger.json. Every day = full 24h, all 7 days/week, played moment-to-moment (single engine calls, react as DM+player; BATCH only for combat setup/utility, never to time-skip). AFTER EACH DAY: update docs/index.html (add the day's narrative manga page) + commit + push so the live Pages site follows in real time.",
   "dailySchedule": [
     "05:30 wake / chakra warm-up at home",
     "06:00 breakfast with family",
