@@ -47,9 +47,12 @@ export function registerAgentIntents(engine: Engine): void {
     const allies = others.filter((o) => teamOf(o, o.kind === "adversary" ? "adversaries" : "characters") === myTeam).map(peer);
     const threats = others.filter((o) => teamOf(o, o.kind === "adversary" ? "adversaries" : "characters") !== myTeam).map(peer);
 
-    // affordances: which known jutsu are castable right now
+    // affordances: which known jutsu are castable right now. PCs hold their kit
+    // in `jutsuKnown`; adversaries (DM-authored) hold theirs in `jutsu`. Read
+    // whichever this actor uses so a kitted adversary surfaces its real jutsu
+    // instead of falling through to "0 castable" (which nudged DMs to freeform).
     const blocked = [...blockedComponents(doc.conditions ?? [])];
-    const jutsu = (doc.jutsuKnown ?? [])
+    const jutsu = (doc.jutsuKnown ?? doc.jutsu ?? [])
       .map((id: string) => {
         const j = ctx.engine.content.getJutsu(id);
         if (!j) return null;

@@ -613,6 +613,14 @@ describe("KKG techniques", () => {
     expect(known.some((id) => id.startsWith("ice-release-"))).toBe(true); // KKG signature
     expect(known.length).toBeGreaterThanOrEqual(2); // + affinity signatures
   });
+
+  it("agent_context surfaces a kitted adversary's jutsu (reads adv.jutsu, not just PC jutsuKnown)", () => {
+    const sp = run("adversary_spawn", { name: "Kitted", tier: "elite", level: 3, jutsu: ["earth-release-rock-tank"] }) as any;
+    const advId = sp.events[0].data.adversary.id as string;
+    const ctx = run("agent_context", {}, advId) as any;
+    const kit: any[] = ctx.events[0].data.affordances.jutsu;
+    expect(kit.some((j) => j.id === "earth-release-rock-tank")).toBe(true); // was [] before the fix
+  });
 });
 
 // npc_decide — the NPC analogue of agent_context: assemble a decision prompt
