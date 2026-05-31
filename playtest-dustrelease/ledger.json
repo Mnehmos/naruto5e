@@ -3,8 +3,8 @@
   "campaignId": "camp_c0b277b6",
   "roomId": "iwa-academy",
   "hero": { "id": "char_2b103605", "name": "Iwao" },
-  "dayClock": 8,
-  "weeksDone": 1,
+  "dayClock": 15,
+  "weeksDone": 2,
   "arc": "Academy — Year One",
   "sheet": {
     "level": 1, "rank": "Genin",
@@ -16,7 +16,7 @@
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
   "standing": {
-    "iwagakure": { "reputation": 7, "favor": 2 },
+    "iwagakure": { "reputation": 9, "favor": 2 },
     "iwa_academy": { "reputation": 3, "favor": 0 }
   },
   "npcs": {
@@ -34,9 +34,12 @@
     "team_genbu": ["Tobari", "Suzume", "Romaru"],
     "team_hoki": ["Hibana", "Komate", "Sazae"]
   },
+  "rivalry": { "ganryu": { "disposition": -1, "familiarity": 2, "note": "Lost first spar to Iwao; vows to out-work the bloodline." } },
   "bugs": [
-    { "id": "bug_1780212505469_fo4a3", "title": "create_character no KKG param", "severity": "medium", "status": "FIXED", "commit": "4253221" }
+    { "id": "bug_1780212505469_fo4a3", "title": "create_character no KKG param", "severity": "medium", "status": "FIXED", "commit": "4253221" },
+    { "id": "bug_1780214524649_1eyb0", "title": "agent_context hid kitted adversary jutsu", "severity": "medium", "status": "FIXED", "commit": "af5d2be" }
   ],
+  "policy": "Kit all combat NPCs/adversaries with real jutsu loadouts at spawn; reserve freeform for improv (natural molding / technique synthesis).",
   "engineErrorsUnvalidated": [],
-  "notes": "Engine L1 maps to rank Genin even pre-graduation; narrate Academy-student fiction over mechanical Genin. Another agent has uncommitted WIP in packages/engine/src/*/world.ts — do NOT touch; be cautious restarting the engine (would compile their WIP)."
+  "notes": "HTML (index.html) is canonical; PDF derived from it via make_pdf.py (headless Chrome). render_pdf.py kept as fpdf2 fallback. Another agent shipped a durable NPC-agent layer (commit 7f3d9d1: persona/directive/secrets/journal, npc_compose/invoke, rest short|long|downtime); new controller tools need an MCP reconnect this session can't trigger — reach engine intents via submit_intent."
 }
