@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 8,
-  "chaptersDone": 7,
+  "dayClock": 9,
+  "chaptersDone": 9,
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
     "particleFrame": "Day 4 — Iwao learns Dust = simultaneity (three natures balanced at once), not sequence; the intellectual path, takes years.",
