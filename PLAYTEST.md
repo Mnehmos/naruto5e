@@ -141,6 +141,18 @@ curl -s localhost:8970/v1/rooms/demo/intent -d '{"actorId":"<bossId>","type":"le
   - adversaries fight on the same combat surface as PCs (initiative, damage,
     death) â€” `from_bingo_book`, `adversary_scale`, `freeform_attack`.
 
+### Encounter balance (design note)
+
+The adversary attack/damage curve is the source Ch.14 table verbatim (the book
+rules). It is calibrated for a full ~4-PC party (action economy in the party's
+favor) - so elite/solo foes hit hard and often against a single PC. This is
+intentional, not a bug. For off-table fights (a lone PC, or custom difficulty)
+use the step-7 personalize knob on the build:
+`{ acMod, attackMod, hpMult, damageMult, dcMod }` (e.g. `adversary_spawn` /
+`from_bingo_book` params.personalize). Minions are low-damage by design (chip/
+swarm); elite and solo attack/damage are the high-end of the table and assume a
+squad.
+
 ## Customize (Phase 5)
 
 ```bash
