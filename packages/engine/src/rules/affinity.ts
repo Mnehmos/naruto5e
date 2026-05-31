@@ -13,6 +13,8 @@
  *
  * Every table here is a TUNABLE CONSTANT — adjust freely; gameplay reads these.
  */
+import { rankFromLevel } from "./abilities.js";
+
 export const ELEMENTS = ["Fire", "Water", "Wind", "Earth", "Lightning"] as const;
 export type Element = (typeof ELEMENTS)[number];
 
@@ -166,6 +168,27 @@ export function rollGenesis(
 export function rankAllows(charRank: string, jutsuRank: string): boolean {
   const cap = RANK_JUTSU_CAP[charRank] ?? "C";
   return RANK_ORDER.indexOf(jutsuRank) <= RANK_ORDER.indexOf(cap);
+}
+
+/**
+ * The jutsu-rank CAP for a character — the decoupling of TITLE from TIER (bug_1780247960181).
+ * The in-world rank TITLE (char.rank) is earned at the Chūnin Exam (rank_up); it is NOT
+ * auto-promoted by leveling. The learnable-jutsu TIER follows LEVEL (char.rankTier, set by
+ * deriveCharacter). The cap is the MORE PERMISSIVE of the two, so a strong but un-promoted
+ * Genin (L5+) can still grow their jutsu ladder, while a DM/exam-set title (or a hand-built
+ * test fixture that sets char.rank directly) is always honored. Backward-compatible: for an
+ * L1 fixture, the level tier is "Genin" (the floor), so the explicit title wins unchanged.
+ */
+export function jutsuRankCap(char: { rank?: string; rankTier?: string; level?: number }): string {
+  const tier = char.rankTier ?? rankFromLevel(char.level ?? 1);
+  const tierCap = RANK_JUTSU_CAP[tier] ?? "C";
+  const titleCap = RANK_JUTSU_CAP[char.rank ?? "Genin"] ?? "C";
+  return RANK_ORDER.indexOf(tierCap) >= RANK_ORDER.indexOf(titleCap) ? tierCap : titleCap;
+}
+
+/** rankAllows for a whole character, using the decoupled (title|tier) cap. */
+export function charRankAllows(char: { rank?: string; rankTier?: string; level?: number }, jutsuRank: string): boolean {
+  return RANK_ORDER.indexOf(jutsuRank) <= RANK_ORDER.indexOf(jutsuRankCap(char));
 }
 
 /** Does the character have access to a jutsu's element (direct affinity OR a KKG)? */

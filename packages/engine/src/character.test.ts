@@ -115,7 +115,11 @@ describe("Phase 1 CHECKPOINT — build any legal character end-to-end", () => {
     const c5 = engine.getEntity("characters", id) as any;
     expect(c5.level).toBe(5);
     expect(c5.proficiencyBonus).toBe(4);
-    expect(c5.rank).toBe("Chunin");
+    // rank decouple (bug_1780247960181): the in-world TITLE is NOT auto-promoted by leveling —
+    // it stays the genesis default until the exam (rank_up). The level-derived jutsu-cap TIER
+    // does advance to Chunin, so a strong Genin can still grow their jutsu ladder.
+    expect(c5.rank).toBe("Genin");
+    expect(c5.rankTier).toBe("Chunin");
     expect(c5.hp.max).toBeGreaterThan(c0.hp.max);
   });
 

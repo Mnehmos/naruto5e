@@ -10,7 +10,7 @@ import { activeEncounter } from "../rules/turn.js";
 import { applyDamageDoc } from "../rules/resolve.js";
 import { rollDamage } from "../rules/combat.js";
 import { checkPhaseTransition } from "../rules/adversary.js";
-import { INCAPACITATING, CONDITION_DOT } from "../rules/conditions.js";
+import { INCAPACITATING, CONDITION_DOT, clearedByCombatEnd } from "../rules/conditions.js";
 import { castJutsu } from "./jutsu.js";
 
 function rooms(ctx: ResolveContext) {
@@ -248,6 +248,11 @@ export function registerCombatIntents(engine: Engine): void {
         if (!ref) continue;
         ref.doc.concentration = [];
         delete (ref.doc as any).turnBudget; // out of combat: no action-economy gate (scene actions are free)
+        // transient combat conditions don't outlive the fight — Prone, Stunned, Grappled, etc.
+        // end with the encounter; only special status conditions (Petrified) persist. (Previously
+        // NOTHING was cleared, so e.g. Prone lingered after combat and through a long rest.)
+        if (Array.isArray(ref.doc.conditions)) ref.doc.conditions = ref.doc.conditions.filter((x: string) => !clearedByCombatEnd(x));
+        if (Array.isArray(ref.doc.conditionStates)) ref.doc.conditionStates = ref.doc.conditionStates.filter((s: any) => !clearedByCombatEnd(s.name));
         saveActor(ctx.store, ref);
       }
     }
@@ -361,6 +366,30 @@ export function registerCombatIntents(engine: Engine): void {
     saveActor(ctx.store, ref);
     ctx.ir.emit("disengage", { actor: ref.doc.id, data: {}, narration: `${ref.doc.name} disengages.` });
   });
+
+  // stand up from Prone — the player spends ACTION ECONOMY (half their speed in movement,
+  // per 5e) to shake the positional condition; free out of combat. This is the deliberate
+  // "remove a transient condition by spending resources" path (vs duration/save-to-end).
+  const stand = (ctx: ResolveContext) => {
+    const enc = activeEncounter(ctx.store, ctx.room.id);
+    const ref = loadActor(ctx.store, String(ctx.op.actorId));
+    if (!ref) throw reject("actor_required", "stand requires a valid actorId.", {});
+    if (!(ref.doc.conditions ?? []).includes("Prone")) throw reject("not_prone", `${ref.doc.name} is not Prone — nothing to stand up from.`, {}, ["Only a Prone creature stands up."]);
+    let cost = 0;
+    if (enc) {
+      const active = enc.order[enc.activeIndex];
+      if (active !== ref.doc.id) throw reject("off_turn", `It is not ${ref.doc.name}'s turn.`, { active });
+      if (!ref.doc.turnBudget) ref.doc.turnBudget = defaultBudget(ref.doc.speed ?? 30);
+      cost = Math.ceil((ref.doc.speed ?? 30) / 2); // standing costs half your speed
+      const aff = canAfford(ref.doc.turnBudget, { movement: cost });
+      if (!aff.ok) throw reject("action_economy", `${ref.doc.name} needs ${cost} ft of movement to stand: ${aff.detail}.`, { cost, remaining: ref.doc.turnBudget.movement }, ["Dash for more movement, or stand next turn."]);
+      spend(ref.doc.turnBudget, { movement: cost });
+    }
+    ref.doc.conditions = (ref.doc.conditions ?? []).filter((c: string) => c !== "Prone");
+    saveActor(ctx.store, ref);
+    ctx.ir.emit("stand", { actor: ref.doc.id, data: { cost, movementLeft: ref.doc.turnBudget?.movement }, narration: `${ref.doc.name} gets to their feet${cost ? ` (spends ${cost} ft of movement)` : ""}.` });
+  };
+  for (const v of ["stand", "stand_up", "get_up"]) engine.registerHandler(v, stand);
 
   for (const simple of ["help", "hide", "search", "use_object", "use_item"]) {
     engine.registerHandler(simple, (ctx) => {

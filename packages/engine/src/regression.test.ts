@@ -757,3 +757,127 @@ describe("campaign management", () => {
     expect(d.recentJournal.some((j: any) => j.beat === "met Tazuna")).toBe(true);
   });
 });
+
+// bug_1780247960181: ninja-rank TITLE was auto-derived from level (L5 -> 'Chunin'),
+// clobbering an exam-earned title. Decoupled: TITLE is set at genesis/by exam; the
+// jutsu-cap TIER follows level.
+describe("rank decouple (title vs jutsu-cap tier)", () => {
+  it("leveling does NOT auto-promote the title, but the jutsu-cap tier follows level", () => {
+    const pc = mkPC("Climber"); // L1 Genin
+    for (let i = 0; i < 4; i++) run("character_level_up", {}, pc); // -> L5
+    const c5 = engine.getEntity("characters", pc) as any;
+    expect(c5.level).toBe(5);
+    expect(c5.rank).toBe("Genin"); // TITLE not auto-promoted
+    expect(c5.rankTier).toBe("Chunin"); // TIER follows level
+    // the level-derived tier drives the learnable-jutsu cap (B at Chunin tier)
+    const learn = (run("jutsu_learnable", {}, pc) as any).events[0].data;
+    expect(learn.rankCap).toBe("B");
+  });
+
+  it("an exam/DM-set title survives subsequent level-ups (not overwritten by derive)", () => {
+    const pc = mkPC("Promoted");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.rank = "Jonin"; // simulate an exam promotion
+    cc.put(c);
+    run("character_level_up", {}, pc); // deriveCharacter runs
+    expect(cc.get(pc).rank).toBe("Jonin");
+  });
+});
+
+// Prone (and other transient conditions) used to linger forever — neither end_combat
+// nor any rest cleared conditions. A long rest now resolves transient states; structural
+// ones (Petrified) survive; end_combat clears the positional Prone.
+describe("conditions clear on rest / combat-end", () => {
+  it("a long rest resolves transient conditions (Prone, Bleeding) but Petrified survives", () => {
+    const pc = mkPC("Faller");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.conditions = ["Prone", "Bleeding", "Petrified"];
+    cc.put(c);
+    run("rest", { type: "long" }, pc);
+    const after = cc.get(pc);
+    expect(after.conditions).not.toContain("Prone");
+    expect(after.conditions).not.toContain("Bleeding");
+    expect(after.conditions).toContain("Petrified"); // persistent state survives
+  });
+
+  it("ending combat clears ALL transient conditions (Prone, Stunned) but special status (Petrified) survives", () => {
+    const a = mkPC("Aa");
+    const b = mkPC("Bb");
+    run("combat_start", { combatants: [{ actorId: a, team: "pc" }, { actorId: b, team: "enemy" }] });
+    const cc = (engine as any).store.collection("characters");
+    const ca = cc.get(a);
+    ca.conditions = ["Prone", "Stunned", "Petrified"];
+    cc.put(ca);
+    run("end_combat", {});
+    const after = cc.get(a).conditions;
+    expect(after).not.toContain("Prone");
+    expect(after).not.toContain("Stunned");
+    expect(after).toContain("Petrified"); // special status outlives the fight
+  });
+
+  it("a Prone creature spends action economy (half speed) to STAND in combat", () => {
+    const a = mkPC("Stander");
+    const b = mkPC("Foe");
+    run("combat_start", { combatants: [{ actorId: a, team: "pc" }, { actorId: b, team: "enemy" }] });
+    const cc = (engine as any).store.collection("characters");
+    const ca = cc.get(a);
+    ca.conditions = ["Prone"];
+    cc.put(ca);
+    // ensure it's the stander's turn (combat_start sets activeIndex 0 = first in order; both PCs,
+    // initiative order may vary — stand from whoever is active). Find the active actor.
+    const enc = engine.getRoomState(ROOM) as any;
+    const active = enc.encounter.order[enc.encounter.activeIndex];
+    const cAct = cc.get(active);
+    cAct.conditions = ["Prone"];
+    cc.put(cAct);
+    const speed = cAct.speed ?? 30;
+    const r = run("stand", {}, active) as any;
+    expect(r.status).toBe("resolved");
+    const ev = r.events.find((e: any) => e.type === "stand");
+    expect(ev.data.cost).toBe(Math.ceil(speed / 2)); // standing cost = half speed
+    expect(cc.get(active).conditions).not.toContain("Prone");
+  });
+
+  it("a transient control condition ends when its duration expires (rounds tick to 0)", () => {
+    const a = mkPC("Held");
+    const b = mkPC("Other");
+    run("combat_start", { combatants: [{ actorId: a, team: "pc" }, { actorId: b, team: "enemy" }] });
+    const cc = (engine as any).store.collection("characters");
+    const held = cc.get(a);
+    held.conditions = ["Restrained"];
+    held.conditionStates = [{ name: "Restrained", saveAbility: "str", dc: 99, saveToEnd: false, rounds: 1 }]; // dc99 = never saves; rounds expire it
+    cc.put(held);
+    // advance a full round back to `a` so its start-of-turn duration tick fires
+    run("advance", {}); // -> b
+    run("advance", {}); // -> a (start of a's turn ticks Restrained: rounds 1 -> 0 -> ends)
+    expect(cc.get(a).conditions).not.toContain("Restrained");
+  });
+});
+
+// bug_1780245857774: the rest-embedded tick minted directed-goal reputation EVERY rest
+// (unbounded). Now standing is milestone-gated and silenceable via passiveStanding.
+describe("standing inflation gate", () => {
+  it("directed-goal standing fires on a milestone, NOT every tick", () => {
+    const pc = mkPC("Heir");
+    run("npc_create", { name: "Guardian", authorityId: "iwa", goals: [{ text: "shield the heir", drive: "protect", targetActorId: pc, targetAuthorityId: "iwa", intensity: 1 }] });
+    const rep = () => (engine.getEntity("standings", `${pc}:iwa`) as any)?.reputation ?? 0;
+    run("tick_run", { magnitude: "small" }); // 0 -> 5: first advance = milestone -> standing moves
+    const afterFirst = rep();
+    expect(afterFirst).toBeGreaterThan(0);
+    run("tick_run", { magnitude: "small" }); // 5 -> 10: no band crossed -> no standing
+    run("tick_run", { magnitude: "small" }); // 10 -> 15: still no band crossed
+    expect(rep()).toBe(afterFirst); // unchanged across in-band ticks (no per-rest drip)
+  });
+
+  it("passiveStanding:false silences off-screen reputation but still advances goals + memory", () => {
+    const pc = mkPC("Target");
+    const npcId = (run("npc_create", { name: "Schemer", authorityId: "iwa", goals: [{ text: "ruin him", drive: "undermine", targetActorId: pc, targetAuthorityId: "iwa", intensity: 2 }] }) as any).events[0].data.npc.id as string;
+    const tick = (run("tick_run", { magnitude: "large", passiveStanding: false }) as any).events.find((e: any) => e.type === "tick").data.tick;
+    expect(tick.consequenceDeltas.standing.length).toBe(0); // no reputation minted
+    expect((engine.getEntity("npcs", npcId) as any).goals[0].progress).toBeGreaterThan(0); // goal still advanced
+    const rel = engine.getEntity("npc_relationships", `${npcId}:${pc}`) as any;
+    expect(rel.memories.some((m: any) => (m.topics ?? []).includes("undermine"))).toBe(true); // still remembered
+  });
+});

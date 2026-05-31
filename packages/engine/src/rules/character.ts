@@ -250,8 +250,12 @@ export function deriveCharacter(char: Character): Character {
   const wisMod = abilityMod(totals.wis);
 
   char.proficiencyBonus = proficiencyBonus(char.level);
-  char.rank = char.rank && char.rank !== "Genin" ? char.rank : rankFromLevel(char.level);
-  if (!char.rank) char.rank = rankFromLevel(char.level);
+  // Rank decouple (bug_1780247960181): the jutsu-cap TIER follows level (always derived),
+  // but the in-world rank TITLE is NOT auto-promoted by leveling — it is set at genesis
+  // (default "Genin") and only changed by the exam/DM (rank_up). So a strong Genin keeps
+  // the title until they earn the vest, while their learnable-jutsu tier still grows.
+  char.rankTier = rankFromLevel(char.level);
+  if (!char.rank) char.rank = "Genin";
 
   // pools (take-average leveling, deterministic). Multiclass-aware: the very
   // first character level uses the max die; every later level (any class) uses

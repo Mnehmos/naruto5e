@@ -11,7 +11,7 @@ import {
   setAbilitiesByMethod,
   type BuildSelections,
 } from "../rules/character.js";
-import { rollGenesis, deriveKKG, findKKGRecipe, KKG_RECIPES, ELEMENTS, RANK_JUTSU_CAP } from "../rules/affinity.js";
+import { rollGenesis, deriveKKG, findKKGRecipe, KKG_RECIPES, ELEMENTS, jutsuRankCap } from "../rules/affinity.js";
 import { levelForXp, xpToNext } from "../rules/progression.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
 import { learnGate } from "../rules/learn.js";
@@ -187,7 +187,7 @@ export function registerCharacterIntents(engine: Engine): void {
     if (ctx.op.params.autoLoadout) {
       const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
       const RV: Record<string, number> = { E: 0, D: 1, C: 2, B: 3, A: 4, S: 5 };
-      const capV = RV[RANK_JUTSU_CAP[char.rank] ?? "C"] ?? 2;
+      const capV = RV[jutsuRankCap(char)] ?? 2;
       const avg = (d?: string) => {
         const m = /(\d+)d(\d+)/.exec(d ?? "");
         return m ? (Number(m[1]) * (Number(m[2]) + 1)) / 2 : 0;

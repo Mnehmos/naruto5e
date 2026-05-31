@@ -432,8 +432,8 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   server.registerTool(
     "spawn_adversary",
     {
-      description: "Spawn a tier-scaled adversary (minion/elite/solo) via the 8-step build. Solo gets Legendary Actions/Resistance + Phase Transitions; Elite gets an extra action.",
-      inputSchema: { roomId: z.string(), name: z.string(), tier: z.enum(["minion", "elite", "solo"]), role: z.string().optional(), clan: z.string().optional(), level: z.number(), partySize: z.number().optional(), jutsu: z.array(z.string()).optional(), traits: z.array(z.string()).optional() },
+      description: "Spawn a tier-scaled adversary (minion/elite/solo) via the 8-step build. Solo gets Legendary Actions/Resistance + Phase Transitions; Elite gets an extra action. affinity sets the foe's chakra natures (surfaced in agent_context for elemental-advantage play).",
+      inputSchema: { roomId: z.string(), name: z.string(), tier: z.enum(["minion", "elite", "solo"]), role: z.string().optional(), clan: z.string().optional(), level: z.number(), partySize: z.number().optional(), jutsu: z.array(z.string()).optional(), traits: z.array(z.string()).optional(), affinity: z.array(z.string()).optional() },
     },
     async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "adversary_spawn", params })),
   );

@@ -7,7 +7,7 @@ import { actorAC, actorAbilityMod, actorAffinity, actorCasting, loadActor, saveA
 import { RANK_VALUE, clashResolve, elementalAdvantage, jutsuElement, rollDamage } from "../rules/combat.js";
 import { applyDamageDoc, healDoc } from "../rules/resolve.js";
 import { useLegendaryResistance, checkPhaseTransition } from "../rules/adversary.js";
-import { RANK_JUTSU_CAP } from "../rules/affinity.js";
+import { jutsuRankCap } from "../rules/affinity.js";
 import { learnGate } from "../rules/learn.js";
 import { blockedComponents, INCAPACITATING, SAVE_TO_END, conditionSaveAbility } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
@@ -384,8 +384,8 @@ export function registerJutsuIntents(engine: Engine): void {
     const slotsLeft = (c.jutsuKnownCap ?? 0) - (c.jutsuKnown?.length ?? 0);
     ctx.ir.emit("jutsu_learnable", {
       actor: c.id,
-      data: { count: list.length, rankCap: RANK_JUTSU_CAP[c.rank] ?? "C", slotsLeft, affinity: c.affinity ?? [], kkg: c.kkg ?? [], jutsu: list },
-      narration: `${c.name} (${c.rank}, natures ${(c.affinity ?? []).join("/") || "none"}) can learn ${list.length} jutsu now (cap rank ${RANK_JUTSU_CAP[c.rank] ?? "C"}, ${slotsLeft} slot(s) left). Top: ${list.slice(0, 6).map((x: any) => `${x.name} [${x.rank}${x.damage ? " " + x.damage : ""}]`).join(", ") || "none"}.`,
+      data: { count: list.length, rankCap: jutsuRankCap(c), slotsLeft, affinity: c.affinity ?? [], kkg: c.kkg ?? [], jutsu: list },
+      narration: `${c.name} (${c.rank} · L${c.level ?? 1}, natures ${(c.affinity ?? []).join("/") || "none"}) can learn ${list.length} jutsu now (cap rank ${jutsuRankCap(c)}, ${slotsLeft} slot(s) left). Top: ${list.slice(0, 6).map((x: any) => `${x.name} [${x.rank}${x.damage ? " " + x.damage : ""}]`).join(", ") || "none"}.`,
     });
   });
 

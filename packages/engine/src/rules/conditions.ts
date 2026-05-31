@@ -74,6 +74,28 @@ export const SAVE_TO_END = new Set<string>([
   "Bleeding",
 ]);
 
+/**
+ * SPECIAL STATUS conditions — the durable afflictions that require deliberate removal
+ * (a cure, a quest, the GM). Everything NOT in this set is "transient": a combat/scene
+ * effect that ends one of three ways — its duration expires (conditionStates.rounds),
+ * the afflicted spends action economy to shake it (e.g. STAND from Prone), or the
+ * encounter ends. Transient conditions therefore do NOT survive end_combat or a long rest;
+ * special status ones do. (Petrified needs Greater-Restoration-tier removal — it is the
+ * canonical "special" condition. Tunable: add long-curse/seal states here as the setting needs.)
+ */
+export const PERSISTENT_STATUS = new Set<string>(["Petrified"]);
+
+/** A long rest / downtime resolves every transient condition (only special status survives). */
+export function clearedByRest(condition: string): boolean {
+  return !PERSISTENT_STATUS.has(condition);
+}
+
+/** Ending the encounter clears every transient condition (Prone, Stunned, Grappled, …);
+ *  only special status conditions outlive the fight. */
+export function clearedByCombatEnd(condition: string): boolean {
+  return !PERSISTENT_STATUS.has(condition);
+}
+
 /** Resolve the save ability for a condition (explicit tag wins, else the default). */
 export function conditionSaveAbility(name: string, explicit?: string): Ability {
   return (explicit ?? CONDITION_SAVE[name] ?? "con") as Ability;

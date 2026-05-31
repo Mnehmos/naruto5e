@@ -46,7 +46,12 @@ export interface TickResult {
   };
 }
 
-export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playerIds: string[]): { tick: TickResult; playerDigest: string[] } {
+export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playerIds: string[], opts: { passiveStanding?: boolean } = {}): { tick: TickResult; playerDigest: string[] } {
+  // passiveStanding (default ON for back-compat): when false, the tick advances goals and
+  // forms NPC memories but mints NO reputation — the clean off-switch for long campaigns
+  // where passive watching shouldn't inflate standing. Even when ON, directed-goal standing
+  // is now MILESTONE-gated (below), not granted every single rest. (bug_1780245857774)
+  const passiveStanding = opts.passiveStanding !== false;
   const tick: TickResult = {
     magnitude,
     agentsCalled: [],
@@ -100,25 +105,36 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
       const target = goal.targetActorId ?? playerIds[0];
       const authority = goal.targetAuthorityId ?? npc.authorityId;
       let action = `pursues "${goal.text}"`;
+      const directed = (goal.drive === "advance" || goal.drive === "undermine" || goal.drive === "protect") && target && authority;
+      // advance the goal first so we can detect a milestone crossing (and report it).
+      const prevProgress = goal.progress ?? 0;
+      const newProgress = Math.min(100, prevProgress + Math.round(PROGRESS_STEP[magnitude] * (goal.intensity ?? 1)));
+      // A standing MILESTONE = the goal's first advance off 0, OR crossing a 25-point band,
+      // OR completion. This is the inflation fix: reputation tracks VISIBLE PROGRESS and stops
+      // at completion, instead of minting +N every single rest. (bug_1780245857774)
+      const milestone = prevProgress === 0 ? newProgress > 0 : Math.floor(newProgress / 25) > Math.floor(prevProgress / 25) || newProgress >= 100;
       // directed drives move a Standing ledger AND the NPC's memory of the target
-      if ((goal.drive === "advance" || goal.drive === "undermine" || goal.drive === "protect") && target && authority) {
+      if (directed) {
         const dir = goal.drive === "undermine" ? -1 : 1;
-        const delta = dir * Math.max(1, Math.round(STANDING_BASE[magnitude] * (goal.intensity ?? 1)));
-        const l = applyStandingDelta(ctx.store, target, authority, { reputation: delta, reason: `${npc.name}: ${goal.text}` });
-        tick.consequenceDeltas.standing.push({ authorityId: authority, charId: target, reputationDelta: delta, why: goal.text });
-        tick.resolved.push({ op: "standing", detail: `${authority} ${delta >= 0 ? "+" : ""}${delta} (${npc.name})` });
-        // surface the "why" as an off-screen NPC memory toward the target
+        // the off-screen act is ALWAYS remembered (the world moves even when standing didn't).
         const rels = ctx.store.collection<NpcRelationship>("npc_relationships");
-        let rel = rels.get(relId(npc.id, target));
-        if (!rel) rel = NpcRelationshipSchema.parse({ id: relId(npc.id, target), npcId: npc.id, actorId: target, authorityId: npc.authorityId });
+        let rel = rels.get(relId(npc.id, target!));
+        if (!rel) rel = NpcRelationshipSchema.parse({ id: relId(npc.id, target!), npcId: npc.id, actorId: target!, authorityId: npc.authorityId });
         rel.disposition = Math.max(-100, Math.min(100, rel.disposition + (dir > 0 ? 3 : -3)));
-        rel.memories.push({ eventId: `mem_tick_${npc.id}_${goal.id}_${goal.progress}`, summary: `off-screen: ${goal.text}`, importance: "notable", topics: ["offscreen", goal.drive], sentiment: dir * 3, witnessed: false });
+        rel.memories.push({ eventId: `mem_tick_${npc.id}_${goal.id}_${prevProgress}`, summary: `off-screen: ${goal.text}`, importance: "notable", topics: ["offscreen", goal.drive], sentiment: dir * 3, witnessed: false });
         rels.put(rel);
         tick.consequenceDeltas.npcMemories.push({ npcId: npc.id, summary: goal.text });
-        if (playerSet.has(target)) digest.push(dir > 0 ? `${npc.name} advanced your standing with ${authority} (now ${l.reputation}).` : `${npc.name} worked against you with ${authority} (now ${l.reputation}).`);
         action = goal.drive === "undermine" ? `schemes against ${target}` : goal.drive === "protect" ? `watches over ${target}` : `advocates for ${target}`;
+        // standing moves ONLY on a milestone, and only if passive standing is enabled.
+        if (passiveStanding && milestone) {
+          const delta = dir * Math.max(1, Math.round(STANDING_BASE[magnitude] * (goal.intensity ?? 1)));
+          const l = applyStandingDelta(ctx.store, target!, authority!, { reputation: delta, reason: `${npc.name}: ${goal.text}` });
+          tick.consequenceDeltas.standing.push({ authorityId: authority!, charId: target!, reputationDelta: delta, why: goal.text });
+          tick.resolved.push({ op: "standing", detail: `${authority} ${delta >= 0 ? "+" : ""}${delta} (${npc.name}, milestone)` });
+          if (playerSet.has(target!)) digest.push(dir > 0 ? `${npc.name} advanced your standing with ${authority} (now ${l.reputation}).` : `${npc.name} worked against you with ${authority} (now ${l.reputation}).`);
+        }
       }
-      goal.progress = Math.min(100, (goal.progress ?? 0) + Math.round(PROGRESS_STEP[magnitude] * (goal.intensity ?? 1)));
+      goal.progress = newProgress;
       if (goal.progress >= 100 && !goal.done) {
         goal.done = true;
         tick.resolved.push({ op: "npc_goal", detail: `${npc.name} achieved: ${goal.text}` });
@@ -136,7 +152,7 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
       action = "patrols the vicinity";
     } else if (roll < 55) {
       action = "trains / advances their own goals";
-    } else if (roll < 75 && npc.authorityId) {
+    } else if (roll < 75 && npc.authorityId && passiveStanding) {
       const target = playerIds[0];
       if (target) {
         const delta = magnitude === "large" ? ctx.rng.int(-3, 4) : ctx.rng.int(-1, 2);
@@ -192,7 +208,7 @@ export function registerTickIntents(engine: Engine): void {
     // declared intents for the DM to conform; or resolve immediately if requested.
     const magnitude = (ctx.op.params.magnitude as Magnitude) ?? magnitudeForRest(String(ctx.op.params.trigger ?? "long"));
     const playerIds = ctx.store.collection<any>("characters").find((c) => c.roomId === ctx.room.id && c.isPC).map((c) => c.id);
-    const { tick, playerDigest } = runEmbeddedTick(ctx, magnitude, playerIds);
+    const { tick, playerDigest } = runEmbeddedTick(ctx, magnitude, playerIds, { passiveStanding: ctx.op.params.passiveStanding as boolean | undefined });
     ctx.ir.emit("tick", { data: { tick }, narration: `Tick (${magnitude}): ${tick.agentsCalled.length} agents acted; ${tick.resolved.length} world ops resolved.` });
     ctx.ir.emit("player_digest", { data: { playerDigest }, narration: playerDigest.join(" ") || "(nothing surfaces to the players)" });
   });

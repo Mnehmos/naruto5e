@@ -3,6 +3,7 @@ import type { Engine } from "../engine.js";
 import type { ResolveContext } from "./registry.js";
 import type { Character } from "../domain/character.js";
 import { abilityMod } from "../rules/abilities.js";
+import { clearedByRest } from "../rules/conditions.js";
 import { magnitudeForRest, runEmbeddedTick } from "./tick.js";
 
 function chars(ctx: ResolveContext) {
@@ -36,6 +37,7 @@ export function registerRestIntents(engine: Engine): void {
     const before = { hp: c.hp.current, chakra: c.chakra.current };
     let hitDiceSpent = 0;
     let chakraDiceSpent = 0;
+    let clearedConditions: string[] = [];
 
     if (type === "long" || type === "downtime") {
       c.hp.current = c.hp.max;
@@ -46,6 +48,14 @@ export function registerRestIntents(engine: Engine): void {
       c.hitDice.remaining = Math.min(c.hitDice.total, c.hitDice.remaining + recoverHd);
       c.chakraDice.remaining = Math.min(c.chakraDice.total, c.chakraDice.remaining + recoverCd);
       if (c.exhaustion > 0) c.exhaustion -= 1;
+      // A full night's rest resolves transient conditions (Prone, Bleeding, Stunned, …);
+      // only persistent states (Petrified, Invisible) survive. Previously NO condition was
+      // cleared, so e.g. Prone lingered indefinitely after a fight. (bug_1780248689058 sibling)
+      clearedConditions = (c.conditions ?? []).filter((x) => clearedByRest(x));
+      if (clearedConditions.length) {
+        c.conditions = (c.conditions ?? []).filter((x) => !clearedByRest(x));
+        c.conditionStates = (c.conditionStates ?? []).filter((s: any) => !clearedByRest(s.name));
+      }
       if (ctx.op.params.missionBoundary === true) c.willOfFire = true;
     } else {
       // short rest: spend dice to recover
@@ -69,6 +79,7 @@ export function registerRestIntents(engine: Engine): void {
       type,
       recovered: { hp: c.hp.current - before.hp, chakra: c.chakra.current - before.chakra, hitDiceSpent, chakraDiceSpent },
       willOfFire: c.willOfFire ? "refreshed" : "unchanged",
+      clearedConditions,
       pools: { hp: c.hp, chakra: c.chakra, hitDice: c.hitDice, chakraDice: c.chakraDice },
     };
     // The tick is EMBEDDED in the rest return (Architecture §13): one call ->
@@ -77,7 +88,7 @@ export function registerRestIntents(engine: Engine): void {
     // the world — resting the party does it and hands back what to say.
     const magnitude = magnitudeForRest(type);
     const playerIds = ctx.store.collection<Character>("characters").find((x) => x.roomId === ctx.room.id && x.isPC).map((x) => x.id);
-    const { tick, playerDigest } = runEmbeddedTick(ctx, magnitude, playerIds);
+    const { tick, playerDigest } = runEmbeddedTick(ctx, magnitude, playerIds, { passiveStanding: ctx.op.params.passiveStanding as boolean | undefined });
 
     ctx.ir.emit("rest", {
       actor: c.id,

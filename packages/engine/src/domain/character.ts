@@ -34,7 +34,8 @@ export const CharacterSchema = z.object({
   background: z.string().optional(),
 
   level: z.number().int().min(1).default(1),
-  rank: z.string().default("Genin"),
+  rank: z.string().default("Genin"), // in-world TITLE — set at genesis / by exam promotion (rank_up); NOT auto-derived from level
+  rankTier: z.string().optional(), // level-derived jutsu-cap TIER (decoupled from the title); set by deriveCharacter
   missionPoints: z.number().int().default(0),
   xp: z.number().int().min(0).default(0),
 

@@ -5,7 +5,7 @@
  * bypass all of these at the call site — this just reports the constraint.
  */
 import { jutsuElement } from "./combat.js";
-import { rankAllows, hasElementAccess, RANK_JUTSU_CAP } from "./affinity.js";
+import { charRankAllows, hasElementAccess, jutsuRankCap } from "./affinity.js";
 
 export interface LearnGateResult {
   ok: boolean;
@@ -19,8 +19,8 @@ export function learnGate(char: any, jutsu: any, clanNames: string[]): LearnGate
   const kws = (jutsu.keywords ?? []).map((k: string) => k.toLowerCase());
   const prereq = String(jutsu.prerequisites ?? "").toLowerCase();
 
-  if (!rankAllows(char.rank, jutsu.rank)) {
-    return { ok: false, rule: "rank_too_high", explain: `${char.name} is ${char.rank}; ${jutsu.name} is rank ${jutsu.rank} (your cap is ${RANK_JUTSU_CAP[char.rank] ?? "C"}).`, suggestions: ["Rank up first, or pass force:true (DM)."] };
+  if (!charRankAllows(char, jutsu.rank)) {
+    return { ok: false, rule: "rank_too_high", explain: `${char.name} is ${char.rank} (L${char.level ?? 1}); ${jutsu.name} is rank ${jutsu.rank} (your cap is ${jutsuRankCap(char)}).`, suggestions: ["Rank up or level up first, or pass force:true (DM)."] };
   }
   const namedClan = clanNames.find((cn) => prereq.includes(cn.toLowerCase()));
   if (kws.includes("hijutsu") && namedClan && (char.clan ?? "").toLowerCase() !== namedClan.toLowerCase()) {
