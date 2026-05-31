@@ -339,10 +339,14 @@ body{margin:0;background:var(--night);color:var(--paper);font-family:'Shippori M
         <p><code>create_character</code> rolled affinity/KKG blindly — Dust (Jinton) was effectively unrollable, which broke the whole premise. Fixed in engine source: a <code>kkg</code> param pins the bloodline deterministically. Commit <code>4253221</code>.</p></div>
       <div class="ev reveal"><div class="t">Combat · fix</div><h4>Why did every NPC only throw punches?</h4>
         <p><code>agent_context</code> read a PC-only field, so kitted adversaries always showed "0 jutsu castable" — nudging the DM toward freeform. Fixed so foes surface their real techniques. Commit <code>af5d2be</code>. Confirmed live in Day 2's spar.</p></div>
+      <div class="ev reveal"><div class="t">Combat · fix (found live)</div><h4>A stale turn-budget that wouldn't clear</h4>
+        <p>Mid-exam, scene-mode casting got blocked by a "no action left" gate that should only exist inside initiative. Fixed: the action-economy gate now applies only in active combat, and <code>end_combat</code> clears the budget on the way out. Commit <code>560e96e</code> — discovered because the agent was genuinely trying to cast, not because anyone went looking.</p></div>
+      <div class="ev reveal"><div class="t">Feature · built to spec</div><h4>An XP system, added mid-campaign</h4>
+        <p>The engine had no leveling when play began. Built one on request: <code>progression.ts</code> (<code>xpThreshold = 50·(L−1)·L</code>) + an <code>award_xp</code> intent that auto-levels across thresholds. Every level since is the sum of <em>logged, earned</em> awards — small for a quiet milestone, larger for a valiant finals loss. Commit <code>69ceb9f</code>.</p></div>
       <div class="ev reveal"><div class="t">Method</div><h4>Played, not narrated</h4>
-        <p>Every check, spar, cast, and rest is a real engine roll. Resources deplete and recover; the village's regard for Iwao climbs through a nightly world-tick where the Tsuchikage literally watches over him. Narration never runs ahead of the dice.</p></div>
-      <div class="ev reveal"><div class="t">In flight</div><h4>The climb ahead</h4>
-        <p>Academy days → the first <em>sanctioned</em> Dust awakening → graduation & a three-genin squad → D-rank missions → the Exhibition → the Chūnin Exam. Logged here as we go.</p></div>
+        <p>Every check, spar, cast, and rest is a real engine roll. Resources deplete and recover; the village's regard for Iwao climbs through a nightly world-tick where the Tsuchikage literally watches over him. Narration never runs ahead of the dice — three times the dice contradicted the plan (a nat-1 deferred the awakening; a failed save lost the finals) and the story bent to them, never the reverse.</p></div>
+      <div class="ev reveal"><div class="t">Volume One · complete</div><h4>The proof is that he lost</h4>
+        <p>~90 in-story days: Academy → the first sanctioned awakening (a fumble) → graduation & squad → D-ranks → the true Dust awakening → the Exhibition → a three-stage Chūnin Exam ending in a duel Iwao <em>lost</em> to the dice. The protagonist did not win his own tournament; the engine wouldn't let him. Every true defect is now a regression test. <a href="https://github.com/Mnehmos/naruto5e/blob/master/playtest-dustrelease/week99_debrief.md" target="_blank" rel="noopener" style="color:var(--ember)">read the full playtest debrief →</a></p></div>
     </div>
   </section>
 </main>
