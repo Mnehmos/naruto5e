@@ -76,6 +76,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch03_the_little_escort.md", slug: "act2-ch03-the-little-escort", arc: "actii", tags: ["Mission", "Intrigue", "Engine Proof"],
     teaser: "The board gives him children to walk to the training ground — and a 'broken cart' at the blind bend that's really a stopwatch. Iwao gives the watchers a blank page.",
     callout: { kind: "proof", label: "Restraint the dice left to him", text: "Iwao made the Perception catch (16 vs 15) — but his growth was a CHOICE the engine handed back: he declined to answer the probe with power, removed the children, and gave the measurers nothing to read. The missing-nin's withdraw declaration hit needs_dm_repair and stayed mere narration, not canon." } },
+  { path: "chapters/act2_ch04_road_work.md", slug: "act2-ch04-road-work", arc: "actii", tags: ["Mission", "Intrigue", "Dice-over-plan"],
+    teaser: "Sent east to fix a road, Iwao can't read the tampered ground — but his scholar's mind recognizes the reshaped bend as textbook ambush geometry. A true warning, easily discounted.",
+    callout: { kind: "proof", label: "Two rolls, one character", text: "Nature 12 vs 15 (fail) + History 23 vs 14 (success): the dice drew Iwao exactly — no woodsman's eye, but the boy who loves the battle-histories finds the war before the trackers do." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
