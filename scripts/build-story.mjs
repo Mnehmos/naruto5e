@@ -85,6 +85,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch06_the_report_nobody_wants.md", slug: "act2-ch06-the-report-nobody-wants", arc: "actii", tags: ["Intrigue", "Politics", "Dice-over-plan"],
     teaser: "Iwao holds the proof a war was forged — and must decide whose hand to put it in. He can't sway the room (he never could), but the truth he lays down is undeniable, and the old man on the terrace is finally listening.",
     callout: { kind: "proof", label: "He loses the room, wins the record", text: "Persuasion 11 vs 15 (fail) + Ninshou 24 vs 15 (success): the same soul as Road Work — Iwao can't charm a frightened hall, but his evidence is airtight. Ōnoki's 'measure the heir' goal completed on the tick; the verdict came from played deeds, not authorial fiat." } },
+  { path: "chapters/act2_ch07_the_hand_behind_the_token.md", slug: "act2-ch07-the-hand-behind-the-token", arc: "actii", tags: ["Intrigue", "Alliance", "Dice-over-plan"],
+    teaser: "Charged to find the framer, Iwao hits the library's far wall — the forgery's too good to trace — so he trusts an enemy to catch a worse one. Raido's lead: the token was forged by someone who knows the Cloud from the inside.",
+    callout: { kind: "proof", label: "The third wall, and borrowed eyes", text: "Ninshou 14 vs 16 — the scholar can't crack it; the answer isn't in any archive. So the hunt turns on trust, not intellect: the framed Cloud envoy (his own model-driven turn) gives the thread the book couldn't — a Cloud-connected forger." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
