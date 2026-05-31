@@ -621,6 +621,25 @@ describe("KKG techniques", () => {
     const kit: any[] = ctx.events[0].data.affordances.jutsu;
     expect(kit.some((j) => j.id === "earth-release-rock-tank")).toBe(true); // was [] before the fix
   });
+
+  it("award_xp accumulates and auto-levels when crossing thresholds", () => {
+    const pc = mkPC("Climber");
+    const before = engine.getEntity("characters", pc) as any;
+    expect(before.level).toBe(1);
+    const r1 = run("award_xp", { amount: 120, reason: "first arc" }, pc) as any; // L2 threshold = 100
+    expect(r1.status).toBe("resolved");
+    let c = engine.getEntity("characters", pc) as any;
+    expect(c.xp).toBe(120);
+    expect(c.level).toBe(2);
+    expect(c.hp.max).toBeGreaterThan(before.hp.max); // pools grew on the auto level-up
+    run("award_xp", { amount: 200, reason: "more" }, pc); // total 320 -> L3 (threshold 300)
+    c = engine.getEntity("characters", pc) as any;
+    expect(c.xp).toBe(320);
+    expect(c.level).toBe(3);
+    const bad = run("award_xp", { amount: 0 }, pc) as any;
+    expect(bad.status).toBe("rejected");
+    expect(bad.reason.rule).toBe("xp_amount_required");
+  });
 });
 
 // npc_decide — the NPC analogue of agent_context: assemble a decision prompt

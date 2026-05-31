@@ -12,6 +12,7 @@ import {
   type BuildSelections,
 } from "../rules/character.js";
 import { rollGenesis, deriveKKG, findKKGRecipe, KKG_RECIPES, ELEMENTS, RANK_JUTSU_CAP } from "../rules/affinity.js";
+import { levelForXp, xpToNext } from "../rules/progression.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
 import { learnGate } from "../rules/learn.js";
 import { jutsuElement } from "../rules/combat.js";
@@ -55,8 +56,41 @@ function summary(c: Character) {
     skills: c.proficiencies.skills,
     savingThrows: c.proficiencies.savingThrows,
     jutsuKnownCap: c.jutsuKnownCap,
+    xp: c.xp,
+    xpToNext: xpToNext(c.xp),
     willOfFire: c.willOfFire,
   };
+}
+
+/** Perform ONE level-up (pools, dice, class features, rank) and emit level_up.
+ *  Shared by character_level_up and the XP auto-leveler (award_xp). */
+function levelUpOnce(ctx: ResolveContext, char: Character): void {
+  char.level += 1;
+  char.hitDice.total = char.level;
+  char.hitDice.remaining = Math.min(char.hitDice.remaining + 1, char.level);
+  char.chakraDice.total = char.level;
+  char.chakraDice.remaining = Math.min(char.chakraDice.remaining + 1, char.level);
+  if (char.classes.length) char.classes[char.classes.length - 1].level += 1;
+  const cls = char.className ? ctx.engine.content.getClass(char.className) : undefined;
+  if (cls) {
+    for (const f of cls.features ?? []) {
+      if (f.level === char.level && !char.classFeatures.some((x) => x.name === f.name)) {
+        char.classFeatures.push({ name: f.name, level: f.level, description: f.description });
+      }
+    }
+  }
+  // bump max pools, credit the per-level gain to current
+  const before = { hp: char.hp.max, ck: char.chakra.max };
+  char.built = true;
+  deriveCharacter(char);
+  char.hp.current += Math.max(0, char.hp.max - before.hp);
+  char.chakra.current += Math.max(0, char.chakra.max - before.ck);
+  chars(ctx).put(char);
+  ctx.ir.emit("level_up", {
+    actor: char.id,
+    data: { level: char.level, rank: char.rank, hp: char.hp, chakra: char.chakra, proficiencyBonus: char.proficiencyBonus },
+    narration: `${char.name} reaches level ${char.level} (${char.rank}).`,
+  });
 }
 
 export function registerCharacterIntents(engine: Engine): void {
@@ -268,33 +302,26 @@ export function registerCharacterIntents(engine: Engine): void {
   engine.registerHandler("character_level_up", (ctx) => {
     const char = loadChar(ctx, ctx.op.actorId);
     if (char.level >= 20) throw reject("max_level", `${char.name} is already level 20.`, { level: 20 });
-    char.level += 1;
-    char.hitDice.total = char.level;
-    char.hitDice.remaining = Math.min(char.hitDice.remaining + 1, char.level);
-    char.chakraDice.total = char.level;
-    char.chakraDice.remaining = Math.min(char.chakraDice.remaining + 1, char.level);
-    if (char.classes.length) char.classes[char.classes.length - 1].level += 1;
-    // grant any newly-available class features
-    const cls = char.className ? ctx.engine.content.getClass(char.className) : undefined;
-    if (cls) {
-      for (const f of cls.features ?? []) {
-        if (f.level === char.level && !char.classFeatures.some((x) => x.name === f.name)) {
-          char.classFeatures.push({ name: f.name, level: f.level, description: f.description });
-        }
-      }
-    }
-    // preserve current pool ratios sensibly: bump max, add the per-level gain to current
-    const before = { hp: char.hp.max, ck: char.chakra.max };
-    char.built = true;
-    deriveCharacter(char);
-    char.hp.current += Math.max(0, char.hp.max - before.hp);
-    char.chakra.current += Math.max(0, char.chakra.max - before.ck);
+    levelUpOnce(ctx, char);
+  });
+
+  // award_xp — earned experience (scaled small->large), auto-levels when the
+  // running total crosses a threshold (rules/progression.ts).
+  engine.registerHandler("award_xp", (ctx) => {
+    const char = loadChar(ctx, ctx.op.actorId);
+    const amount = Math.round(Number(ctx.op.params.amount ?? 0));
+    if (!Number.isFinite(amount) || amount <= 0)
+      throw reject("xp_amount_required", "award_xp needs a positive params.amount.", { amount: ctx.op.params.amount }, ["Pass amount (e.g. 50) and an optional reason."]);
+    const reason = String(ctx.op.params.reason ?? "");
+    char.xp = (char.xp ?? 0) + amount;
     chars(ctx).put(char);
-    ctx.ir.emit("level_up", {
+    const targetLevel = levelForXp(char.xp);
+    ctx.ir.emit("xp_awarded", {
       actor: char.id,
-      data: { level: char.level, rank: char.rank, hp: char.hp, chakra: char.chakra, proficiencyBonus: char.proficiencyBonus },
-      narration: `${char.name} reaches level ${char.level} (${char.rank}).`,
+      data: { amount, total: char.xp, level: targetLevel, toNext: xpToNext(char.xp), reason },
+      narration: `${char.name} earns ${amount} XP${reason ? ` — ${reason}` : ""} (${char.xp} total${targetLevel < 20 ? `, ${xpToNext(char.xp)} to L${targetLevel + 1}` : ""}).`,
     });
+    while (char.level < targetLevel && char.level < 20) levelUpOnce(ctx, char);
   });
 
   // ---- Will of Fire (session-layer covenant, Ch.3) --------------------

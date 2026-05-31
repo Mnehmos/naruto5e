@@ -36,6 +36,7 @@ export const CharacterSchema = z.object({
   level: z.number().int().min(1).default(1),
   rank: z.string().default("Genin"),
   missionPoints: z.number().int().default(0),
+  xp: z.number().int().min(0).default(0),
 
   /** classes[] supports multiclassing (Phase 5); single-class fills one entry. */
   classes: z
