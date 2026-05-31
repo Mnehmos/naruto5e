@@ -66,12 +66,14 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         "learn_fact {npcId, fact} — the NPC now knows a fact; " +
         "set_goal {npcId, goal:{text, drive?(advance|undermine|protect|train|patrol|scheme), targetActorId?, targetAuthorityId?, intensity?, id?}, remove?} — give the NPC an agenda the world tick pursues off-screen (directed drives move Standing + the NPC's memory of the target); " +
         "get_relationship {npcId} — raw relationship + derived attitude/closeness tiers; " +
-        "context {npcId, limit?, minImportance?, topic?} — an LLM-ready summary (attitude/closeness tiers + salient topic/importance-filtered memories + known facts + Standing) to roleplay the NPC consistently in one read.",
+        "context {npcId, limit?, minImportance?, topic?} — an LLM-ready summary (attitude/closeness tiers + salient topic/importance-filtered memories + known facts + Standing) to roleplay the NPC consistently in one read; " +
+        "decide {npcId, observerActorId?} — the NPC analogue of agent_context: assembles a DECISION prompt (driving goal + drive + known facts + who's present + how the NPC regards each PC + a menu of legal social moves). READ-ONLY — pick ONE move from the menu and submit it as an ordinary intent (social_speak/move/npc_interact/set_goal). The MOVE is yours; the engine adjudicates.",
       inputSchema: {
         roomId: z.string(),
-        action: z.enum(["create", "interact", "learn_fact", "set_goal", "get_relationship", "context"]),
+        action: z.enum(["create", "interact", "learn_fact", "set_goal", "get_relationship", "context", "decide"]),
         actorId: z.string().optional(),
         npcId: z.string().optional(),
+        observerActorId: z.string().optional(),
         name: z.string().optional(),
         authorityId: z.string().optional(),
         beat: z.string().optional(),
@@ -92,7 +94,7 @@ export function registerTools(server: McpServer, client: EngineClient): void {
       },
     },
     async ({ roomId, action, actorId, ...rest }) => {
-      const type = { create: "npc_create", interact: "npc_interact", learn_fact: "npc_learn_fact", set_goal: "npc_set_goal", get_relationship: "npc_get_relationship", context: "npc_context" }[action];
+      const type = { create: "npc_create", interact: "npc_interact", learn_fact: "npc_learn_fact", set_goal: "npc_set_goal", get_relationship: "npc_get_relationship", context: "npc_context", decide: "npc_decide" }[action];
       return ok(await client.submitIntent({ roomId, actorId, type, params: rest }));
     },
   );
@@ -209,23 +211,36 @@ export function registerTools(server: McpServer, client: EngineClient): void {
     "create_character",
     {
       description:
-        "Build a Naruto 5e character end-to-end (the 7-step build in one call): clan, class, " +
-        "background, abilities (method: manual|point_buy|standard_array|roll_4d6), and any required " +
-        "skill/ability choices. Returns the finalized sheet or an educational rejection naming what's missing.",
+        "Build a Naruto 5e character end-to-end in ONE call — clan + class + background + abilities + the skill/ability sub-choices each demands, plus auto-rolled genesis. " +
+        "Rejections are EDUCATIONAL: each names the exact missing field and its legal options — read it and resubmit (you can resolve a full build in 1-2 round-trips this way).\n\n" +
+        "🧩 REQUIRED: roomId, name. Defaults fill the rest (Non-Clan / Ninjutsu Specialist / Student / level 1 / manual stats), but a real PC sets clan, className, background, level.\n\n" +
+        "🎲 ABILITIES — pass `abilities:{method, ...}`:\n" +
+        "• method='manual' (default) REQUIRES `abilities.scores:{str,dex,con,int,wis,cha}` (all six).\n" +
+        "• method='point_buy' | 'standard_array' | 'roll_4d6' auto-assign — no scores needed.\n\n" +
+        "🧷 SUB-CHOICES — clan/background/class each demand picks IF their definition offers a choice (the rejection prints the exact menu + count):\n" +
+        "• background → backgroundSkillChoices[] (N skills from its list) + bgAbilityChoice (+1 to one of its two abilities).\n" +
+        "• class → classSkillChoices[] (N skills from its list).\n" +
+        "• clan → clanSkillChoices[] and/or abilityChoices[] when the clan grants a choose-from list (most clans are fixed).\n" +
+        "Backgrounds: Entertainer, Genius, Hard Worker, Hermit, Leader, Noble, Student, Traveler, Trouble Maker, Urchin. Clans/classes: see list_clans / list_classes.\n\n" +
+        "🩸 GENESIS: by default the engine rolls chakra affinity(ies) on a rarity curve, derives any Kekkei Genkai from the natures (e.g. Wind+Lightning→Tempest, Water+Wind→Ice), and rolls special traits (e.g. Sharingan stage for Uchiha). Returned under events[].data.genesis.\n" +
+        "🧬 AUTHORED BLOODLINE (optional): pin the genesis instead of blind-rolling — pass `kkg` to be BORN with a Kekkei Genkai (e.g. 'Dust (Jinton)', 'Dust', or 'Jinton' — its required natures, here Earth+Wind+Fire, are guaranteed) and/or `affinities:[...]` for explicit natures. Pinned genesis is deterministic (exactly clan + requested natures, no random extras); echoed back under events[].data.genesisRequested. KKG list mirrors the recipes (Ice, Wood, Lava, Boil, Storm, Explosion, Scorch, Magnet, Plasma, Tempest, Dust); an unknown name yields an educational rejection.\n" +
+        "⚡ autoLoadout:true (opt-in) also grants a rank-appropriate baseline jutsu per affinity + per KKG — the 'standard kit, then their choice' model. Omit it to let the player pick everything (use jutsu_learnable to discover legal options).",
       inputSchema: {
-        roomId: z.string(),
-        name: z.string(),
-        clan: z.string().optional(),
-        className: z.string().optional(),
-        background: z.string().optional(),
-        level: z.number().optional(),
-        abilities: z.record(z.any()).optional(),
-        abilityChoices: z.array(z.string()).optional(),
-        bgAbilityChoice: z.string().optional(),
-        clanSkillChoices: z.array(z.string()).optional(),
-        classSkillChoices: z.array(z.string()).optional(),
-        backgroundSkillChoices: z.array(z.string()).optional(),
-        autoLoadout: z.boolean().optional(),
+        roomId: z.string().describe("Room/scene the character is created in."),
+        name: z.string().describe("Character name."),
+        clan: z.string().optional().describe("Clan name (see list_clans). Defaults to Non-Clan. Grants ability increases, skills, signature trait, and any affinity."),
+        className: z.string().optional().describe("Class name (see list_classes). Defaults to Ninjutsu Specialist."),
+        background: z.string().optional().describe("One of: Entertainer, Genius, Hard Worker, Hermit, Leader, Noble, Student, Traveler, Trouble Maker, Urchin. Defaults to Student."),
+        level: z.number().optional().describe("Character level (default 1). Sets rank cap (Academy→E … Kage/Legendary→S) and pool sizes."),
+        abilities: z.record(z.any()).optional().describe("{method:'manual'|'point_buy'|'standard_array'|'roll_4d6', scores?:{str,dex,con,int,wis,cha}}. scores REQUIRED for manual; ignored otherwise."),
+        abilityChoices: z.array(z.string()).optional().describe("Clan ability-increase picks, when the clan offers a choose-from list (rejection names the options)."),
+        bgAbilityChoice: z.string().optional().describe("Background +1 ability pick — one of the two the background offers (rejection names them)."),
+        clanSkillChoices: z.array(z.string()).optional().describe("Clan skill picks, when the clan grants a choose-from list."),
+        classSkillChoices: z.array(z.string()).optional().describe("Class skill picks (N from the class's list; rejection names the count + options)."),
+        backgroundSkillChoices: z.array(z.string()).optional().describe("Background skill picks (N from the background's list; rejection names the count + options)."),
+        autoLoadout: z.boolean().optional().describe("Opt-in: also auto-learn one rank-appropriate baseline jutsu per affinity + per KKG. Default false (player picks via jutsu_learnable)."),
+        kkg: z.string().optional().describe("Authored bloodline: be BORN with this Kekkei Genkai (e.g. 'Dust (Jinton)' | 'Dust' | 'Jinton'). Its required natures are guaranteed and the KKG derived. Pins genesis deterministically. Unknown name → educational rejection listing valid KKGs."),
+        affinities: z.array(z.string()).optional().describe("Authored natures: pin specific chakra affinities at genesis (subset of Fire/Water/Wind/Earth/Lightning). Combine with or instead of kkg; unknown nature → educational rejection."),
       },
     },
     async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "character_create", params })),

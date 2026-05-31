@@ -427,6 +427,40 @@ describe("affinity genesis + jutsu-learn gates", () => {
     expect(c.kkg).toContain("Ice (Hyoton)");
   });
 
+  it("authored genesis: a requested KKG is pinned deterministically (Jinton -> Earth+Wind+Fire -> Dust)", () => {
+    const r = run("character_create", {
+      name: "Iwao", clan: "Non-Clan", className: "Ninjutsu Specialist", background: "Genius",
+      abilities: { method: "manual", scores: { str: 10, dex: 14, con: 14, int: 15, wis: 12, cha: 8 } },
+      abilityChoices: ["int", "con", "dex"], bgAbilityChoice: "int",
+      backgroundSkillChoices: ["History", "Nature"], classSkillChoices: ["Chakra Control", "Perception", "Stealth"],
+      clanSkillChoices: ["Acrobatics", "Athletics"],
+      kkg: "Jinton", // loose name (parenthetical/native term) resolves to Dust (Jinton)
+    }) as any;
+    expect(r.status).toBe("resolved");
+    expect(r.events[0].data.genesisRequested).toEqual({ kkg: "Dust (Jinton)", affinities: [] });
+    const c = engine.getEntity("characters", r.events[0].data.character.id) as any;
+    expect(c.affinity).toEqual(expect.arrayContaining(["Earth", "Wind", "Fire"]));
+    expect(c.kkg).toContain("Dust (Jinton)");
+    // deterministic: exactly the recipe's three natures, no random extras
+    expect(c.affinity.length).toBe(3);
+    // born with the bloodline -> can learn the gated D-rank Dust art at Genin (cap C)
+    expect((run("jutsu_learn", { jutsu: "dust-release-d" }, c.id) as any).status).toBe("resolved");
+  });
+
+  it("authored genesis: an unknown KKG name is an educational rejection", () => {
+    const r = run("character_create", {
+      name: "NoSuch", clan: "Non-Clan", className: "Ninjutsu Specialist", background: "Genius",
+      abilities: { method: "manual", scores: { str: 10, dex: 14, con: 14, int: 15, wis: 12, cha: 8 } },
+      abilityChoices: ["int", "con", "dex"], bgAbilityChoice: "int",
+      backgroundSkillChoices: ["History", "Nature"], classSkillChoices: ["Chakra Control", "Perception", "Stealth"],
+      clanSkillChoices: ["Acrobatics", "Athletics"],
+      kkg: "Sand Release",
+    }) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("unknown_kkg");
+    expect(r.suggestions.join(" ")).toContain("Dust (Jinton)");
+  });
+
   it("off-affinity elemental jutsu is gated; force (DM) overrides", () => {
     const pc = mkPC("Mizu");
     const cc = (engine as any).store.collection("characters");
@@ -578,6 +612,43 @@ describe("KKG techniques", () => {
     const known: string[] = ch.jutsuKnown ?? [];
     expect(known.some((id) => id.startsWith("ice-release-"))).toBe(true); // KKG signature
     expect(known.length).toBeGreaterThanOrEqual(2); // + affinity signatures
+  });
+});
+
+// npc_decide — the NPC analogue of agent_context: assemble a decision prompt
+// (dominant goal + who's present + how the NPC regards them + a legal-move menu).
+describe("npc_decide assembles an NPC decision prompt", () => {
+  it("returns the dominant goal, present PCs with regard, and a legal-move menu", () => {
+    const pc = mkPC("Sakura");
+    const npcR = run("npc_create", {
+      name: "Danzo",
+      authorityId: "anbu",
+      goals: [
+        { text: "discredit the Hokage", drive: "undermine", targetActorId: pc, intensity: 3 },
+        { text: "appear loyal", drive: "scheme", intensity: 1 },
+      ],
+    }) as any;
+    expect(npcR.status).toBe("resolved");
+    const npcId = npcR.events[0].data.npc.id as string;
+    // a prior beat: the NPC sours on the PC (disposition -30 -> "unfriendly")
+    run("npc_interact", { npcId, beat: "caught them eavesdropping", dispositionDelta: -30, importance: "notable" }, pc);
+
+    const d = run("npc_decide", { npcId }) as any;
+    expect(d.status).toBe("resolved");
+    const data = d.events[0].data;
+    expect(data.dominantGoal?.drive).toBe("undermine"); // highest intensity wins
+    const sakura = data.scene.present.find((p: any) => p.actorId === pc);
+    expect(sakura?.attitude).toBe("unfriendly");
+    expect(sakura?.remembers).toContain("caught them eavesdropping");
+    expect(data.affordances.actions.some((a: any) => a.type === "social_speak")).toBe(true);
+    expect(data.affordances.actions.some((a: any) => a.type === "npc_set_goal")).toBe(true);
+    expect(data.contextSummary).toMatch(/discredit the Hokage/);
+  });
+
+  it("rejects an unknown NPC educationally", () => {
+    const d = run("npc_decide", { npcId: "npc_nope" }) as any;
+    expect(d.status).toBe("rejected");
+    expect(d.reason.rule).toBe("entity_not_found");
   });
 });
 
