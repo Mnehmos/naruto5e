@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 6,
-  "chaptersDone": 5,
+  "dayClock": 7,
+  "chaptersDone": 6,
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
     "particleFrame": "Day 4 — Iwao learns Dust = simultaneity (three natures balanced at once), not sequence; the intellectual path, takes years.",
@@ -18,7 +18,7 @@
     "romaru": "wary respect after Day-2 spar (+1, 'you're not soft')",
     "ryuen": "mentor bond deepening (caught the Day-3 forbidden Dust reach; protective, fear-driven)"
   },
-  "structure": "ONE CHAPTER PER DAY (chapters/dayNNN.md), authored BY HAND as PURE NARRATIVE-DRIVEN MANGA — no inline mechanics/dice/DC/LOG in the prose; the engine truth lives HERE in ledger.json. Every day = full 24h, all 7 days/week, played moment-to-moment (single engine calls, react as DM+player; BATCH only for combat setup/utility, never to time-skip). AFTER EACH DAY: update docs/index.html (add the day's narrative manga page) + commit + push so the live Pages site follows in real time.",
+  "structure": "A SHINOBI LIFE-SIM told as narrative manga. ONE CHAPTER PER DAY (chapters/dayNNN.md), authored BY HAND, PURE NARRATIVE (no inline mechanics — engine truth lives HERE in ledger.json). Each day is narrated HOUR BY HOUR with AT LEAST 10 beats (## time-stamped scene headers walking the daily schedule: wake/molding, breakfast/family, commute, the class periods, breaks, lunch, sensei training/sparring, downtime, dinner, evening, sleep). Played moment-to-moment (single engine calls; BATCH only for combat setup/utility, never to time-skip). Mechanically-significant beats are engine-grounded (checks/casts/spars/rests/level-ups); the rest is life-sim texture (relationships, habits, the small accumulations). AFTER EACH DAY: update docs/index.html + commit + push so the live Pages site follows in real time. Mandate: run continuously ~100 days / through the arc before reporting back.",
   "dailySchedule": [
     "05:30 wake / chakra warm-up at home",
     "06:00 breakfast with family",
@@ -44,7 +44,7 @@
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
-  "standing": { "iwagakure": { "reputation": 11, "favor": 0 }, "iwa_academy": { "reputation": 8, "favor": 0 } },
+  "standing": { "iwagakure": { "reputation": 13, "favor": 0 }, "iwa_academy": { "reputation": 9, "favor": 0 } },
   "npcs": {
     "onoki": "npc_9cc97845", "soun": "npc_80d2fd85", "tetsuna": "npc_98b5e513",
     "ryuen": "npc_c83497dd", "kanna": "npc_af2cd0e0",
