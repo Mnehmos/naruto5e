@@ -82,6 +82,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch05_caravan_under_rain.md", slug: "act2-ch05-caravan-under-rain", arc: "actii", tags: ["Combat", "Caravan", "Engine Proof", "Dice-over-plan"],
     teaser: "The geometry comes off the page. An ambush at the killing-bend, a hired blade faster than him — and Iwao wins not by crushing but by holding the frame. Then he finds the planted token.",
     callout: { kind: "proof", label: "The fight the dice fought", text: "Every blow rolled live: Ren's two DEX saves (22, 20), the 15-slash that took Iwao to 15 HP, the 41-rolled Sand-Coffin. Iwao out-lasted a +20 blade through control — no kills — then read the wreck (Perception 16) and found a planted Cloud token: a manufactured war." } },
+  { path: "chapters/act2_ch06_the_report_nobody_wants.md", slug: "act2-ch06-the-report-nobody-wants", arc: "actii", tags: ["Intrigue", "Politics", "Dice-over-plan"],
+    teaser: "Iwao holds the proof a war was forged — and must decide whose hand to put it in. He can't sway the room (he never could), but the truth he lays down is undeniable, and the old man on the terrace is finally listening.",
+    callout: { kind: "proof", label: "He loses the room, wins the record", text: "Persuasion 11 vs 15 (fail) + Ninshou 24 vs 15 (success): the same soul as Road Work — Iwao can't charm a frightened hall, but his evidence is airtight. Ōnoki's 'measure the heir' goal completed on the tick; the verdict came from played deeds, not authorial fiat." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
