@@ -3,16 +3,20 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { EngineClient } from "./client.js";
 import * as lifecycle from "./engine-process.js";
 import { openaiChat } from "./openai.js";
+import { resolveNpcDeclaration, type NpcMode } from "./npc-loop.js";
 
 const NPC_MODEL = () => process.env.NARUTO_NPC_MODEL ?? "gpt-5.4-mini";
 
 /**
- * After a rest/tick, the engine emits tick.agentPrompts — composed prompts for the
- * in-scope LLM agent-NPCs. Invoke each through OpenAI (the engine hosts no LLM) and
- * record what it did as a first-person journal entry, so the world's NPCs act
- * during the party's downtime. Graceful no-op when OPENAI_API_KEY is unset.
+ * After a rest/tick, the engine emits tick.agentPrompts — composed prompts for the in-scope
+ * LLM agent-NPCs. Invoke each through OpenAI (the engine hosts no LLM), then CONFORM the
+ * declaration to a legal engine intent and SUBMIT it so the NPC's off-screen action becomes
+ * ground truth (not just journal prose). declaration + outcome are journaled together; an
+ * unconformable declaration is recorded as needs_dm_repair and mutates nothing. The
+ * deterministic embedded tick already advanced goals/standing, so this is additive and the
+ * world still moves with no API key. Pass resolve:false to fall back to journal-only.
  */
-async function invokeTickAgents(client: EngineClient, roomId: string, result: any): Promise<{ invoked: any[]; note?: string }> {
+async function invokeTickAgents(client: EngineClient, roomId: string, result: any, resolve = true): Promise<{ invoked: any[]; note?: string }> {
   const ev = (result.events ?? []).find((e: any) => e.type === "rest" || e.type === "tick");
   const prompts: any[] = ev?.data?.tick?.agentPrompts ?? [];
   if (!prompts.length) return { invoked: [] };
@@ -21,8 +25,17 @@ async function invokeTickAgents(client: EngineClient, roomId: string, result: an
   for (const p of prompts) {
     try {
       const { text, finishReason } = await openaiChat({ model: p.model ?? NPC_MODEL(), messages: p.messages, timeoutMs: 60_000 });
-      if (text) await client.submitIntent({ roomId, type: "npc_add_journal", params: { npcId: p.npcId, entry: text } });
-      invoked.push({ npcId: p.npcId, name: p.name, action: text, finishReason });
+      if (!text) {
+        invoked.push({ npcId: p.npcId, name: p.name, action: "(no reply)", finishReason });
+        continue;
+      }
+      if (resolve) {
+        const turn = await resolveNpcDeclaration(client, { roomId, npcId: p.npcId, declaration: text, mode: "tick", name: p.name });
+        invoked.push({ npcId: p.npcId, name: p.name, declaration: text, conformance: turn.conformance.status, resolution: turn.resolution?.status, finishReason });
+      } else {
+        await client.submitIntent({ roomId, type: "npc_add_journal", params: { npcId: p.npcId, entry: text } });
+        invoked.push({ npcId: p.npcId, name: p.name, action: text, finishReason });
+      }
     } catch (e) {
       invoked.push({ npcId: p.npcId, name: p.name, error: (e as Error).message });
     }
@@ -99,7 +112,7 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         "add_secret {npcId, text} / remove_secret {npcId, secretId} — agent-private knowledge (injected into the prompt, never narrated); " +
         "add_journal {npcId, entry} / get_journal {npcId, limit?} — the NPC's first-person rolling memory; " +
         "compose / preview_prompt {npcId, situation?, journalLimit?} — assemble the agent's messages[] (persona→directive→secrets→state→journal→situation) WITHOUT calling the model; " +
-        "invoke {npcId, situation?, record?} — compose AND call the model (OpenAI, NARUTO_NPC_MODEL) so the NPC replies in character with a declared intent; records the reply as a journal entry unless record:false. The DM then resolves that intent. Rest/downtime invoke agents automatically.",
+        "invoke {npcId, situation?, record?, resolve?, mode?} — compose AND call the model so the NPC replies in character with a declared intent. By default records the reply as a journal entry (the DM resolves it). With resolve:true it runs the FULL autonomous loop: conform the declaration to a legal intent, submit it so the engine resolves ground truth, and journal declaration+outcome (an unconformable reply becomes needs_dm_repair and mutates nothing). Rest/downtime invoke agents automatically.",
       inputSchema: {
         roomId: z.string(),
         action: z.enum(["create", "interact", "learn_fact", "set_goal", "get_relationship", "context", "decide", "set_agent", "add_secret", "remove_secret", "add_journal", "get_journal", "compose", "preview_prompt", "invoke"]),
@@ -134,6 +147,8 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         situation: z.string().optional().describe("Per-invoke scene narrative (compose/invoke); becomes the user turn."),
         journalLimit: z.number().optional().describe("How many recent journal entries to include (compose/invoke)."),
         record: z.boolean().optional().describe("invoke: record the reply as a journal entry (default true)."),
+        resolve: z.boolean().optional().describe("invoke: run the full conform→submit→journal loop so the declaration becomes engine-resolved ground truth (default false = journal only)."),
+        mode: z.enum(["tick", "scene", "combat", "downtime"]).optional().describe("invoke+resolve: the action mode (default scene; use combat for in-fight turns)."),
       },
     },
     async ({ roomId, action, actorId, ...rest }) => {
@@ -145,6 +160,11 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         const model = ev.data.model ?? NPC_MODEL();
         try {
           const { text, finishReason, usage } = await openaiChat({ model, messages: ev.data.messages, timeoutMs: 60_000 });
+          if ((rest as any).resolve === true && text) {
+            // full autonomous loop: conform the declaration → submit → journal declaration+outcome
+            const turn = await resolveNpcDeclaration(client, { roomId, npcId: ev.data.npcId, actorId, declaration: text, mode: ((rest as any).mode as NpcMode) ?? "scene", affordances: { actions: ev.data.affordances?.actions } });
+            return ok({ npcId: ev.data.npcId, name: ev.data.name, model, declaration: text, conformance: turn.conformance, resolution: turn.resolution, journaled: turn.journaled, finishReason, usage });
+          }
           if (text && (rest as any).record !== false) await client.submitIntent({ roomId, type: "npc_add_journal", params: { npcId: ev.data.npcId, entry: text } });
           return ok({ npcId: ev.data.npcId, name: ev.data.name, model, action: text, finishReason, usage, slicesIncluded: ev.data.slicesIncluded, affordances: ev.data.affordances });
         } catch (e) {
@@ -641,11 +661,50 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   );
   server.registerTool(
     "tick_run",
-    { description: "Run a standalone world tick (the rest tool embeds this automatically). trigger short|long|downtime sets magnitude. Advances off-screen NPC goals AND invokes in-scope agent-NPCs (OpenAI) to act in character — returned under npcAgents, saved to each NPC's journal. Returns tick + playerDigest.", inputSchema: { roomId: z.string(), trigger: z.string().optional() } },
-    async ({ roomId, trigger }) => {
-      const result = await client.submitIntent({ roomId, type: "tick_run", params: { trigger } });
-      const npcAgents = await invokeTickAgents(client, roomId, result);
+    { description: "Run a standalone world tick (the rest tool embeds this automatically). trigger short|long|downtime sets magnitude. Advances off-screen NPC goals AND invokes in-scope agent-NPCs (OpenAI), CONFORMING each declaration to a legal intent and resolving it through the engine (declaration+outcome journaled) — returned under npcAgents. resolve:false journals only. passiveStanding:false silences the off-screen reputation drip. Returns tick + playerDigest.", inputSchema: { roomId: z.string(), trigger: z.string().optional(), resolve: z.boolean().optional(), passiveStanding: z.boolean().optional() } },
+    async ({ roomId, trigger, resolve, passiveStanding }) => {
+      const result = await client.submitIntent({ roomId, type: "tick_run", params: { trigger, passiveStanding } });
+      const npcAgents = await invokeTickAgents(client, roomId, result, resolve !== false);
       return ok({ ...result, npcAgents });
     },
+  );
+
+  server.registerTool(
+    "npc_turn",
+    {
+      description:
+        "On-demand autonomous NPC turn (the full loop in one call): compose the NPC's prompt for THIS situation → call the model → CONFORM the declaration to a legal intent → submit it so the engine resolves ground truth → journal declaration+outcome. Use in live scenes/combat when a relevant NPC should act like a player at the table. An unconformable reply returns needs_dm_repair and mutates nothing. (Engine stays LLM-free; the model call is here.)",
+      inputSchema: {
+        roomId: z.string(),
+        npcId: z.string(),
+        actorId: z.string().optional().describe("The NPC's combatant id (for combat affordances/agent_context); defaults to npcId."),
+        situation: z.string().describe("The scene pressure the NPC reacts to (becomes the user turn)."),
+        mode: z.enum(["tick", "scene", "combat", "downtime"]).optional(),
+        journalLimit: z.number().optional(),
+      },
+    },
+    async ({ roomId, npcId, actorId, situation, mode, journalLimit }) => {
+      const composed = await client.submitIntent({ roomId, actorId, type: "npc_compose", params: { npcId, situation, journalLimit } });
+      const ev = (composed.events ?? []).find((e: any) => e.type === "npc_prompt");
+      if (!ev) return ok(composed); // a rejection (e.g. unknown NPC) passes straight through
+      const model = ev.data.model ?? NPC_MODEL();
+      try {
+        const { text, finishReason, usage } = await openaiChat({ model, messages: ev.data.messages, timeoutMs: 60_000 });
+        if (!text) return ok({ npcId, name: ev.data.name, model, error: "empty reply", finishReason });
+        const turn = await resolveNpcDeclaration(client, { roomId, npcId, actorId, declaration: text, mode: (mode as NpcMode) ?? "scene", affordances: { actions: ev.data.affordances?.actions }, name: ev.data.name });
+        return ok({ npcId, name: ev.data.name, model, declaration: text, conformance: turn.conformance, resolution: turn.resolution, journaled: turn.journaled, finishReason, usage });
+      } catch (e) {
+        return ok({ npcId, name: ev.data.name, model, error: (e as Error).message, hint: "Set OPENAI_API_KEY in .env; check NARUTO_NPC_MODEL." });
+      }
+    },
+  );
+
+  server.registerTool(
+    "tick_resolve",
+    {
+      description: "Resolve a DM-conformed batch of NPC/world ops as one sequenced transaction (the manual analogue of the autonomous loop — when YOU conform several NPC declarations yourself and want them all submitted). ops:[{type, actorId?, params}].",
+      inputSchema: { roomId: z.string(), ops: z.array(z.object({ type: z.string(), actorId: z.string().optional(), params: z.record(z.any()).optional() })) },
+    },
+    async ({ roomId, ops }) => ok(await client.submitIntent({ roomId, type: "tick_resolve", params: { ops } })),
   );
 }

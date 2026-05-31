@@ -345,6 +345,26 @@ describe("NPC goals + tick", () => {
     const tickEv = (run("tick_run", { magnitude: "small" }) as any).events.find((e: any) => e.type === "tick");
     expect(tickEv.data.tick.agentsCalled.length).toBeGreaterThanOrEqual(1);
   });
+
+  it("tick_resolve runs a DM-conformed batch of NPC ops as ground truth (the autonomous-loop seam)", () => {
+    mkPC("Hero");
+    const npcId = (run("npc_create", { name: "Talker", authorityId: "leaf" }) as any).events[0].data.npc.id as string;
+    const r = run("tick_resolve", {
+      ops: [
+        { type: "social_speak", actorId: npcId, params: { text: "Halt — papers." } },
+        { type: "npc_add_journal", params: { npcId, entry: "challenged a passerby" } },
+      ],
+    }) as any;
+    expect(r.status).toBe("resolved");
+    const npc = engine.getEntity("npcs", npcId) as any;
+    expect((npc.journal ?? []).some((j: any) => /challenged a passerby/.test(j.entry))).toBe(true); // op took effect
+  });
+
+  it("tick_resolve rejects an empty batch (nothing to resolve)", () => {
+    const r = run("tick_resolve", { ops: [] }) as any;
+    expect(r.status).toBe("rejected");
+    expect(r.reason.rule).toBe("no_ops");
+  });
 });
 
 // Social-stealth: who overhears an exchange (ninja eavesdropping), and NPC memory of it.

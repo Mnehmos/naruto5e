@@ -111,8 +111,10 @@ export function composeNpcMessages(
   if (recentJournal.length) add("journal", `Recently, you:\n${recentJournal.map((j: any) => `- ${j.entry}`).join("\n")}`);
 
   const closing =
-    "\n\n--- HOW TO RESPOND ---\nStay in character. Briefly declare ONE thing you do, the way a player at the table declares an action " +
-    '("I step between them and lower my voice.", "I demand to see their papers."). The DM rolls dice and narrates the outcome.';
+    "\n\n--- HOW TO RESPOND ---\nStay in character and declare ONE thing you do — an ATTEMPT, not an outcome (you can TRY to expose a secret; whether it lands is the dice's call). " +
+    'PREFER a single JSON action object so it resolves cleanly, e.g. {"intent":"speak","text":"Lower your voices.","target":"Iwao","tone":"low"} ' +
+    '| {"intent":"goal","goal":"shadow the squad"} | {"intent":"move","distance":15} | {"intent":"attack","target":"Raijū"} | {"intent":"cast","jutsu":"<id>","target":"…"} | {"intent":"reflect","text":"I wait and watch."}. ' +
+    "Plain first-person prose also works. The engine adjudicates the result.";
   const messages: { role: "system" | "user"; content: string }[] = [];
   if (systemParts.length) messages.push({ role: "system", content: systemParts.join("\n\n") + closing });
   const userContent = (situation ?? "").trim() || `${sit.sceneLine}\n\nWhat do you do?`;
