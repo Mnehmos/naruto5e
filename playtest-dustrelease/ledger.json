@@ -3,8 +3,8 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 95,
-  "chaptersDone": 24,
+  "dayClock": 97,
+  "chaptersDone": 26,
   "arcStatus": "VOLUME ONE COMPLETE — Academy → graduation → D-ranks → true Dust awakening → Exhibition → Chūnin Exam (paper/survival/finals). Finals: valiant LOSS to Hayato the Lone Blade (failed STR save, dropped to 0, stabilized). Ōnoki withheld promotion — judged, not won; 'never narrated for free' honored. Title remains Genin (resolves the engine rank-by-level divergence in-fiction). The dice owned the climax. Recovery long rest taken (full HP/chakra).",
   "actII": {
     "arc": "Act II — The Associate",
@@ -30,7 +30,12 @@
       "Ch.5 Caravan Under Rain (D94): COMBAT set-piece (3 bandits + Ren elite +20). Iwao 38->15; held the frame, out-lasted/drove off Ren by control (no kills); Perception 16 found a planted Cloud token = manufactured provocation to frame Kumo for war.",
       "Ch.6 The Report Nobody Wants (D95): trusted Kurikara over the desk; Persuasion 11 vs 15 FAIL (can't sway the room) but Ninshou 24 vs 15 lays the irrefutable case; Onoki's 'measure' goal completed -> grants Iwao standing + a charge to FIND the framer."
     ],
-    "liveTension": "Gomei (missing-nin) abandoned the find-able frame, now building 'an incident that needs no discovering.' Raido (Cloud) realizes he's being framed, wrote home. Iwao holds the planted token + Onoki's charge: hunt the hand, eyes before blood. Escalation Layer 2->3.",
+    "huntArc": [
+      "Ch.7 The Hand Behind the Token (D96): Ninshou 14 vs 16 FAIL (can't trace the forgery by book); trusts ENEMY Raido (wary alliance) who gives the lead the archive couldn't — the token was forged by someone who knows the Cloud from the INSIDE (a Cloud-connected rogue).",
+      "Ch.8 The Rot Inside (D97): Perception 19 (w/ Akemi sensing) traces money+muscle BACKWARD — runs IN through the wall. Dosu (used, not complicit) gives up an inside BROKER wearing a 'chain of office.' Gomei's second shape: an incident from within the Stone. Onoki sets an unchained watch."
+    ],
+    "liveTension": "FRAMER = Gomei the Hollow Road (npc_2441ef66), a Cloud DEFECTOR with an old grudge against both villages, using two as blade+throat. He has an INSIDE BROKER (a trusted Iwa functionary 'wearing a chain of office') and is building a 'second shape' — an incident from inside the Stone that needs no token to be believed. ALLY: Raido of the Cloud (npc_5251c1ab), framed too, in a wary partnership with Iwao. Iwao holds Onoki's charge (find the hand, eyes before blood) + the planted token. NEXT: identify/confront the broker before the inside-incident fires. Escalation Layer 3, building toward a mid-Act-II climax.",
+    "iwaoArcTruth": "Across the hunt the dice keep drawing the same soul: he FAILS the people/instinct/forgery rolls (Persuasion, Nature, the forgery analysis) and WINS the knowledge/pattern rolls (History, Ninshou-case, Perception-with-Akemi) — and his real growth is learning to bring his FRIENDS/allies to cover his weaknesses (the cell, the sensor, even an enemy). Frame, not fist; trust, not control — now applied to alliance and to suspecting home.",
     "craftRules": "PROSE keeps dice OOC (Engine Log footer + callouts), never in narrative. COMBAT narrated as UFC-style play-by-play with exact rolls/damage/HP/proximity-to-death in the OOC log."
   },
   "squad": { "team": "Team Kurikara", "members": ["Iwao", "Ganryū", "Akemi"], "sensei": "Kurikara (npc_a42aa521) — scarred war-vet, zero awe, demands he prove he's more than a bloodline and a liability", "graduated": "Day 28 — headband earned, top practical marks" },
