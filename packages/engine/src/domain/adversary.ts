@@ -39,6 +39,9 @@ export const AdversarySchema = z.object({
   affinity: z.array(z.string()).default([]),
 
   conditions: z.array(z.string()).default([]),
+  conditionStates: z
+    .array(z.object({ name: z.string(), saveAbility: z.string().default("con"), dc: z.number().default(13), saveToEnd: z.boolean().default(false), rounds: z.number().optional() }))
+    .default([]),
   dead: z.boolean().default(false),
   position: z.object({ x: z.number(), y: z.number() }).optional(),
   initiative: z.number().optional(),

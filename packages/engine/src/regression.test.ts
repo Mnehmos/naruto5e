@@ -457,6 +457,84 @@ describe("affinity genesis + jutsu-learn gates", () => {
   });
 });
 
+// ① jutsu discovery — what an actor can LEARN, gated by rank + affinity.
+describe("jutsu_learnable discovery", () => {
+  it("lists only gate-legal jutsu (rank cap + affinity)", () => {
+    const pc = mkPC("Disc");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.affinity = ["Fire"];
+    c.kkg = [];
+    c.rank = "Genin";
+    cc.put(c);
+    const d = (run("jutsu_learnable", {}, pc) as any).events[0].data;
+    expect(d.rankCap).toBe("C");
+    expect(d.jutsu.length).toBeGreaterThan(0);
+    const otherBases = ["Water", "Wind", "Earth", "Lightning"];
+    for (const j of d.jutsu) {
+      expect(["E", "D", "C"]).toContain(j.rank); // rank gate
+      expect(otherBases.includes(j.element)).toBe(false); // no off-affinity leak
+    }
+  });
+});
+
+// ② condition saves — attack-delivery rider conditions now force a save (+ LR), and
+// save-to-end fires at the start of the afflicted's turn.
+describe("condition saves + durations", () => {
+  it("an attack-delivery rider condition forces a save (closes the no-save lock)", () => {
+    const pc = mkPC("Striker");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.jutsuKnown = ["leaf-great-flash"];
+    c.rank = "Jonin";
+    c.chakra = { current: 50, max: 50, temp: 0 };
+    cc.put(c);
+    const ac = (engine as any).store.collection("adversaries");
+    const foeId = (run("adversary_spawn", { name: "Dummy", tier: "minion", level: 3 }) as any).events[0].data.adversary.id as string;
+    const foe = ac.get(foeId);
+    foe.ac = 1; // guarantee the attack lands so we reach the rider
+    ac.put(foe);
+    const r = run("cast", { jutsu: "leaf-great-flash", targets: [foeId] }, pc) as any;
+    expect(r.events.find((e: any) => e.type === "attack")?.data.hit).toBe(true);
+    expect(r.events.some((e: any) => e.type === "save" && e.data.vs === "Paralyzed")).toBe(true);
+  });
+
+  it("a save-to-end condition is re-rolled at the start of the afflicted's turn", () => {
+    const pc = mkPC("Hero");
+    const foeId = (run("adversary_spawn", { name: "Bound", tier: "minion", level: 3 }) as any).events[0].data.adversary.id as string;
+    run("combat_start", { combatants: [{ actorId: pc, team: "pc" }, { actorId: foeId, team: "enemy" }] });
+    const ac = (engine as any).store.collection("adversaries");
+    const foe = ac.get(foeId);
+    foe.conditions = ["Paralyzed"];
+    foe.conditionStates = [{ name: "Paralyzed", saveAbility: "con", dc: 13, saveToEnd: true }];
+    ac.put(foe);
+    let sawSave = false;
+    for (let i = 0; i < 6 && !sawSave; i++) {
+      const r = run("advance", {}) as any;
+      if (r.events?.some((e: any) => e.type === "save" && e.data.vs === "Paralyzed" && e.data.saveToEnd)) sawSave = true;
+    }
+    expect(sawSave).toBe(true);
+  });
+});
+
+// polish — half-on-save damage reports the raw dice total in `rolled`.
+describe("damage IR rolled == raw dice total", () => {
+  it("half-on-save keeps rolled as the raw roll", () => {
+    const pc = mkPC("Caster");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.jutsuKnown = ["fire-release-hellfire-rejection"];
+    c.affinity = ["Fire"];
+    c.rank = "Jonin";
+    c.chakra = { current: 50, max: 50, temp: 0 };
+    cc.put(c);
+    const foeId = (run("adversary_spawn", { name: "Dummy", tier: "minion", level: 3 }) as any).events[0].data.adversary.id as string;
+    const r = run("cast", { jutsu: "fire-release-hellfire-rejection", targets: [foeId] }, pc) as any;
+    const dmg = r.events.find((e: any) => e.type === "damage" && Array.isArray(e.data.rolls));
+    if (dmg) expect(dmg.data.rolled).toBe(dmg.data.rolls.reduce((a: number, b: number) => a + b, 0));
+  });
+});
+
 // Campaign/world layer above rooms.
 describe("campaign management", () => {
   it("creates, advances the clock, logs, and composes a dashboard", () => {

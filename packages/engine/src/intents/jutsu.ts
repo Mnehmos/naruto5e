@@ -7,8 +7,9 @@ import { actorAC, actorAbilityMod, actorAffinity, actorCasting, loadActor, saveA
 import { RANK_VALUE, clashResolve, elementalAdvantage, jutsuElement, rollDamage } from "../rules/combat.js";
 import { applyDamageDoc, healDoc } from "../rules/resolve.js";
 import { useLegendaryResistance, checkPhaseTransition } from "../rules/adversary.js";
-import { rankAllows, hasElementAccess, RANK_JUTSU_CAP } from "../rules/affinity.js";
-import { blockedComponents, INCAPACITATING } from "../rules/conditions.js";
+import { RANK_JUTSU_CAP } from "../rules/affinity.js";
+import { learnGate } from "../rules/learn.js";
+import { blockedComponents, INCAPACITATING, SAVE_TO_END, conditionSaveAbility } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
 import { activeCombatantId } from "../rules/turn.js";
 
@@ -243,7 +244,7 @@ export function castJutsu(ctx: ResolveContext): void {
           anyHit = true;
         }
       }
-      if (anyHit) applyConditions(ctx, caster, tref, eff, null);
+      if (anyHit) applyConditions(ctx, caster, tref, eff, true, casting.saveDC);
     } else if (eff.delivery === "save") {
       const ability = eff.saveAbility ?? "dex";
       const saveMod = actorAbilityMod(target, ability) + (target.proficiencies?.savingThrows?.includes?.(ability) ? target.proficiencyBonus ?? 0 : 0);
@@ -259,12 +260,12 @@ export function castJutsu(ctx: ResolveContext): void {
       if (dmgDice) {
         const full = rollDamage(ctx.rng, dmgDice);
         const amount = success ? (eff.halfOnSave ? Math.floor(full.total / 2) : 0) : full.total;
-        if (amount > 0) applyDamageNumberAndEmit(ctx, caster, tref, amount, eff.damage!.type, isPCActor(tref), full.rolls);
+        if (amount > 0) applyDamageNumberAndEmit(ctx, caster, tref, amount, eff.damage!.type, isPCActor(tref), full.rolls, full.total);
       }
-      if (!success) applyConditions(ctx, caster, tref, eff, ability);
+      if (!success) applyConditions(ctx, caster, tref, eff, false, casting.saveDC);
     } else if (eff.delivery === "auto") {
       if (dmgDice) applyDamageAndEmit(ctx, caster, tref, dmgDice, eff.damage!.type, false, isPCActor(tref));
-      applyConditions(ctx, caster, tref, eff, null);
+      applyConditions(ctx, caster, tref, eff, true, casting.saveDC);
     }
   }
 }
@@ -273,13 +274,36 @@ function isPCActor(ref: ActorRef): boolean {
   return ref.doc.isPC ?? ref.coll === "characters";
 }
 
-function applyConditions(ctx: ResolveContext, caster: any, tref: ActorRef, eff: any, _save: string | null): void {
+/**
+ * Apply a jutsu's rider conditions. `needsSave` = the delivery hasn't already
+ * forced a save (attack/auto): each condition gets its OWN save vs the caster's DC
+ * (Legendary Resistance applies, so a Solo can shrug it off) — closing the
+ * no-save lock that let attack-delivery jutsu Paralyze bosses for free. For
+ * save-delivery the jutsu's save already failed, so the condition lands. Either
+ * way, save-to-end conditions are recorded in conditionStates so they fade.
+ */
+function applyConditions(ctx: ResolveContext, caster: any, tref: ActorRef, eff: any, needsSave: boolean, dc: number): void {
+  const target = tref.doc;
+  target.conditions = target.conditions ?? [];
+  target.conditionStates = target.conditionStates ?? [];
   for (const c of eff.conditions ?? []) {
-    if (!tref.doc.conditions) tref.doc.conditions = [];
-    if (!tref.doc.conditions.includes(c.name)) {
-      tref.doc.conditions.push(c.name);
-      ctx.ir.emit("condition", { actor: caster.id, data: { target: tref.doc.id, condition: c.name, applied: true }, narration: `${tref.doc.name} is ${c.name}.` });
+    if (target.conditions.includes(c.name)) continue;
+    const ability = conditionSaveAbility(c.name, c.save ?? eff.saveAbility);
+    if (needsSave) {
+      const mod = actorAbilityMod(target, ability) + (target.proficiencies?.savingThrows?.includes?.(ability) ? target.proficiencyBonus ?? 0 : 0);
+      const roll = rollD20(ctx.rng, { modifier: mod });
+      let saved = roll.total >= dc;
+      if (!saved && tref.coll === "adversaries" && useLegendaryResistance(target)) {
+        saved = true;
+        ctx.ir.emit("legendary_resistance", { actor: target.id, data: { remaining: target.legendary?.resistance, condition: c.name }, narration: `${target.name} shrugs off ${c.name} with Legendary Resistance.` });
+      }
+      ctx.ir.emit("save", { actor: target.id, data: { ability, roll: roll.total, dc, success: saved, vs: c.name }, narration: `${target.name} ${ability.toUpperCase()} save ${roll.total} vs DC ${dc} → ${saved ? `resists ${c.name}` : `is ${c.name}`}.` });
+      if (saved) continue;
     }
+    target.conditions.push(c.name);
+    const saveToEnd = SAVE_TO_END.has(c.name);
+    if (saveToEnd || c.rounds) target.conditionStates.push({ name: c.name, saveAbility: ability, dc, saveToEnd, rounds: c.rounds });
+    ctx.ir.emit("condition", { actor: caster.id, data: { target: target.id, condition: c.name, applied: true, saveToEnd }, narration: `${target.name} is ${c.name}.` });
   }
   saveActor(ctx.store, tref);
 }
@@ -289,13 +313,14 @@ function applyDamageAndEmit(ctx: ResolveContext, caster: any, tref: ActorRef, di
   applyDamageNumberAndEmit(ctx, caster, tref, dmg.total, type, isPC, dmg.rolls);
 }
 
-function applyDamageNumberAndEmit(ctx: ResolveContext, caster: any, tref: ActorRef, amount: number, type: string, isPC: boolean, rolls?: number[]): void {
+function applyDamageNumberAndEmit(ctx: ResolveContext, caster: any, tref: ActorRef, amount: number, type: string, isPC: boolean, rolls?: number[], rawRolled?: number): void {
   const out = applyDamageDoc(tref.doc, amount, { isPC });
   // Solo Phase Transition on crossing 60% / 30% HP.
   const crossed = tref.coll === "adversaries" ? checkPhaseTransition(tref.doc) : null;
   saveActor(ctx.store, tref);
-  // `amount` = HP actually removed (after the overkill cap); `rolled` = raw dice total.
-  ctx.ir.emit("damage", { actor: caster.id, data: { target: tref.doc.id, amount: out.dealt, rolled: amount, type, rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} ${type} damage (${out.hp.current}/${out.hp.max} HP).` });
+  // `amount` here = damage to apply; `out.dealt` = HP actually removed (overkill-capped);
+  // `rolled` = the raw dice total (= rawRolled when the applied amount was reduced, e.g. half-on-save).
+  ctx.ir.emit("damage", { actor: caster.id, data: { target: tref.doc.id, amount: out.dealt, rolled: rawRolled ?? amount, type, rolls, hp: out.hp }, narration: `${tref.doc.name} takes ${out.dealt} ${type} damage (${out.hp.current}/${out.hp.max} HP).` });
   if (crossed) ctx.ir.emit("phase_transition", { actor: tref.doc.id, data: { threshold: crossed, phase: tref.doc.phases.current }, narration: `${tref.doc.name} enters a new phase (${crossed}% HP)!` });
   concentrationCheck(ctx, tref, out.dealt);
   if (out.died) ctx.ir.emit("down", { actor: caster.id, data: { target: tref.doc.id, dead: true }, narration: `${tref.doc.name} is slain.` });
@@ -318,32 +343,12 @@ export function registerJutsuIntents(engine: Engine): void {
       ctx.ir.emit("jutsu_learned", { actor: c.id, data: { jutsu: j.id, already: true } });
       return;
     }
-    // multi-axis learn gate (rank · clan · class · affinity). Generic jutsu (no
-    // tags) only face the rank gate. force:true (DM) overrides every gate — the
-    // sanctioned path for off-affinity training / clan-secret tutelage.
-    const force = ctx.op.params.force === true;
-    const kws = (j.keywords ?? []).map((k) => k.toLowerCase());
-    const prereq = String(j.prerequisites ?? "").toLowerCase();
-    if (!force) {
-      // RANK: can't learn above your ninja rank's cap
-      if (!rankAllows(c.rank, j.rank)) {
-        throw reject("rank_too_high", `${c.name} is ${c.rank}; ${j.name} is rank ${j.rank} (your cap is ${RANK_JUTSU_CAP[c.rank] ?? "C"}).`, { jutsuRank: j.rank, charRank: c.rank }, ["Rank up first, or pass force:true (DM)."]);
-      }
-      // CLAN: a clan-secret (Hijutsu) whose prerequisites name a clan needs that clan
-      const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
-      const namedClan = clanNames.find((cn) => prereq.includes(cn.toLowerCase()));
-      if (kws.includes("hijutsu") && namedClan && (c.clan ?? "").toLowerCase() !== namedClan.toLowerCase()) {
-        throw reject("clan_locked", `${j.name} is a ${namedClan} clan secret; ${c.name} is ${c.clan ?? "clanless"}.`, { requiredClan: namedClan, clan: c.clan }, ["Only the matching clan learns it (or force:true / favor)."]);
-      }
-      // CLASS: Medical arts require the Medical-Nin class
-      if (kws.includes("medical") && c.className !== "Medical-Nin") {
-        throw reject("class_locked", `${j.name} is a Medical art; only a Medical-Nin can learn it (${c.name} is a ${c.className}).`, { className: c.className }, ["Multiclass into Medical-Nin, or pass force:true."]);
-      }
-      // AFFINITY: an elemental-nature jutsu needs the matching affinity or KKG
-      const el = jutsuElement(j);
-      if (el && el !== "neutral" && !hasElementAccess(c, el)) {
-        throw reject("off_affinity", `${j.name} is ${el}-natured; ${c.name}'s natures are [${(c.affinity ?? []).join(", ") || "none"}]${(c.kkg ?? []).length ? ` (KKG ${c.kkg.join(", ")})` : ""}.`, { element: el, affinity: c.affinity ?? [], kkg: c.kkg ?? [] }, ["Off-affinity is the hard path: force:true (DM) for costly cross-training, or favor_unlock the nature."]);
-      }
+    // multi-axis learn gate (rank · clan · class · affinity). Generic jutsu only
+    // face the rank gate. force:true (DM) overrides every gate — the sanctioned
+    // path for off-affinity training / clan-secret tutelage.
+    if (ctx.op.params.force !== true) {
+      const gate = learnGate(c, j, (ctx.engine.content as any).clanNames?.() ?? []);
+      if (!gate.ok) throw reject(gate.rule!, gate.explain!, { jutsu: j.id, rank: j.rank, element: gate.element }, gate.suggestions ?? []);
     }
     if (c.jutsuKnown.length >= c.jutsuKnownCap && !ctx.op.params.force) {
       throw reject("jutsu_known_cap", `${c.name} knows ${c.jutsuKnown.length}/${c.jutsuKnownCap} jutsu (cap reached).`, { known: c.jutsuKnown.length, cap: c.jutsuKnownCap }, ["Forget a jutsu (jutsu_forget), level up to raise the cap, or pass force:true."]);
@@ -351,6 +356,36 @@ export function registerJutsuIntents(engine: Engine): void {
     c.jutsuKnown.push(j.id);
     chars(ctx).put(c);
     ctx.ir.emit("jutsu_learned", { actor: c.id, data: { jutsu: j.id, name: j.name, known: c.jutsuKnown.length, cap: c.jutsuKnownCap }, narration: `${c.name} learns ${j.name}.` });
+  });
+
+  // jutsu_learnable — discovery: every jutsu this actor could learn right now
+  // (passes rank/affinity/clan/class), sorted by rank then damage. The "what can
+  // I learn" complement to agent_context's "what can I cast" — fixes the loadout gap.
+  engine.registerHandler("jutsu_learnable", (ctx) => {
+    const c = chars(ctx).get(String(ctx.op.actorId));
+    if (!c) throw reject("actor_required", "jutsu_learnable requires a valid actorId.", {}, ["Set actorId to a character."]);
+    const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
+    const known = new Set(c.jutsuKnown ?? []);
+    const limit = Number(ctx.op.params.limit ?? 25);
+    const classFilter = ctx.op.params.classification ? String(ctx.op.params.classification).toLowerCase() : undefined;
+    const avg = (d?: string) => {
+      const m = /(\d+)d(\d+)/.exec(d ?? "");
+      return m ? (Number(m[1]) * (Number(m[2]) + 1)) / 2 : 0;
+    };
+    const list = ctx.engine.content.jutsu
+      .filter((j: any) => !known.has(j.id) && (!classFilter || String(j.classification ?? "").toLowerCase() === classFilter))
+      .map((j: any) => ({ j, gate: learnGate(c, j, clanNames) }))
+      .filter((x: any) => x.gate.ok)
+      .map((x: any) => ({ id: x.j.id, name: x.j.name, rank: x.j.rank, classification: x.j.classification, cost: x.j.cost, element: x.gate.element ?? null, delivery: x.j.effect?.delivery, damage: x.j.effect?.damage?.dice, _avg: avg(x.j.effect?.damage?.dice) }))
+      .sort((a: any, b: any) => (RANK_VALUE[b.rank] ?? 0) - (RANK_VALUE[a.rank] ?? 0) || b._avg - a._avg)
+      .slice(0, limit)
+      .map(({ _avg, ...rest }: any) => rest);
+    const slotsLeft = (c.jutsuKnownCap ?? 0) - (c.jutsuKnown?.length ?? 0);
+    ctx.ir.emit("jutsu_learnable", {
+      actor: c.id,
+      data: { count: list.length, rankCap: RANK_JUTSU_CAP[c.rank] ?? "C", slotsLeft, affinity: c.affinity ?? [], kkg: c.kkg ?? [], jutsu: list },
+      narration: `${c.name} (${c.rank}, natures ${(c.affinity ?? []).join("/") || "none"}) can learn ${list.length} jutsu now (cap rank ${RANK_JUTSU_CAP[c.rank] ?? "C"}, ${slotsLeft} slot(s) left). Top: ${list.slice(0, 6).map((x: any) => `${x.name} [${x.rank}${x.damage ? " " + x.damage : ""}]`).join(", ") || "none"}.`,
+    });
   });
 
   engine.registerHandler("jutsu_forget", (ctx) => {

@@ -225,9 +225,20 @@ export function registerTools(server: McpServer, client: EngineClient): void {
         clanSkillChoices: z.array(z.string()).optional(),
         classSkillChoices: z.array(z.string()).optional(),
         backgroundSkillChoices: z.array(z.string()).optional(),
+        autoLoadout: z.boolean().optional(),
       },
     },
     async ({ roomId, ...params }) => ok(await client.submitIntent({ roomId, type: "character_create", params })),
+  );
+
+  server.registerTool(
+    "jutsu_learnable",
+    {
+      description:
+        "Discovery: every jutsu this actor could LEARN right now — passes all gates (rank cap, affinity/KKG, clan, class), excludes already-known — sorted by rank then damage. The 'what can I learn' complement to agent_context's 'what can I cast'. Use it to pick rank-appropriate kit (a Jonin should be wielding A-rank, an S-rank Legendary the big ones). Optional classification filter + limit.",
+      inputSchema: { roomId: z.string(), actorId: z.string(), classification: z.string().optional(), limit: z.number().optional() },
+    },
+    async ({ roomId, actorId, ...params }) => ok(await client.submitIntent({ roomId, actorId, type: "jutsu_learnable", params })),
   );
 
   server.registerTool(

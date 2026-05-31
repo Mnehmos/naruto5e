@@ -13,6 +13,7 @@ import {
 } from "../rules/character.js";
 import { rollGenesis, deriveKKG } from "../rules/affinity.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
+import { learnGate } from "../rules/learn.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -118,6 +119,22 @@ export function registerCharacterIntents(engine: Engine): void {
     char.built = true;
     // genesis roll: affinities (clan grant + rarity-rolled), KKG, special traits
     const genesis = rollGenesis(char, ctx.rng);
+    // optional: auto-learn a rank/affinity-legal damage kit up to the known cap
+    if (ctx.op.params.autoLoadout) {
+      const clanNames: string[] = (ctx.engine.content as any).clanNames?.() ?? [];
+      const RV: Record<string, number> = { E: 0, D: 1, C: 2, B: 3, A: 4, S: 5 };
+      const avg = (d?: string) => {
+        const m = /(\d+)d(\d+)/.exec(d ?? "");
+        return m ? (Number(m[1]) * (Number(m[2]) + 1)) / 2 : 0;
+      };
+      const picks = ctx.engine.content.jutsu
+        .filter((j: any) => (j.effect?.damage || j.effect?.healing) && !char.jutsuKnown.includes(j.id) && learnGate(char, j, clanNames).ok)
+        .sort((a: any, b: any) => (RV[b.rank] ?? 0) - (RV[a.rank] ?? 0) || avg(b.effect?.damage?.dice) - avg(a.effect?.damage?.dice));
+      for (const j of picks) {
+        if (char.jutsuKnown.length >= char.jutsuKnownCap) break;
+        char.jutsuKnown.push(j.id);
+      }
+    }
     chars(ctx).put(char);
 
     ctx.ir.emit("character_created", {

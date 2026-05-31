@@ -82,6 +82,11 @@ export const CharacterSchema = z.object({
   feats: z.array(z.string()).default([]),
 
   conditions: z.array(z.string()).default([]),
+  // durational/save-to-end metadata for applied conditions (conditions[] stays the
+  // membership list; this drives the start-of-turn save + duration tick).
+  conditionStates: z
+    .array(z.object({ name: z.string(), saveAbility: z.string().default("con"), dc: z.number().default(13), saveToEnd: z.boolean().default(false), rounds: z.number().optional() }))
+    .default([]),
   exhaustion: z.number().int().default(0),
 
   jutsuKnown: z.array(z.string()).default([]),

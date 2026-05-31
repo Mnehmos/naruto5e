@@ -115,6 +115,37 @@ function tickDot(ctx: ResolveContext, ref: ActorRef): void {
   }
 }
 
+/** Start-of-turn: tick condition durations + roll save-to-end for control effects
+ *  (Paralyzed/Stunned/etc.). A successful save (or expired duration) ends it. */
+function tickConditionSaves(ctx: ResolveContext, ref: ActorRef): void {
+  const doc = ref.doc;
+  const states: any[] = doc.conditionStates ?? [];
+  if (doc.dead || !states.length) return;
+  const keep: any[] = [];
+  for (const st of states) {
+    let ended = false;
+    if (typeof st.rounds === "number") {
+      st.rounds -= 1;
+      if (st.rounds <= 0) ended = true;
+    }
+    if (!ended && st.saveToEnd) {
+      const mod = actorAbilityMod(doc, st.saveAbility) + (doc.proficiencies?.savingThrows?.includes?.(st.saveAbility) ? doc.proficiencyBonus ?? 0 : 0);
+      const roll = rollD20(ctx.rng, { modifier: mod });
+      const saved = roll.total >= st.dc;
+      ctx.ir.emit("save", { actor: doc.id, data: { ability: st.saveAbility, roll: roll.total, dc: st.dc, success: saved, vs: st.name, saveToEnd: true }, narration: `${doc.name} ${String(st.saveAbility).toUpperCase()} save ${roll.total} vs DC ${st.dc} → ${saved ? `shakes off ${st.name}` : `still ${st.name}`}.` });
+      if (saved) ended = true;
+    }
+    if (ended) {
+      doc.conditions = (doc.conditions ?? []).filter((c: string) => c !== st.name);
+      ctx.ir.emit("condition", { actor: doc.id, data: { target: doc.id, condition: st.name, applied: false, ended: true }, narration: `${doc.name} is no longer ${st.name}.` });
+    } else {
+      keep.push(st);
+    }
+  }
+  doc.conditionStates = keep;
+  saveActor(ctx.store, ref);
+}
+
 export function registerCombatIntents(engine: Engine): void {
   // ---- combat_manage --------------------------------------------------
   engine.registerHandler("combat_start", (ctx) => {
@@ -194,6 +225,8 @@ export function registerCombatIntents(engine: Engine): void {
       ctx.ir.emit("advance", { actor: ref.doc.id, data: { round, activeIndex: idx, turn: ref.doc.id }, narration: `Round ${round}: ${ref.doc.name}'s turn.` });
       // damage-over-time conditions (Burned/Bleeding) tick at the START of the turn
       tickDot(ctx, ref);
+      // control conditions (Paralyzed/Stunned/...) get a save-to-end + duration tick
+      tickConditionSaves(ctx, ref);
       // downed PC auto-rolls a death save at the start of its turn
       if (ref.doc.isPC && !ref.doc.dead && (ref.doc.hp?.current ?? 1) === 0 && !ref.doc.deathSaves?.stable) {
         autoDeathSave(ctx, ref);
