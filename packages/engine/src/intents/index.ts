@@ -14,6 +14,8 @@ import { registerWorldIntents } from "./world.js";
 import { registerContentToolIntents } from "./content.js";
 import { registerTickIntents } from "./tick.js";
 import { registerAdminIntents } from "./admin.js";
+import { registerAgentIntents } from "./agent.js";
+import { registerCampaignIntents } from "./campaign.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -35,4 +37,6 @@ export function registerAllHandlers(engine: Engine): void {
   registerContentToolIntents(engine); // Phase 8 (jutsu_build + freeform)
   registerTickIntents(engine); // Phase 9 (rest-embedded multi-agent tick)
   registerAdminIntents(engine); // state management (world_reset / room_reset / character_delete)
+  registerAgentIntents(engine); // LLM-agent seam (agent_context: assemble an actor's turn context + legal moves)
+  registerCampaignIntents(engine); // campaign/world layer (clock, arc, party, journal, scenes)
 }

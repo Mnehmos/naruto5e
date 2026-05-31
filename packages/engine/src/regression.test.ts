@@ -370,3 +370,47 @@ describe("social_speak eavesdropping", () => {
     expect(r.events[0].data.heardBy).not.toContain(npcId);
   });
 });
+
+// LLM-agent seam: agent_context assembles an actor's turn context + legal moves.
+describe("agent_context turn seam", () => {
+  const giveJutsu = (id: string, chakra: number) => {
+    const pc = mkPC("Hero");
+    const cc = (engine as any).store.collection("characters");
+    const c = cc.get(pc);
+    c.jutsuKnown = ["fire-release-fox-fire"];
+    c.chakra = { current: chakra, max: 30, temp: 0 };
+    cc.put(c);
+    return pc;
+  };
+  it("returns identity, scene, and castable-jutsu affordances", () => {
+    const pc = giveJutsu("fox", 30);
+    const d = (run("agent_context", {}, pc) as any).events[0].data;
+    expect(d.identity.name).toBe("Hero");
+    expect(d.scene.mode).toBe("scene");
+    expect(d.affordances.canAct).toBe(true);
+    const fox = d.affordances.jutsu.find((j: any) => j.id === "fire-release-fox-fire");
+    expect(fox?.castable).toBe(true);
+  });
+  it("flags a jutsu the actor can't afford", () => {
+    const pc = giveJutsu("fox", 0);
+    const d = (run("agent_context", {}, pc) as any).events[0].data;
+    const fox = d.affordances.jutsu.find((j: any) => j.id === "fire-release-fox-fire");
+    expect(fox?.castable).toBe(false);
+    expect(fox?.blockedBy).toBe("chakra");
+  });
+});
+
+// Campaign/world layer above rooms.
+describe("campaign management", () => {
+  it("creates, advances the clock, logs, and composes a dashboard", () => {
+    const pc = mkPC("Hero");
+    const camp = (run("campaign_create", { name: "Land of Waves", party: [pc], arc: "The Bridge", factionsOfNote: ["wave_village"] }) as any).events[0].data.campaign.id as string;
+    run("campaign_log", { campaignId: camp, beat: "met Tazuna" });
+    run("campaign_advance_day", { campaignId: camp, days: 2, arc: "Zabuza Returns" });
+    const d = (run("campaign_get", { campaignId: camp }) as any).events[0].data;
+    expect(d.campaign.day).toBe(3); // 1 + 2
+    expect(d.campaign.arc).toBe("Zabuza Returns");
+    expect(d.party[0].name).toBe("Hero");
+    expect(d.recentJournal.some((j: any) => j.beat === "met Tazuna")).toBe(true);
+  });
+});

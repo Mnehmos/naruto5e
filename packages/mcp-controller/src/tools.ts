@@ -118,6 +118,51 @@ export function registerTools(server: McpServer, client: EngineClient): void {
   );
 
   server.registerTool(
+    "agent_context",
+    {
+      description:
+        "LLM-agent seam — assemble one actor's turn context so an LLM can play them. Read-only; returns the actor's identity, vitals (hp/chakra/conditions/position/turnBudget), the scene (allies & threats with distance), and the LEGAL/affordable moves: which KNOWN jutsu are castable right now (with cost/element/delivery + why-not) plus the basic actions available. The MOVE is yours to decide — submit it as a normal intent (cast/attack/move/...). For NPC roleplay use npc_manage context instead.",
+      inputSchema: { roomId: z.string(), actorId: z.string() },
+    },
+    async ({ roomId, actorId }) => ok(await client.submitIntent({ roomId, actorId, type: "agent_context" })),
+  );
+
+  server.registerTool(
+    "campaign_manage",
+    {
+      description:
+        "Campaign/world layer above rooms (unifies scenes, party, missions=quests, and per-authority Standing=factions under one arc + world clock + journal). Actions: " +
+        "create {name, party?, arc?, activeRoomId?, scenes?, factionsOfNote?}; " +
+        "get {campaignId, journalLimit?} -> dashboard (party summary + active missions + standings of note + recent journal); " +
+        "set {campaignId, arc?, activeRoomId?, addParty?, removeParty?, addScene?, addLocation?, factionsOfNote?}; " +
+        "advance_day {campaignId, days?, arc?} -> advance the world clock; " +
+        "log {campaignId, beat} -> append a day-stamped journal beat.",
+      inputSchema: {
+        roomId: z.string(),
+        action: z.enum(["create", "get", "set", "advance_day", "log"]),
+        campaignId: z.string().optional(),
+        name: z.string().optional(),
+        arc: z.string().optional(),
+        party: z.array(z.string()).optional(),
+        scenes: z.array(z.string()).optional(),
+        activeRoomId: z.string().optional(),
+        factionsOfNote: z.array(z.string()).optional(),
+        addParty: z.array(z.string()).optional(),
+        removeParty: z.array(z.string()).optional(),
+        addScene: z.array(z.string()).optional(),
+        addLocation: z.record(z.any()).optional(),
+        beat: z.string().optional(),
+        days: z.number().optional(),
+        journalLimit: z.number().optional(),
+      },
+    },
+    async ({ roomId, action, ...rest }) => {
+      const type = { create: "campaign_create", get: "campaign_get", set: "campaign_set", advance_day: "campaign_advance_day", log: "campaign_log" }[action];
+      return ok(await client.submitIntent({ roomId, type, params: rest }));
+    },
+  );
+
+  server.registerTool(
     "server_manage",
     {
       description:
