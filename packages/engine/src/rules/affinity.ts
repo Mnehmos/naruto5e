@@ -83,6 +83,30 @@ export function deriveKKG(affinities: string[]): string[] {
   return KKG_RECIPES.filter((r) => r.elements.every((e) => affinities.includes(e))).map((r) => r.name);
 }
 
+/**
+ * Resolve a KKG name to its recipe with loose matching, so a caller can pin a
+ * bloodline by canonical name ("Dust (Jinton)"), short name ("Dust"), or the
+ * parenthetical/native term ("Jinton"). Returns undefined for an unknown name.
+ */
+export function findKKGRecipe(name: string): { name: string; elements: Element[] } | undefined {
+  const q = String(name ?? "").trim().toLowerCase();
+  if (!q) return undefined;
+  return KKG_RECIPES.find((r) => {
+    const full = r.name.toLowerCase(); // "dust (jinton)"
+    const short = r.name.split(" ")[0].toLowerCase(); // "dust"
+    const paren = /\(([^)]+)\)/.exec(r.name)?.[1]?.toLowerCase(); // "jinton"
+    return full === q || short === q || paren === q;
+  });
+}
+
+/** Authored-genesis overrides: pin a bloodline/natures instead of blind-rolling. */
+export type GenesisOptions = {
+  /** Pin a Kekkei Genkai by name; its recipe elements are guaranteed at genesis. */
+  forceKKG?: string;
+  /** Pin specific base elements (e.g. an authored single-nature character). */
+  forceElements?: string[];
+};
+
 /** Clan-keyed special-trait roll (dojutsu stages, etc.). Tunable. */
 function rollSpecialTraits(rng: Rng, clan?: string): string[] {
   const c = (clan ?? "").toLowerCase();
@@ -100,11 +124,33 @@ function rollSpecialTraits(rng: Rng, clan?: string): string[] {
 /**
  * Roll a character's genesis: affinities (clan grant + rarity-rolled extras),
  * derived KKG, and special traits. Mutates and returns the character.
+ *
+ * When `opts` pins a bloodline (forceKKG) or natures (forceElements) — e.g. an
+ * authored Dust Release prodigy — those elements are seeded and the random
+ * rarity expansion is skipped, so genesis is deterministic: exactly the
+ * clan-granted + requested natures, with the requested KKG derived. Without
+ * overrides, behaviour is unchanged (blind rarity roll).
  */
-export function rollGenesis(char: any, rng: Rng): { affinity: string[]; kkg: string[]; specialTraits: string[] } {
+export function rollGenesis(
+  char: any,
+  rng: Rng,
+  opts: GenesisOptions = {},
+): { affinity: string[]; kkg: string[]; specialTraits: string[] } {
   const seed = expandToElements(char.affinity ?? []); // clan-granted base natures
   const elements: Element[] = [...new Set(seed)] as Element[];
-  const count = Math.max(elements.length, rollAffinityCount(rng));
+
+  // Authored override: pin the requested KKG's recipe elements and/or explicit
+  // natures into the seed. (Validation/normalization of the names happens at the
+  // intent layer so a bad name yields an educational rejection.)
+  const forcedKKG = opts.forceKKG ? findKKGRecipe(opts.forceKKG) : undefined;
+  if (forcedKKG) for (const e of forcedKKG.elements) if (!elements.includes(e)) elements.push(e);
+  for (const e of opts.forceElements ?? [])
+    if ((ELEMENTS as readonly string[]).includes(e) && !elements.includes(e as Element)) elements.push(e as Element);
+  const pinned = !!forcedKKG || (opts.forceElements?.length ?? 0) > 0;
+
+  // Pinned genesis is deterministic (no random extra natures); blind genesis
+  // expands on the rarity curve as before.
+  const count = pinned ? elements.length : Math.max(elements.length, rollAffinityCount(rng));
   const pool = ELEMENTS.filter((e) => !elements.includes(e));
   while (elements.length < count && pool.length) {
     elements.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]);

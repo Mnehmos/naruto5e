@@ -11,7 +11,7 @@ import {
   setAbilitiesByMethod,
   type BuildSelections,
 } from "../rules/character.js";
-import { rollGenesis, deriveKKG, RANK_JUTSU_CAP } from "../rules/affinity.js";
+import { rollGenesis, deriveKKG, findKKGRecipe, KKG_RECIPES, ELEMENTS, RANK_JUTSU_CAP } from "../rules/affinity.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
 import { learnGate } from "../rules/learn.js";
 import { jutsuElement } from "../rules/combat.js";
@@ -118,8 +118,35 @@ export function registerCharacterIntents(engine: Engine): void {
     // derive while still "unbuilt" so pools fill to max, then mark built
     char = deriveCharacter(char);
     char.built = true;
-    // genesis roll: affinities (clan grant + rarity-rolled), KKG, special traits
-    const genesis = rollGenesis(char, ctx.rng);
+
+    // Optional authored bloodline: pin a Kekkei Genkai (e.g. "Dust (Jinton)") and/or
+    // explicit natures at genesis instead of the blind rarity roll. Validated here so a
+    // bad name returns an educational rejection.
+    const reqKKG = p.kkg != null ? String(p.kkg).trim() : "";
+    let forceKKG: string | undefined;
+    if (reqKKG) {
+      const recipe = findKKGRecipe(reqKKG);
+      if (!recipe)
+        throw reject(
+          "unknown_kkg",
+          `No Kekkei Genkai "${reqKKG}".`,
+          { kkg: reqKKG },
+          [`Kekkei Genkai: ${KKG_RECIPES.map((r) => r.name).join(", ")}`],
+        );
+      forceKKG = recipe.name;
+    }
+    const reqAffinities = Array.isArray(p.affinities) ? (p.affinities as unknown[]).map((e) => String(e).trim()) : [];
+    const badAffinity = reqAffinities.find((e) => !(ELEMENTS as readonly string[]).includes(e));
+    if (badAffinity)
+      throw reject(
+        "unknown_affinity",
+        `No chakra nature "${badAffinity}".`,
+        { affinity: badAffinity },
+        [`Natures: ${ELEMENTS.join(", ")}`],
+      );
+
+    // genesis: affinities (clan grant + authored pins, else rarity-rolled), KKG, special traits
+    const genesis = rollGenesis(char, ctx.rng, { forceKKG, forceElements: reqAffinities });
     // opt-in baseline kit: ONE rank-appropriate signature per base affinity + ONE
     // per Kekkei Genkai (the "standard, then their choice" model). Picks the
     // highest-rank-<=-cap, highest-damage legal technique for each nature/KKG.
@@ -146,9 +173,10 @@ export function registerCharacterIntents(engine: Engine): void {
     }
     chars(ctx).put(char);
 
+    const genesisRequested = forceKKG || reqAffinities.length ? { kkg: forceKKG ?? null, affinities: reqAffinities } : null;
     ctx.ir.emit("character_created", {
       actor: char.id,
-      data: { character: summary(char), genesis, levelClamped },
+      data: { character: summary(char), genesis, genesisRequested, levelClamped },
       narration: `${char.name} — ${char.rank} ${char.clan ?? ""} ${char.className ?? ""} (L${char.level}), HP ${char.hp.max}, Chakra ${char.chakra.max}. Natures: ${genesis.affinity.join("/") || "none"}${genesis.kkg.length ? ` · KKG: ${genesis.kkg.join(", ")}` : ""}${genesis.specialTraits.length ? ` · ${genesis.specialTraits.join(", ")}` : ""}.`,
     });
   });
