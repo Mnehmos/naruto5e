@@ -7,6 +7,7 @@ import { loadActor, saveActor, actorAC } from "../rules/actor.js";
 import { applyDamageDoc } from "../rules/resolve.js";
 import { activeEncounter } from "../rules/turn.js";
 import { defaultBudget, canAfford, spend } from "../rules/turnBudget.js";
+import { INCAPACITATING } from "../rules/conditions.js";
 
 function advs(ctx: ResolveContext) {
   return ctx.store.collection<Adversary>("adversaries");
@@ -163,6 +164,10 @@ export function registerAdversaryIntents(engine: Engine): void {
     const ref = loadActor(ctx.store, String(ctx.op.actorId));
     if (!ref) throw reject("actor_required", "freeform_attack requires a valid actorId.", {});
     const attacker = ref.doc;
+    // incapacitating conditions (Paralyzed/Stunned/Unconscious/...) block attacks —
+    // even a Solo's legendary action. (cast + combat-action paths gate this too.)
+    const incap = (attacker.conditions ?? []).find((c: string) => INCAPACITATING.has(c));
+    if (incap) throw reject("incapacitated", `${attacker.name} is ${incap} and cannot attack.`, { condition: incap }, ["Remove the condition (e.g. the effect ends) before attacking."]);
     const enc = activeEncounter(ctx.store, ctx.room.id);
     const legendary = ctx.op.params.__legendary === true;
     if (enc && !legendary) {

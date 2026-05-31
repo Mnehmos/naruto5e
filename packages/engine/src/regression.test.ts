@@ -400,6 +400,19 @@ describe("agent_context turn seam", () => {
   });
 });
 
+// bug_1780205302421 (HIGH, found in high-tier playtest): freeform_attack ignored
+// incapacitating conditions, so a Paralyzed/Stunned adversary could still attack.
+describe("freeform_attack honors incapacitating conditions", () => {
+  it("a Paralyzed adversary cannot freeform_attack", () => {
+    const pc = mkPC("Hero");
+    const foe = (run("adversary_spawn", { name: "Brute", tier: "elite", level: 5 }) as any).events[0].data.adversary.id as string;
+    run("condition", { target: foe, condition: "Paralyzed" });
+    const r = run("freeform_attack", { target: pc }, foe) as any;
+    expect(r.status).toBe("rejected");
+    if (r.status === "rejected") expect(r.reason.rule).toBe("incapacitated");
+  });
+});
+
 // Campaign/world layer above rooms.
 describe("campaign management", () => {
   it("creates, advances the clock, logs, and composes a dashboard", () => {
