@@ -91,6 +91,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch08_the_rot_inside.md", slug: "act2-ch08-the-rot-inside", arc: "actii", tags: ["Intrigue", "Investigation", "Engine Proof"],
     teaser: "The thread Iwao expected to run east turns around and runs home. With Akemi's sensing he traces the disaster's money and muscle to a broker wearing a chain of office — inside the wall.",
     callout: { kind: "proof", label: "He stopped bringing his weaknesses to the work", text: "Perception 19 (Iwao can't track, so he borrows Akemi's sensing and reads the pattern). Dosu's model-driven turn gives up the inside broker. The rot is in the Stone, not beyond it." } },
+  { path: "chapters/act2_ch09_the_name_and_the_chain.md", slug: "act2-ch09-the-name-and-the-chain", arc: "actii", tags: ["Intrigue", "Investigation", "Dice-over-plan"],
+    teaser: "Off the official channel, Iwao reads a traitor out of the registry — a natural 20 names Administrator Jōzen, a true-believer who'd burn the village to forge it harder. But knowing isn't proving, and naming him early forces his hand.",
+    callout: { kind: "proof", label: "The crit that crowned the scholar", text: "Ninshou nat-20 (27 vs DC 16) — after a week of analysis walls, the dice finally let Iwao be exactly as good as he is, naming the broker with total certainty. Jōzen's model-driven turn hides behind office; being right out loud forces the climax." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
