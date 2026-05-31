@@ -1,11 +1,34 @@
 {
   "campaign": "Iwao: The Particle Heir",
-  "campaignId": "camp_c0b277b6",
+  "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
-  "hero": { "id": "char_2b103605", "name": "Iwao" },
-  "dayClock": 15,
-  "weeksDone": 2,
-  "arc": "Academy — Year One",
+  "hero": { "id": "char_9314ed6b", "name": "Iwao" },
+  "dayClock": 2,
+  "chaptersDone": 1,
+  "arc": "Academy — Day One",
+  "relationships": {
+    "family": "Tsuru/Gennai/Mai bonds warming (dinner Day 1, defining beats)",
+    "akemi": "friendly (sits with him)", "tobari": "friendly",
+    "ganryu": "rivalry seeded, disposition -1 ('the wind cut that leaf, not you')",
+    "ryuen": "protective, deliberately slowing the prodigy"
+  },
+  "structure": "ONE CHAPTER PER DAY (chapters/dayNNN.md). Every day = full 24h on the schedule, all 7 days/week, played moment-to-moment (single engine calls, react to each result as DM + player). BATCH only for combat setup / bulk utility — never to time-skip a story.",
+  "dailySchedule": [
+    "05:30 wake / chakra warm-up at home",
+    "06:00 breakfast with family",
+    "07:00 commute up the cliff-stairs",
+    "08:00 1st period — Chakra Control (Tetsuna)",
+    "09:30 2nd period — Taijutsu & Conditioning (Tetsuna)",
+    "11:00 midday break — the yard",
+    "12:00 lunch",
+    "13:00 3rd period — History/Strategy (Ryūen)",
+    "14:30 4th period — Bukijutsu / shuriken (Kanna)",
+    "16:00 sensei-sanctioned training / sparring",
+    "18:00 downtime (self-practice, errands, social)",
+    "19:30 dinner with family",
+    "21:00 evening (study, the weight)",
+    "22:30 sleep (long rest)"
+  ],
   "sheet": {
     "level": 1, "rank": "Genin",
     "hp": "8/8", "chakra": "14/14", "ac": 12,
@@ -15,31 +38,26 @@
     "affinity": ["Earth", "Wind", "Fire"],
     "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
   },
-  "standing": {
-    "iwagakure": { "reputation": 9, "favor": 2 },
-    "iwa_academy": { "reputation": 3, "favor": 0 }
-  },
+  "standing": { "iwagakure": { "reputation": 2, "favor": 0 }, "iwa_academy": { "reputation": 4, "favor": 0 } },
   "npcs": {
-    "onoki": "npc_e119e519", "soun": "npc_cb6d28d2", "tetsuna": "npc_896274f5",
-    "ryuen": "npc_e174dc61", "kanna": "npc_2a078a09",
-    "ganryu": "npc_e0b7e804", "akemi": "npc_7910b5b7", "tobari": "npc_7fd350ea",
-    "suzume": "npc_b00b69f3", "romaru": "npc_5996e6da", "hibana": "npc_8db2fc16",
-    "komate": "npc_804206e4", "sazae": "npc_e8331e56",
-    "kurikara": "npc_1e6c73a7", "genbu": "npc_46c9bd0a", "hoki": "npc_0ddc12e1",
-    "kurogane": "npc_9340af38", "shion": "npc_95a5418d"
+    "onoki": "npc_9cc97845", "soun": "npc_80d2fd85", "tetsuna": "npc_98b5e513",
+    "ryuen": "npc_c83497dd", "kanna": "npc_af2cd0e0",
+    "ganryu": "npc_ef2a7cea", "akemi": "npc_907075f3", "tobari": "npc_f732c8ee",
+    "suzume": "npc_4b892500", "romaru": "npc_6921635c", "hibana": "npc_eb52139d",
+    "komate": "npc_a945bd2c", "sazae": "npc_8119285e",
+    "kurikara": "npc_a42aa521", "genbu": "npc_000b729d", "hoki": "npc_3809a745",
+    "kurogane": "npc_ea9c8de5", "shion": "npc_b1ddb76a",
+    "tsuru_mother": "npc_51945b85", "gennai_father": "npc_fc9e6fc1", "mai_sister": "npc_f2ec1c78"
   },
-  "classmates9": ["Iwao", "Ganryu", "Akemi", "Tobari", "Suzume", "Romaru", "Hibana", "Komate", "Sazae"],
   "plannedSquads": {
     "team_kurikara": ["Iwao", "Ganryu", "Akemi"],
     "team_genbu": ["Tobari", "Suzume", "Romaru"],
     "team_hoki": ["Hibana", "Komate", "Sazae"]
   },
-  "rivalry": { "ganryu": { "disposition": -1, "familiarity": 2, "note": "Lost first spar to Iwao; vows to out-work the bloodline." } },
-  "bugs": [
-    { "id": "bug_1780212505469_fo4a3", "title": "create_character no KKG param", "severity": "medium", "status": "FIXED", "commit": "4253221" },
-    { "id": "bug_1780214524649_1eyb0", "title": "agent_context hid kitted adversary jutsu", "severity": "medium", "status": "FIXED", "commit": "af5d2be" }
+  "bugsFixed": [
+    { "id": "bug_1780212505469_fo4a3", "title": "create_character no KKG param", "commit": "4253221" },
+    { "id": "bug_1780214524649_1eyb0", "title": "agent_context hid kitted adversary jutsu", "commit": "af5d2be" }
   ],
-  "policy": "Kit all combat NPCs/adversaries with real jutsu loadouts at spawn; reserve freeform for improv (natural molding / technique synthesis).",
-  "engineErrorsUnvalidated": [],
-  "notes": "HTML (index.html) is canonical; PDF derived from it via make_pdf.py (headless Chrome). render_pdf.py kept as fpdf2 fallback. Another agent shipped a durable NPC-agent layer (commit 7f3d9d1: persona/directive/secrets/journal, npc_compose/invoke, rest short|long|downtime); new controller tools need an MCP reconnect this session can't trigger — reach engine intents via submit_intent."
+  "policy": "Kit all combat NPCs/adversaries with real jutsu loadouts at spawn; freeform only for improv (natural molding / technique synthesis). Missions begin a few in-story weeks in.",
+  "notes": "Clean restart per steer. Another agent shares this repo/engine (durable NPC-agent layer, commit 7f3d9d1); reach new engine intents via submit_intent (this session's MCP controller schema is cached)."
 }
