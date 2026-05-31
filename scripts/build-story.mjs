@@ -15,10 +15,10 @@
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "playtest-dustrelease");
+export const SRC = join(ROOT, "playtest-dustrelease");
 const DOCS = join(ROOT, "docs");
 const OUTCH = join(DOCS, "chapters");
 
@@ -34,7 +34,7 @@ const ARCS = {
 
 const PROOF_TAGS = new Set(["Engine Proof", "Dice-over-plan"]);
 
-const MANIFEST = [
+export const MANIFEST = [
   { path: "chapters/day01.md", slug: "day01", arc: "academy", tags: ["Academy", "Dust Release"],
     teaser: "A leaf falls open in four clean pieces where the lesson asked for one — and the Hidden Stone sees the Third Tsuchikage's dead bloodline alive again in a child." },
   { path: "chapters/day02.md", slug: "day02", arc: "academy", tags: ["Academy", "Engine Proof"] },
@@ -84,7 +84,37 @@ function firstSentence(body) {
   const m = body.replace(/^#+ .*$/gm, "").trim().match(/^.*?[.!?](\s|$)/s);
   return (m ? m[0] : body.slice(0, 160)).replace(/\s+/g, " ").trim();
 }
-function parseChapter(raw) {
+/**
+ * Clean narration plaintext for TTS: the title + body prose, with the ---LOG--- footer, the
+ * inline [OOC …] brackets, and markdown syntax stripped — so the spoken narration is the STORY,
+ * not the dice. Headings become soft pauses (sentence breaks).
+ */
+export function narrationText(raw) {
+  const lines = raw.replace(/\r\n/g, "\n").split("\n");
+  const title = (lines.find((l) => /^TITLE:/.test(l)) || "").replace(/^TITLE:\s*/, "").trim();
+  const logIdx = lines.findIndex((l) => l.trim() === "---LOG---");
+  const sepIdx = lines.findIndex((l, i) => i > 1 && l.trim() === "---");
+  const body = lines.slice(sepIdx + 1, logIdx === -1 ? undefined : logIdx);
+  const out = [];
+  for (const line of body) {
+    const t = line.trim();
+    if (!t || t === "---") continue;
+    if (/^\[OOC\b[\s\S]*\]$/i.test(t)) continue; // skip OOC brackets — story only
+    const clean = t
+      .replace(/^#{1,3}\s+/, "") // heading marker
+      .replace(/^[-+]\s+/, "") // bullet
+      .replace(/^\d+\.\s+/, "") // numbered
+      .replace(/^>\s?/, "") // quote
+      .replace(/`([^`]+?)`/g, "$1")
+      .replace(/\*\*(.+?)\*\*/g, "$1")
+      .replace(/\*(.+?)\*/g, "$1");
+    out.push(clean);
+  }
+  const prose = out.join("\n\n").replace(/[ \t]+/g, " ").trim();
+  return title ? `${title}.\n\n${prose}` : prose;
+}
+
+export function parseChapter(raw) {
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
   const title = (lines.find((l) => /^TITLE:/.test(l)) || "TITLE: Untitled").replace(/^TITLE:\s*/, "").trim();
   const dates = (lines.find((l) => /^DATES:/.test(l)) || "DATES:").replace(/^DATES:\s*/, "").trim();
@@ -154,6 +184,11 @@ function renderChapter(entry, parsed, prev, next) {
     ? `<div class="callout ${entry.callout.kind === "proof" ? "proof" : ""}"><span class="lbl">${esc(entry.callout.label)}</span><p>${esc(entry.callout.text)}</p></div>`
     : "";
   const dek = entry.teaser || parsed.teaserAuto;
+  // OpenAI-generated narration (build-tts.mjs writes docs/audio/<slug>.mp3). Shown when present;
+  // chapters without a file fall back to the Web Speech narrator in tts.js.
+  const narration = existsSync(join(DOCS, "audio", `${entry.slug}.mp3`))
+    ? `<div class="narration"><span class="narration-tag">🎧 Narration</span><audio class="tts-audio" controls preload="none"><source src="../audio/${entry.slug}.mp3" type="audio/mpeg">Your browser can't play audio.</audio></div>`
+    : "";
   const head = HEAD(`${parsed.title} · Iwao — The Particle Heir`, dek).replace(/ASSETS\//g, "../assets/");
   const logBlock = parsed.logHtml
     ? `<section class="ooc-ledger">
@@ -179,6 +214,7 @@ function renderChapter(entry, parsed, prev, next) {
     <div class="tagrow">${tagHtml(entry.tags)}</div>
   </header>
   ${navLinks()}
+  ${narration}
   ${callout}
   <section class="chapter-body reveal">
         ${parsed.bodyHtml}
@@ -250,18 +286,23 @@ ${PROGRESS}
 }
 
 /* ----------------------------- run ----------------------------- */
-if (!existsSync(OUTCH)) mkdirSync(OUTCH, { recursive: true });
-const items = [];
-for (const entry of MANIFEST) {
-  const p = join(SRC, entry.path);
-  if (!existsSync(p)) { console.warn(`! missing: ${entry.path} — skipped`); continue; }
-  const parsed = parseChapter(readFileSync(p, "utf8"));
-  items.push({ entry, parsed });
+function build() {
+  if (!existsSync(OUTCH)) mkdirSync(OUTCH, { recursive: true });
+  const items = [];
+  for (const entry of MANIFEST) {
+    const p = join(SRC, entry.path);
+    if (!existsSync(p)) { console.warn(`! missing: ${entry.path} — skipped`); continue; }
+    const parsed = parseChapter(readFileSync(p, "utf8"));
+    items.push({ entry, parsed });
+  }
+  for (let i = 0; i < items.length; i++) {
+    const { entry, parsed } = items[i];
+    const html = renderChapter(entry, parsed, items[i - 1]?.entry, items[i + 1]?.entry);
+    writeFileSync(join(OUTCH, `${entry.slug}.html`), html, "utf8");
+  }
+  writeFileSync(join(DOCS, "story.html"), renderIndex(items), "utf8");
+  console.log(`✓ built ${items.length} chapter page(s) → docs/chapters/ + docs/story.html`);
 }
-for (let i = 0; i < items.length; i++) {
-  const { entry, parsed } = items[i];
-  const html = renderChapter(entry, parsed, items[i - 1]?.entry, items[i + 1]?.entry);
-  writeFileSync(join(OUTCH, `${entry.slug}.html`), html, "utf8");
-}
-writeFileSync(join(DOCS, "story.html"), renderIndex(items), "utf8");
-console.log(`✓ built ${items.length} chapter page(s) → docs/chapters/ + docs/story.html`);
+
+// run only when invoked directly (so build-tts.mjs can import MANIFEST/narrationText)
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) build();

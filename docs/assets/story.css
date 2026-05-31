@@ -100,6 +100,13 @@ a{color:var(--ember-soft)}
 .chapter-nav a.disabled{opacity:.3;pointer-events:none}
 .chapter-nav a.mid{flex:0 0 auto;color:var(--gold)}
 
+/* OpenAI narration — native audio player, themed container */
+.narration{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0;padding:11px 15px;
+  border:1px solid rgba(207,155,58,.35);border-radius:9px;background:rgba(20,16,13,.6)}
+.narration-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.narration .tts-audio{flex:1;min-width:230px;height:40px}
+@media (max-width:600px){.narration{padding:9px 11px;gap:8px}.narration .tts-audio{min-width:150px}}
+
 /* the parchment reading panel */
 .chapter-body{background:linear-gradient(180deg,var(--paper),var(--paper2));color:var(--ink);border-radius:6px;
   padding:clamp(26px,5vw,52px) clamp(22px,5vw,56px);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 2px var(--ink);
