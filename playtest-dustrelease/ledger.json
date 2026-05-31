@@ -1,0 +1,42 @@
+{
+  "campaign": "Iwao: The Particle Heir",
+  "campaignId": "camp_c0b277b6",
+  "roomId": "iwa-academy",
+  "hero": { "id": "char_2b103605", "name": "Iwao" },
+  "dayClock": 8,
+  "weeksDone": 1,
+  "arc": "Academy — Year One",
+  "sheet": {
+    "level": 1, "rank": "Genin",
+    "hp": "8/8", "chakra": "14/14", "ac": 12,
+    "ryo": 0, "beltPouchRyo": 20, "missionPoints": 0,
+    "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap"],
+    "jutsuKnownCap": 3,
+    "affinity": ["Earth", "Wind", "Fire"],
+    "kkg": ["Lava (Yoton)", "Scorch (Shakuton)", "Magnet (Jiton)", "Dust (Jinton)"]
+  },
+  "standing": {
+    "iwagakure": { "reputation": 7, "favor": 2 },
+    "iwa_academy": { "reputation": 3, "favor": 0 }
+  },
+  "npcs": {
+    "onoki": "npc_e119e519", "soun": "npc_cb6d28d2", "tetsuna": "npc_896274f5",
+    "ryuen": "npc_e174dc61", "kanna": "npc_2a078a09",
+    "ganryu": "npc_e0b7e804", "akemi": "npc_7910b5b7", "tobari": "npc_7fd350ea",
+    "suzume": "npc_b00b69f3", "romaru": "npc_5996e6da", "hibana": "npc_8db2fc16",
+    "komate": "npc_804206e4", "sazae": "npc_e8331e56",
+    "kurikara": "npc_1e6c73a7", "genbu": "npc_46c9bd0a", "hoki": "npc_0ddc12e1",
+    "kurogane": "npc_9340af38", "shion": "npc_95a5418d"
+  },
+  "classmates9": ["Iwao", "Ganryu", "Akemi", "Tobari", "Suzume", "Romaru", "Hibana", "Komate", "Sazae"],
+  "plannedSquads": {
+    "team_kurikara": ["Iwao", "Ganryu", "Akemi"],
+    "team_genbu": ["Tobari", "Suzume", "Romaru"],
+    "team_hoki": ["Hibana", "Komate", "Sazae"]
+  },
+  "bugs": [
+    { "id": "bug_1780212505469_fo4a3", "title": "create_character no KKG param", "severity": "medium", "status": "FIXED", "commit": "4253221" }
+  ],
+  "engineErrorsUnvalidated": [],
+  "notes": "Engine L1 maps to rank Genin even pre-graduation; narrate Academy-student fiction over mechanical Genin. Another agent has uncommitted WIP in packages/engine/src/*/world.ts — do NOT touch; be cautious restarting the engine (would compile their WIP)."
+}

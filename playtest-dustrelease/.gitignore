@@ -1,0 +1,4 @@
+# Regenerable build artifact — rebuild with: python render_pdf.py
+Iwao_DustRelease_Campaign.pdf
+__pycache__/
+*.pyc
