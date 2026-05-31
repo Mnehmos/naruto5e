@@ -3,12 +3,13 @@
   "campaignId": "camp_e3ca139f",
   "roomId": "iwa-academy",
   "hero": { "id": "char_9314ed6b", "name": "Iwao" },
-  "dayClock": 20,
-  "chaptersDone": 10,
+  "dayClock": 23,
+  "chaptersDone": 11,
   "arcFlags": {
     "dustReframe": "Day 3 — control comes free, Dust must be EARNED; failed forbidden solo reach unmade a patch of wall; Ryūen forbade unsupervised attempts for years.",
     "particleFrame": "Day 4 — Iwao learns Dust = simultaneity (three natures balanced at once), not sequence; the intellectual path, takes years.",
-    "trustWound": "Day 5 — failed the tactics drill by treating teammates as variables; Akemi names it: he holds everyone at arm's length because he fears his own hands. Teamwork is his real growth edge before graduation/squad."
+    "trustWound": "Day 5 — failed the tactics drill by treating teammates as variables; Akemi names it: he holds everyone at arm's length because he fears his own hands. Teamwork is his real growth edge before graduation/squad.",
+    "deferredAwakening": "Day 23 — first sanctioned Dust attempt before Ōnoki FUMBLED (nat-1); the bloodline refused him; Ōnoki caught the backlash and gave the true key: hold the natures like a FRAME, not a fist — trust, not control (the same lesson as the cell). Dust ladder still NOT learned; the real awakening waits until he integrates 'trust the natures'. Convergence point: bloodline-mastery == the trust/teamwork arc."
   },
   "arc": "Academy — Day One",
   "relationships": {
@@ -37,7 +38,7 @@
   ],
   "sheet": {
     "level": 3, "rank": "Genin", "subclass": "Elementalist",
-    "xp": 320, "xpToNextLevel": 280, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
+    "xp": 400, "xpToNextLevel": 200, "xpThresholds": "50*(L-1)*L : L2=100 L3=300 L4=600 L5=1000 ...",
     "hp": "20/20", "chakra": "32/32", "ac": 12,
     "ryo": 0, "beltPouchRyo": 20, "missionPoints": 0,
     "jutsuKnown": ["earth-release-sand-coffin-binding", "wind-release-sickle-weasel", "fire-release-flaming-trap"],
@@ -49,11 +50,12 @@
   "renown": { "iwagakure": 15, "iwa_academy": 10, "note": "FAME — passive, drawn by the bloodline whether earned or not (engine 'reputation'); the unearned hype. NOT the point." },
   "willOfStone": {
     "what": "Iwagakure's Will of Fire: carry weight without breaking; never crush the people you carry it beside. DM-AWARDED only, for defining moments, scaled small(1)/medium(2-3)/large(4-5). Engine track: iwagakure FAVOR (cap 10). THIS is what Iwao earns.",
-    "total": 6, "cap": 10,
+    "total": 7, "cap": 10,
     "awarded": [
       { "day": 2, "size": "medium(+3)", "moment": "Ended the spar without crushing Rōmaru even at 2 HP — carried the heavier stone, didn't crush the one beside him." },
       { "days": "6-7", "size": "small(+1)", "moment": "Said 'help'; learned blind trust (3 then 5 steps); climbed to the quarry to seek the cost of his gift." },
-      { "day": 20, "size": "medium(+2)", "moment": "Mid-term eval: his plan FAILED under pressure, but he'd left gaps and trusted his cell — Akemi & Tobari covered the breach and they passed together. Succeeded by the creed, not by control." }
+      { "day": 20, "size": "medium(+2)", "moment": "Mid-term eval: his plan FAILED under pressure, but he'd left gaps and trusted his cell — Akemi & Tobari covered the breach and they passed together. Succeeded by the creed, not by control." },
+      { "day": 23, "size": "small(+1)", "moment": "Failed the awakening utterly before the Third Tsuchikage (nat-1) and did not break — stood in the wreck and asked to be taught." }
     ]
   },
   "npcs": {
