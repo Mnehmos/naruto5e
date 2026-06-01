@@ -16,7 +16,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
-import { MANIFEST, SRC, narrationText } from "./build-story.mjs";
+import { MANIFEST, SRC, narrationText, build as buildStory } from "./build-story.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const AUDIO = join(ROOT, "docs", "audio");
@@ -107,3 +107,7 @@ if (!targets.length) { console.error("no matching slugs in the manifest."); proc
 let made = 0;
 for (const entry of targets) { try { if (await generate(entry)) made++; } catch (e) { console.error(`✗ ${entry.slug}: ${e.message}`); } }
 console.log(`\n✓ TTS done — ${made} file(s) generated/updated, ${targets.length - made} unchanged/skipped (model ${MODEL}, voice ${VOICE}).`);
+// Always rebuild the static pages AFTER generating audio, so the native <audio> player is
+// injected into any chapter whose mp3 now exists (avoids the build-order gap where a freshly
+// generated chapter's page was rendered before its mp3 existed and so had no player).
+if (made > 0) { buildStory(); console.log("✓ pages rebuilt — narration players in sync with docs/audio/."); }

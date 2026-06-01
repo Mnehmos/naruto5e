@@ -313,7 +313,7 @@ ${PROGRESS}
 }
 
 /* ----------------------------- run ----------------------------- */
-function build() {
+export function build() {
   if (!existsSync(OUTCH)) mkdirSync(OUTCH, { recursive: true });
   const items = [];
   for (const entry of MANIFEST) {
