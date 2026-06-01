@@ -37,6 +37,12 @@ export interface JutsuRecord {
   atHigherRanks: string | null;
   source?: { document: string; page: number };
   effect?: JutsuEffect;
+  /**
+   * Phase B — opt-in: if true, a technique_noop_spoken disposition does NOT
+   * refund the resource (e.g. a misfired forbidden seal that consumes chakra
+   * regardless of outcome).  Defaults to false: a no-op refunds by default.
+   */
+  nonRefundable?: boolean;
   [k: string]: unknown;
 }
 
@@ -52,6 +58,42 @@ export interface JutsuEffect {
   concentration?: boolean;
   /** number of separate attack rolls (multi-projectile jutsu, e.g. Phoenix Fire). */
   hits?: number;
+  /**
+   * Phase B — utility/buff branch.  When present on a utility-delivery jutsu
+   * (or alongside damage/heal), the engine applies a timed buff to each target
+   * (or the caster if `selfOnly: true`).  Closes the silent-no-op bug for
+   * non-healing utility techniques (AC up, temp HP, advantage grant, aura, ...).
+   */
+  buff?: JutsuBuff;
+}
+
+/** Phase B — structured buff descriptor authored by the content pack. */
+export interface JutsuBuff {
+  /** Human-readable buff name; used as the dedupe key per-source. */
+  name: string;
+  /**
+   * Buff kind decides which resolve branch lights up:
+   *  - ac_bonus       → mod.ac (default +2) added to AC reads
+   *  - temp_hp        → grants `dice` (rolled) or `amount` temp HP
+   *  - condition_grant→ applies `conditionGranted` (e.g. "Invisible") for `rounds`
+   *  - advantage_flag → `advantageOn: ['stealth', ...]` consulted by checks
+   *  - aura           → `aura: { radius, grants: {ac: +1, ...} }` for nearby allies
+   *  - generic        → bag of mods + advantageOn (the catch-all)
+   */
+  kind?: "generic" | "ac_bonus" | "temp_hp" | "condition_grant" | "advantage_flag" | "aura";
+  mod?: Record<string, number>;
+  advantageOn?: string[];
+  conditionGranted?: string;
+  /** Temp HP — fixed amount; takes precedence over `dice` if both set. */
+  tempHpAmount?: number;
+  /** Temp HP — dice expression rolled at cast (e.g. "2d4"). */
+  tempHpDice?: string;
+  /** Number of rounds the buff lasts (omitted = until rest or removed by GM). */
+  rounds?: number;
+  /** Default: target each `targets[]` entry; if true, force caster-self. */
+  selfOnly?: boolean;
+  /** Aura descriptor (only meaningful when kind === "aura"). */
+  aura?: { radius: number; shape?: string; grants?: Record<string, number | string | boolean> };
 }
 
 function readJson<T>(file: string, fallback: T): T {

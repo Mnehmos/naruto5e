@@ -120,6 +120,37 @@ export const CharacterSchema = z.object({
     .optional(),
   /** up to TWO concentration jutsu at once (divergence from 5e). */
   concentration: z.array(z.object({ jutsuId: z.string(), name: z.string(), targets: z.array(z.string()).default([]) })).default([]),
+  /**
+   * Phase B — active utility/buff effects landed by a technique whose delivery
+   * is "utility" but which DOES have an observable effect (AC bonus, temp HP,
+   * granted condition, advantage flag, aura, or freeform modifier). These ride
+   * alongside conditions/concentration; reads through actor.ts pick them up.
+   * Empty default keeps every existing actor's AC + saves bit-identical.
+   */
+  activeBuffs: z
+    .array(
+      z.object({
+        source: z.string(), // caster id
+        name: z.string(), // buff name (also jutsu name in most cases)
+        kind: z
+          .enum(["generic", "ac_bonus", "temp_hp", "condition_grant", "advantage_flag", "aura"])
+          .default("generic"),
+        mod: z.record(z.number()).default({}), // free-form numeric modifiers (ac, attack, saveDC, ...)
+        advantageOn: z.array(z.string()).default([]), // ability/skill keys for advantage
+        conditionGranted: z.string().optional(), // condition name applied by the buff
+        aura: z
+          .object({
+            radius: z.number().int().min(0).default(0),
+            shape: z.string().optional(),
+            grants: z.record(z.union([z.number(), z.string(), z.boolean()])).default({}),
+          })
+          .optional(),
+        expiresOnRound: z.number().int().optional(),
+        rounds: z.number().int().optional(),
+        concentration: z.boolean().default(false),
+      }),
+    )
+    .default([]),
   deathSaves: z.object({ successes: z.number(), failures: z.number(), stable: z.boolean() }).default({ successes: 0, failures: 0, stable: false }),
   dead: z.boolean().default(false),
   readied: z.object({ trigger: z.string(), op: z.any() }).optional(),

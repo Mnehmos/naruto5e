@@ -7,6 +7,7 @@
 import { abilityMod } from "./abilities.js";
 import type { Ability } from "./skills.js";
 import type { Store } from "../store/types.js";
+import { buffModTotal } from "./buffs.js";
 
 export interface ActorRef {
   doc: any;
@@ -59,7 +60,10 @@ export function actorCasting(doc: any, classification: string): CastingTrack {
 }
 
 export function actorAC(doc: any): number {
-  return doc.ac ?? 10;
+  const base = doc.ac ?? 10;
+  // Phase B — active buffs may add to AC.  Empty activeBuffs → zero delta,
+  // preserving every existing combat-test numeric.
+  return base + buffModTotal(doc, "ac");
 }
 
 export function actorAffinity(doc: any): string[] {

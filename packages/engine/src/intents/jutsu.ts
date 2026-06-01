@@ -11,8 +11,10 @@ import { jutsuRankCap } from "../rules/affinity.js";
 import { learnGate } from "../rules/learn.js";
 import { blockedComponents, INCAPACITATING, SAVE_TO_END, conditionSaveAbility } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
-import { activeCombatantId } from "../rules/turn.js";
-import { debitPool, readPool, resolveResource } from "../rules/resourcePool.js";
+import { activeCombatantId, activeEncounter } from "../rules/turn.js";
+import { debitPool, creditPool, readPool, resolveResource } from "../rules/resourcePool.js";
+import { applyBuffDoc, type BuffEntry } from "../rules/buffs.js";
+import { rollExpression } from "@naruto5e/shared";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -191,7 +193,10 @@ export function castJutsu(ctx: ResolveContext): void {
 
   // cast IR (carries area for the visualizer; element for tinting).
   // `cost` carries both the generic resource shape AND the legacy `chakra` key
-  // so existing UI / log consumers keep working.
+  // so existing UI / log consumers keep working.  Phase B: every cast emits with
+  // `disposition: 'commit'` — costs were paid and the technique resolved.  A
+  // separate `technique_noop_spoken` event fires AFTER when the resolution had
+  // no observable effect (utility + no heal + no conditions + no buff + ...).
   ctx.ir.emit("cast", {
     actor: caster.id,
     data: {
@@ -205,6 +210,7 @@ export function castJutsu(ctx: ResolveContext): void {
       delivery: eff?.delivery ?? "utility",
       targets: ctx.op.params.targets,
       origin: ctx.op.params.areaOrigin,
+      disposition: "commit",
     },
     narration: `${caster.name} casts ${jutsu.name} (${atRank ?? jutsu.rank}-rank, ${chakraCost} ${resourceDef.label || resourceDef.id}).`,
   });
@@ -218,6 +224,9 @@ export function castJutsu(ctx: ResolveContext): void {
     saveActor(ctx.store, ref);
   }
 
+  // ---- effect resolution: tracked so we can detect the no-op case ----
+  let didApplyEffect = false;
+
   // healing (self or targets)
   if (eff?.healing) {
     const targetIds = (ctx.op.params.targets as string[]) ?? [caster.id];
@@ -228,16 +237,39 @@ export function castJutsu(ctx: ResolveContext): void {
       const res = healDoc(tref.doc, dmgRoll.total + casting.mod);
       saveActor(ctx.store, tref);
       ctx.ir.emit("heal", { actor: caster.id, data: { target: tid, amount: res.healed, hp: res.hp, revived: res.revived } });
+      didApplyEffect = true;
     }
   }
 
+  // Phase B — buff branch: a utility/buff technique that DOES land an observable
+  // effect (AC bonus, temp HP, condition grant, advantage flag, aura, ...).  The
+  // jutsu record opts into this via `effect.buff: JutsuBuff`.  This is the real
+  // fix for bug-1780153780675 (non-healing utility silently no-op'd): now the
+  // engine has a place to LAND the effect, and the noop branch below only fires
+  // when the technique genuinely has no observable effect authored.
+  if (eff?.buff) {
+    const targetIds = applyBuffsFromCast(ctx, caster, eff, ref);
+    if (targetIds.length) didApplyEffect = true;
+  }
+
   // damage / conditions delivery
-  if (!eff || eff.delivery === "utility") return;
+  if (!eff || eff.delivery === "utility") {
+    // utility (or no-effect) techniques: if we landed nothing observable,
+    // emit the explicit noop disposition + refund the resource by default.
+    if (!didApplyEffect) {
+      emitNoopSpoken(ctx, caster, ref, resourceDef.id, chakraCost, jutsu, "utility_no_observable_effect");
+    }
+    return;
+  }
 
   const targetIds = (ctx.op.params.targets as string[]) ?? [];
   if (targetIds.length === 0) {
-    // no targets given: emit nothing further (DM may resolve area narratively)
-    ctx.ir.emit("cast_unresolved", { actor: caster.id, data: { reason: "no targets specified", jutsu: jutsu.name } });
+    // Phase B — what used to be a silent `cast_unresolved` is now an explicit
+    // technique_noop_spoken with refund.  Preserves the legacy event name as a
+    // transitional duplicate so any UI/log consumer keying on `cast_unresolved`
+    // keeps working until they migrate.
+    emitNoopSpoken(ctx, caster, ref, resourceDef.id, chakraCost, jutsu, "no_targets_specified");
+    ctx.ir.emit("cast_unresolved", { actor: caster.id, data: { reason: "no targets specified", jutsu: jutsu.name, disposition: "no_op_spoken" } });
     return;
   }
 
@@ -298,6 +330,176 @@ export function castJutsu(ctx: ResolveContext): void {
 
 function isPCActor(ref: ActorRef): boolean {
   return ref.doc.isPC ?? ref.coll === "characters";
+}
+
+/**
+ * Phase B — emit `technique_noop_spoken` and refund the resource by default.
+ * The caller has already debited the resource (we are post-cost-payment); we
+ * credit it back unless the jutsu opted in to `nonRefundable: true`.  This is
+ * the standardized disposition for "the technique resolved but had no
+ * observable effect" — every silent return-without-emit case in castJutsu
+ * routes through this helper.
+ */
+function emitNoopSpoken(
+  ctx: ResolveContext,
+  caster: any,
+  ref: ActorRef,
+  resourceId: string,
+  amount: number,
+  jutsu: JutsuRecord,
+  reason: string,
+): void {
+  const nonRefundable = jutsu.nonRefundable === true;
+  let refunded = false;
+  if (!nonRefundable && amount > 0) {
+    creditPool(caster, ctx.engine.content, resourceId, amount);
+    saveActor(ctx.store, ref);
+    refunded = true;
+  }
+  const resourceDef = ctx.engine.content.getResource(resourceId);
+  const label = resourceDef?.label || resourceId;
+  ctx.ir.emit("technique_noop_spoken", {
+    actor: caster.id,
+    data: {
+      jutsu: jutsu.name,
+      jutsuId: jutsu.id,
+      resource: resourceId,
+      resourceSpent: amount,
+      refunded,
+      nonRefundable,
+      reason,
+      disposition: "no_op_spoken",
+    },
+    narration: `${jutsu.name} resolves with no observable effect${refunded ? ` (${amount} ${label} refunded)` : ""}.`,
+  });
+}
+
+/**
+ * Phase B — apply the technique's structured buff to the target list.  Returns
+ * the list of target ids that received the buff (empty when none); the caller
+ * uses that to mark `didApplyEffect`.  Handles AC bonus, temp HP, condition
+ * grant, advantage flag, aura, and the generic mod-bag in a single composable
+ * pass.  Re-applying the same buff (same source + name) refreshes rather than
+ * stacks — matches the concentration replacement rule.
+ */
+function applyBuffsFromCast(ctx: ResolveContext, caster: any, eff: any, casterRef: ActorRef): string[] {
+  const buff = eff.buff;
+  if (!buff) return [];
+  const requested = (ctx.op.params.targets as string[]) ?? [];
+  const targetIds: string[] = buff.selfOnly || requested.length === 0 ? [caster.id] : requested;
+  const expiresOnRound = computeExpiry(ctx, casterRef.doc, buff.rounds);
+  const applied: string[] = [];
+
+  for (const tid of targetIds) {
+    const tref = loadActor(ctx.store, tid);
+    if (!tref) {
+      ctx.ir.emit("miss_target", { actor: caster.id, data: { target: tid, reason: "not found" } });
+      continue;
+    }
+    if (tref.doc.dead) {
+      ctx.ir.emit("miss_target", { actor: caster.id, data: { target: tid, reason: "already defeated" } });
+      continue;
+    }
+    const kind = (buff.kind as BuffEntry["kind"]) ?? "generic";
+    const mod: Record<string, number> = { ...(buff.mod ?? {}) };
+
+    // Kind-specific resolution -------------------------------------------------
+    if (kind === "ac_bonus") {
+      // ac_bonus defaults to +2 if the content didn't spell out a number.
+      if (typeof mod.ac !== "number") mod.ac = 2;
+    }
+    let tempHpApplied = 0;
+    if (kind === "temp_hp" || typeof buff.tempHpAmount === "number" || buff.tempHpDice) {
+      tempHpApplied = applyTempHpToDoc(ctx, tref.doc, buff);
+    }
+    const conditionGranted = kind === "condition_grant" ? buff.conditionGranted : buff.conditionGranted;
+    if (conditionGranted) applyGrantedCondition(ctx, caster, tref, conditionGranted, buff.rounds);
+
+    const entry: BuffEntry = {
+      source: caster.id,
+      name: buff.name,
+      kind,
+      mod,
+      advantageOn: buff.advantageOn ?? [],
+      conditionGranted: conditionGranted || undefined,
+      aura: buff.aura
+        ? {
+            radius: buff.aura.radius ?? 0,
+            shape: buff.aura.shape,
+            grants: buff.aura.grants ?? {},
+          }
+        : undefined,
+      expiresOnRound,
+      rounds: buff.rounds,
+      concentration: !!eff.concentration,
+    };
+    const res = applyBuffDoc(tref.doc, entry);
+    saveActor(ctx.store, tref);
+    ctx.ir.emit(res.refreshed ? "buff_refreshed" : "buff", {
+      actor: caster.id,
+      data: {
+        target: tid,
+        name: buff.name,
+        kind,
+        mod,
+        advantageOn: buff.advantageOn ?? [],
+        conditionGranted: conditionGranted || undefined,
+        tempHp: tempHpApplied || undefined,
+        aura: entry.aura,
+        rounds: buff.rounds,
+        expiresOnRound,
+        disposition: "commit",
+      },
+      narration: `${caster.name} ${res.refreshed ? "refreshes" : "applies"} ${buff.name} on ${tref.doc.name}.`,
+    });
+    applied.push(tid);
+  }
+  return applied;
+}
+
+/** Stamp temp HP onto a doc (max-wins: temp HP doesn't stack, 5e-style). */
+function applyTempHpToDoc(ctx: ResolveContext, doc: any, buff: any): number {
+  let amount = 0;
+  if (typeof buff.tempHpAmount === "number") amount = Math.max(0, Math.floor(buff.tempHpAmount));
+  else if (buff.tempHpDice) {
+    const roll = rollExpression(ctx.rng, buff.tempHpDice);
+    amount = Math.max(0, roll.total);
+  }
+  if (amount <= 0) return 0;
+  doc.hp.temp = Math.max(doc.hp.temp ?? 0, amount);
+  return amount;
+}
+
+/** Apply a granted condition (Invisible, etc.) for a buff with rounds support. */
+function applyGrantedCondition(ctx: ResolveContext, caster: any, tref: ActorRef, condition: string, rounds?: number): void {
+  const t = tref.doc;
+  t.conditions = t.conditions ?? [];
+  t.conditionStates = t.conditionStates ?? [];
+  if (!t.conditions.includes(condition)) t.conditions.push(condition);
+  if (rounds) t.conditionStates.push({ name: condition, saveAbility: "con", dc: 0, saveToEnd: false, rounds });
+  saveActor(ctx.store, tref);
+  ctx.ir.emit("condition", {
+    actor: caster.id,
+    data: { target: t.id, condition, applied: true, granted: true, rounds: rounds ?? null },
+    narration: `${t.name} gains ${condition}.`,
+  });
+}
+
+/**
+ * Compute the round (absolute) at which the buff expires.  When the caster is
+ * in an active encounter, look up the encounter's current round and add the
+ * buff's duration.  Out of combat, leave expiresOnRound undefined (buff lasts
+ * until rest or explicit removal).
+ */
+function computeExpiry(ctx: ResolveContext, casterDoc: any, rounds?: number): number | undefined {
+  if (typeof rounds !== "number" || rounds <= 0) return undefined;
+  try {
+    const enc = activeEncounter(ctx.store, ctx.room.id);
+    if (enc && typeof enc.round === "number") return enc.round + rounds;
+  } catch {
+    /* fall through */
+  }
+  return undefined;
 }
 
 /**

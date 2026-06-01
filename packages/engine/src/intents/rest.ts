@@ -72,6 +72,10 @@ export function registerRestIntents(engine: Engine): void {
         c.conditions = (c.conditions ?? []).filter((x) => !clearedByRest(x));
         c.conditionStates = (c.conditionStates ?? []).filter((s: any) => !clearedByRest(s.name));
       }
+      // Phase B — active buffs from a prior encounter (e.g. AC bonus, temp HP,
+      // advantage flags) don't survive a full night's rest.  Stripped silently;
+      // the rest event already names HP/chakra recovery as the visible signal.
+      if (Array.isArray((c as any).activeBuffs)) (c as any).activeBuffs = [];
       if (ctx.op.params.missionBoundary === true) c.willOfFire = true;
     } else {
       // short rest: spend dice to recover

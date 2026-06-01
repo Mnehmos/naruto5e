@@ -11,6 +11,7 @@ import { applyDamageDoc } from "../rules/resolve.js";
 import { rollDamage } from "../rules/combat.js";
 import { checkPhaseTransition } from "../rules/adversary.js";
 import { INCAPACITATING, CONDITION_DOT, clearedByCombatEnd } from "../rules/conditions.js";
+import { tickBuffs } from "../rules/buffs.js";
 import { castJutsu } from "./jutsu.js";
 
 function rooms(ctx: ResolveContext) {
@@ -231,6 +232,15 @@ export function registerCombatIntents(engine: Engine): void {
       tickDot(ctx, ref);
       // control conditions (Paralyzed/Stunned/...) get a save-to-end + duration tick
       tickConditionSaves(ctx, ref);
+      // Phase B — active buffs may expire at the start of the turn.  Stripped
+      // entries each emit a `buff_expired` IR so visualizers can clear icons.
+      const expired = tickBuffs(ref.doc, round);
+      if (expired.length) {
+        saveActor(ctx.store, ref);
+        for (const b of expired) {
+          ctx.ir.emit("buff_expired", { actor: ref.doc.id, data: { target: ref.doc.id, name: b.name, kind: b.kind, source: b.source }, narration: `${b.name} fades from ${ref.doc.name}.` });
+        }
+      }
       // downed PC auto-rolls a death save at the start of its turn
       if (ref.doc.isPC && !ref.doc.dead && (ref.doc.hp?.current ?? 1) === 0 && !ref.doc.deathSaves?.stable) {
         autoDeathSave(ctx, ref);
@@ -257,6 +267,8 @@ export function registerCombatIntents(engine: Engine): void {
         // NOTHING was cleared, so e.g. Prone lingered after combat and through a long rest.)
         if (Array.isArray(ref.doc.conditions)) ref.doc.conditions = ref.doc.conditions.filter((x: string) => !clearedByCombatEnd(x));
         if (Array.isArray(ref.doc.conditionStates)) ref.doc.conditionStates = ref.doc.conditionStates.filter((s: any) => !clearedByCombatEnd(s.name));
+        // Phase B — active buffs from the encounter don't outlive it.
+        if (Array.isArray(ref.doc.activeBuffs)) ref.doc.activeBuffs = [];
         saveActor(ctx.store, ref);
       }
     }
