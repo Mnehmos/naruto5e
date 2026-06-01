@@ -107,6 +107,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch13_the_crossing.md", slug: "act2-ch13-the-crossing", arc: "actii2", tags: ["Travel", "Dice-over-plan", "Engine Proof"],
     teaser: "Off the mountain, the gift fails: the lens who reads any archive can't read a hillside, and a natural 1 nearly walks the cell onto a killing-ground. Then he reads the valley itself — and finds the man they hunt has tended eleven graves for eighteen years.",
     callout: { kind: "proof", label: "Nat-1 in the field; 18 reading the dead", text: "Nature NATURAL 1 (8 vs DC 16) — the scholar's instinct in open country is dangerously inverted; only Akemi's sensing saves the cell. Then Perception 18 vs DC 15: he can't track, but he reads eleven tended cairns out of an erased valley. The antagonist becomes the sole mourner of the dead two villages forgot — right about the wound, wrong about the cure." } },
+  { path: "chapters/act2_ch14_where_no_one_dies.md", slug: "act2-ch14-where-no-one-dies", arc: "actii2", tags: ["Combat", "Engine Proof", "Dice-over-plan"],
+    teaser: "The incident Gomei wanted springs at last — dead Stone genin with Cloud sign, a war no lens can refute. UFC-called, dice live. Iwao answers a +20 killer with a cage instead of a grave, and declines the free kill on the one ground built by people who never did.",
+    callout: { kind: "proof", label: "A 42-damage bind that chose not to kill", text: "Sand-Coffin Binding rolled 42 earth (50→8) and PARALYZED the elite Captain — a near-kill that spared him by the shape of the technique. With the +20 killer helpless at 8 HP (break-save 6 vs 15), Iwao declined the free kill, took him alive (incident defused), and offered the hired blade a way home. No graves made in the valley of graves — and Gomei, watching, withdrew with a doubt instead of a plan." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
