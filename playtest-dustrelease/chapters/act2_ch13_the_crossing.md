@@ -1,0 +1,61 @@
+TITLE: Act II, Chapter 13 — The Crossing
+DATES: The contested march · Day 102 · the scholar off his mountain, the gift that fails in open country, and a valley full of tended graves
+---
+They went down off the mountain at dawn, and within an hour the world took away every wall Iwao had ever leaned on.
+
+He had not understood, until the cliff-stairs were behind him and the contested march opened out ahead — grey shale and bent scrub and a sky too big to have a ceiling — how much of his whole life had been *indoors.* The Academy, the archive, the registry, the bend he'd read off a map: every triumph of his short career had been a triumph of reading something someone else had written down. Out here nothing was written. The land did not keep a ledger. And Iwao, the lens, the boy who could read a traitor out of a roster and a war out of a smoothed report, discovered very quickly that he could not read the difference between a safe slope and a killing one.
+
+## Off the Mountain — The Gift That Fails Outdoors
+He tried. That was almost the worst of it; he tried his hardest, brought all his careful intellect to bear on the shape of the country, reasoned his way toward what *ought* to be the route — and reasoned exactly wrong.
+
+[OOC · Nature (navigate the trackless highlands toward the Hollow Pass) — d20 **natural 1**, +7 = 8 vs DC 16 · FUMBLE. The dice draw the soul again, hard: the scholar's instinct in open country is not just absent, it is actively, dangerously inverted. He leads the cell precisely the wrong way.]
+
+He walked them, with total confidence, up onto a shelf of open shale — and it was Akemi, three steps behind him with her eyes half-closed and her sensing thrown wide, who felt the trap close before it sprang. The shelf was not a route. It was a funnel: open ground overlooked from the ridge above, the exact kind of place a patient killer prays his quarry will wander into on its own. And there was a quarry-killer up there. She felt him — a single chakra signature, held perfectly still and perfectly cold, watching them climb obediently toward the spot he'd have chosen for them.
+
+> "Stop." Her voice was flat and quiet and absolutely without panic, which was how he knew to obey it instantly. "Left ridge, now. We're being watched. Don't look up, don't point — just bring the cell back off the shale and into cover with me."
+
+[OOC · Akemi (npc_907075f3) — on-demand model turn → social_speak (urgent). The fumble's consequence, caught by the sensor: Iwao walked them onto a kill-ground, and the hands he'd insisted on bringing are the only reason it didn't kill them. They retreat into cover — and now know a patient watcher holds the march.]
+
+They peeled off the open ground low and unhurried, the way you back away from a drop, and slid into the broken cover of a dry watercourse, and Iwao's heart was going hard — not from the climb, from the understanding. *If I had come alone,* he thought, with the cold clarity that had replaced so many of his illusions this year, *I would already be dead. Not outwitted. Not out-planned. Just dead, on a rock, because I cannot read a hillside.* He had brought three other people into danger and one of them had just paid that danger back tenfold by being exactly the thing he wasn't. *Use mine,* she'd said. He was beginning to understand that she had not meant it as comfort. She had meant it as a fact about how he was going to survive.
+
+He did not apologize, because Akemi would have hated that. He just said, low, "Thank you. Lead. I'll read what you find." And handed her the front of the column, the scholar walking second behind the tracker, which was the most honest order of march the cell had ever kept.
+
+## The Pass That Isn't On Any Map
+Akemi brought them the long, ugly, safe way around — down a watercourse and along a fold of dead ground that Iwao would never in a hundred years have found — and by the grey middle of the afternoon they lay in cover on a lip of rock above a valley that appeared on no current map of either country.
+
+The Hollow Pass. Where it had happened. Where eleven names had been spent to buy a peace and then erased so the peace could be praised. It was a narrow, high, lonely place, the kind of geography that two nations could plausibly agree to stop arguing about, and the moment Iwao's eyes settled on it the thing he was actually good at came back to him all at once, like a held breath let go. He could not track a man across it. But he could *read* it. And read it he did.
+
+[OOC · Perception (read the lived-in signs of the erased valley — eighteen years of one man inhabiting a place both nations refuse to see) — d20 13, +5 = **18** vs DC 15 · SUCCESS. The chapter's balance: he FUMBLES the field and WINS the reading. Can't navigate the land; can read everything written on it.]
+
+It was inhabited. Not camped in — *inhabited,* with the deep, worn, unmistakable grammar of one person living a long time in one place: a cook-fire site used so often the stone had gone to glass, a path between two points beaten ankle-deep over years, a cistern kept clear, a windbreak repaired and repaired and repaired. A man had been living in the valley that two countries pretended was empty, for a very long time, alone.
+
+And then Iwao saw the rest of it, and the careful detective grammar in his head stopped working for a moment and just *hurt.*
+
+## The Eleven
+Along the valley's sheltered eastern wall, out of the wind, stood eleven cairns. Stone stacked on stone, the patient way, each one shaped and tended — not a mass grave, not eleven anonymous heaps, but eleven *individual* graves, kept. Weeded. The stones straightened where frost had shifted them. One of them had a chipped iron cup set at its base, the kind a genin carries, polished. Someone had been coming to those graves for eighteen years. Someone had carried each of those eleven bodies, alone, out of whatever the Stone left of them, and built each one a marker, and come back, and back, and back, through eighteen winters, to keep the wind from taking them too.
+
+The man who wanted to burn two nations down was the only person alive who had ever mourned the eleven they killed to keep their peace. He had not been hiding in the wound. He had been *tending* it. He was a monster the way a man who has been left alone with eleven graves for eighteen years becomes a monster — which is to say he was right about everything except what to do about it.
+
+"He kept them," Iwao said, very quietly, to no one. "Both villages forgot, and he *kept* them." And he understood, looking down at the cup polished by a dead boy's friend, that he had not come here to defeat a villain. There were no villains in this valley. There was a crime, and there was the one man who had refused to let it be forgotten, and there was the terrible thing that refusal had curdled into. *I can't beat that,* he thought. *You can't beat grief that's right. You can only — give it somewhere else to go.* He did not yet know how. But he knew, now, exactly what the shape of winning would have to be, and it was not a shape with a body on the ground at the end of it.
+
+## First Watch
+They made a cold camp in the dead ground, no fire, and Ganryū took first watch beside the heir because Ganryū did not trust the quiet and did not pretend to. For a long while he just looked down at the tended graves catching the last grey light, and when he finally spoke it was not to Iwao. It was to the cold signature they all knew was out there in the dark, watching them watch his dead.
+
+> "You keep graves better than most men keep promises, Gomei," Ganryū said, barely above the wind. "I won't pretend that doesn't count for something." His hand stayed easy on his weapon all the same. "But if you're hiding a lie in this valley — I'll drag it into the open myself."
+
+[OOC · Ganryū (npc_ef2a7cea) — on-demand model turn → social_speak (whisper). The gruff rival's whole arc in three sentences: he grants the enemy the one thing the enemy has earned — the graves count — without surrendering an inch of the line. The cell now holds Gomei as neither monster nor martyr, which is the only way anyone was ever going to reach him.]
+
+Iwao lay awake under the enormous unwalled sky long after his watch ended, listening to the wind work at eleven cairns and one polished cup, turning the unsolvable thing over and over. *He is right about the wound. He is wrong about the cure. And the only person who can prove there's a better cure than war is the one standing in the exact place that taught him there wasn't.* Somewhere out in the dark, a patient man who had buried his friends with his own hands watched a Stone heir sleep beside his graves, and did not kill him in the night, and that — Iwao would understand only later — was itself a kind of question the Hollow Road was asking, in the only language eighteen years of silence had left him.
+
+*— He couldn't read the land, and it nearly killed him; the friend he brought read it instead. Then he read the valley, and found not a lair but a grief that had kept eleven graves for eighteen years — and understood that winning could not mean a body on the ground.*
+
+---LOG---
+ACT II · DAY 102 · "The Crossing" — Movement Two, off Stone soil. Iwao L6, Genin. Strict temporal: 2 required + 1 optional block lived + resolved; clock 101 → 102. New locations entered: the contested march / the Hollow Pass (off-map, no-man's-land).
+PLAYED BEATS:
+ • Iwao Nature NAT-1 (8 vs DC 16) — FUMBLE. The lens is hopeless in trackless country; he reasons the route exactly wrong and leads the cell onto an exposed shale death-funnel overlooked by a hidden watcher. The dice make his field-weakness nearly fatal.
+ • Akemi (npc_907075f3, model turn): her sensing catches the trap before it springs — pulls the cell off the kill-ground into cover; reveals a single cold, patient watcher holding the march. Iwao cedes the column: "Lead. I'll read what you find." If he'd come alone he'd be dead — the hands he brought are the reason he isn't.
+ • Iwao Perception 18 vs DC 15 — SUCCESS (his element rebalances the fumble): from cover he READS the erased valley — 18 years of one man inhabiting it AND eleven individually-tended cairns. Gomei has kept his disavowed squad's graves alone for 18 winters; the 'monster' is the sole mourner of the dead two villages erased. Iwao's realization: "You can't beat grief that's right. You can only give it somewhere else to go" — winning cannot mean a body on the ground.
+ • Ganryu (npc_ef2a7cea, model turn): first watch, speaking to the absent Gomei — "You keep graves better than most men keep promises... but if you're hiding a lie in this valley, I'll drag it into the open." Grants the enemy his humanity, holds the line; the cell sees Gomei as neither monster nor martyr.
+ • Beat: the watcher does not kill them in the night — itself a question Gomei is asking in the only language 18 years of silence left him.
+THESIS (made flesh): Iwao's gift fails utterly in the field (nat-1) and only the cell saves him — bringing hands is survival, not sentiment. And the antagonist is humanized to the point of heartbreak: right about the wound, the lone keeper of the forgotten dead, wrong only about the cure.
+HOOK: tomorrow they go DOWN into the pass. A patient watcher holds the march. The confrontation coming is not a fight to win but a grief to redirect — and Gomei's 'revised' design (blind or convince the lens) is still in motion out there in the dark.

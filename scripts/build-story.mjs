@@ -104,6 +104,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch12_the_clouds_half.md", slug: "act2-ch12-the-clouds-half", arc: "actii2", tags: ["Intrigue", "Alliance", "Investigation"],
     teaser: "To learn the whole shape of the man, Iwao does the unthinkable — he gives an enemy his own village's buried shame, for free, and asks for the Cloud's in return. The two halves of the lie meet on one table, and point home to a wound.",
     callout: { kind: "proof", label: "Win the room without the roll you'd lose", text: "No persuasion check — Iwao's weakest suit — is ever made; he trades vulnerability instead of leverage, and Raido (model-driven) answers in kind. Then Ninshou 19 vs DC 17 reads the Hollow Road's ground out of two villages' silences: the contested march both pretend is empty. He chooses to walk into the silence that makes men like Gomei — carrying hands on purpose." } },
+  { path: "chapters/act2_ch13_the_crossing.md", slug: "act2-ch13-the-crossing", arc: "actii2", tags: ["Travel", "Dice-over-plan", "Engine Proof"],
+    teaser: "Off the mountain, the gift fails: the lens who reads any archive can't read a hillside, and a natural 1 nearly walks the cell onto a killing-ground. Then he reads the valley itself — and finds the man they hunt has tended eleven graves for eighteen years.",
+    callout: { kind: "proof", label: "Nat-1 in the field; 18 reading the dead", text: "Nature NATURAL 1 (8 vs DC 16) — the scholar's instinct in open country is dangerously inverted; only Akemi's sensing saves the cell. Then Perception 18 vs DC 15: he can't track, but he reads eleven tended cairns out of an erased valley. The antagonist becomes the sole mourner of the dead two villages forgot — right about the wound, wrong about the cure." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
