@@ -48,6 +48,12 @@ export function registerRestIntents(engine: Engine): void {
       c.hitDice.remaining = Math.min(c.hitDice.total, c.hitDice.remaining + recoverHd);
       c.chakraDice.remaining = Math.min(c.chakraDice.total, c.chakraDice.remaining + recoverCd);
       if (c.exhaustion > 0) c.exhaustion -= 1;
+      // A long/downtime rest brings HP to full, so the character is unambiguously no
+      // longer dying — zero any lingering death-save tally (belt-and-suspenders for the
+      // heal-from-0 reset; also repairs state persisted before that fix existed).
+      if (c.deathSaves && (c.deathSaves.failures || c.deathSaves.successes || c.deathSaves.stable)) {
+        c.deathSaves = { successes: 0, failures: 0, stable: false };
+      }
       // A full night's rest resolves transient conditions (Prone, Bleeding, Stunned, …);
       // only persistent states (Petrified, Invisible) survive. Previously NO condition was
       // cleared, so e.g. Prone lingered indefinitely after a fight. (bug_1780248689058 sibling)

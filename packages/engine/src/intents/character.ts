@@ -412,6 +412,13 @@ export function registerCharacterIntents(engine: Engine): void {
     if (char.hp.current > 0 && char.conditions.includes("Unconscious")) {
       char.conditions = char.conditions.filter((c) => c !== "Unconscious");
     }
+    // 5e: regaining ANY hit points while at 0 ends the dying state — you become
+    // conscious and your death saves reset. Without this, a revived PC keeps a
+    // stale failure count into the next time they go down (the courtyard-climax
+    // residue: revived to full but still carrying failures:1 / stable:false).
+    if (before === 0 && char.hp.current > 0) {
+      char.deathSaves = { successes: 0, failures: 0, stable: false };
+    }
     const healed = char.hp.current - before;
     chars(ctx).put(char);
     ctx.ir.emit("heal", {

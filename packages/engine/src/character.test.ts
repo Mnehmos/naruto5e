@@ -214,4 +214,33 @@ describe("character_heal — target routing, dice amounts, NaN guard, corruption
     expect(r.status).toBe("resolved");
     expect(doc(medic).hp.current).toBe(9);
   });
+
+  // Regression — the courtyard-climax residue: a PC revived from 0 kept failures:1 /
+  // stable:false into the next time they went down. 5e: regaining HP from 0 ends dying.
+  it("resets death saves when a downed (0 HP) character is healed back up", () => {
+    const ally = mkChar("Faller");
+    const d = coll().get(ally);
+    d.hp.current = 0;
+    d.deathSaves = { successes: 0, failures: 2, stable: false };
+    d.conditions = ["Unconscious"];
+    coll().put(d);
+    const r = heal(mkChar("Medic"), { targetId: ally, amount: 5 });
+    expect(r.status).toBe("resolved");
+    expect(doc(ally).hp.current).toBe(5);
+    expect(doc(ally).deathSaves).toEqual({ successes: 0, failures: 0, stable: false });
+    expect(doc(ally).conditions).not.toContain("Unconscious");
+    expect((r as any).events[0].data.revived).toBe(true);
+  });
+
+  // A heal that does NOT bring HP up from 0 (already conscious) must not touch death saves.
+  it("leaves death saves untouched when healing an already-conscious character", () => {
+    const ally = mkChar("Wounded");
+    const d = coll().get(ally);
+    d.hp.current = 3;
+    d.deathSaves = { successes: 1, failures: 1, stable: false };
+    coll().put(d);
+    const r = heal(mkChar("Medic"), { targetId: ally, amount: 4 });
+    expect(r.status).toBe("resolved");
+    expect(doc(ally).deathSaves).toEqual({ successes: 1, failures: 1, stable: false });
+  });
 });
