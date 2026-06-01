@@ -101,6 +101,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch11_the_cold_trail.md", slug: "act2-ch11-the-cold-trail", arc: "actii2", tags: ["Intrigue", "Investigation", "Dice-over-plan"],
     teaser: "The believer fell; the architect walked. Tasked to hunt a forger who now forges nothing, Iwao stops chasing the man and reads the wound instead — and finds, buried in the Stone's own ledgers, that the enemy's grudge is true.",
     callout: { kind: "proof", label: "Track the wound, not the man", text: "History 22 vs DC 18 — the lens can't read a trail that was never forged, so he reads decades of buried border records instead, and uncovers a real Stone–Cloud atrocity at the root of Gomei's war. The hunt gains a conscience: the peace Iwao defends was bought with unmarked graves." } },
+  { path: "chapters/act2_ch12_the_clouds_half.md", slug: "act2-ch12-the-clouds-half", arc: "actii2", tags: ["Intrigue", "Alliance", "Investigation"],
+    teaser: "To learn the whole shape of the man, Iwao does the unthinkable — he gives an enemy his own village's buried shame, for free, and asks for the Cloud's in return. The two halves of the lie meet on one table, and point home to a wound.",
+    callout: { kind: "proof", label: "Win the room without the roll you'd lose", text: "No persuasion check — Iwao's weakest suit — is ever made; he trades vulnerability instead of leverage, and Raido (model-driven) answers in kind. Then Ninshou 19 vs DC 17 reads the Hollow Road's ground out of two villages' silences: the contested march both pretend is empty. He chooses to walk into the silence that makes men like Gomei — carrying hands on purpose." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
