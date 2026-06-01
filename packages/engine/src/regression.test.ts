@@ -131,6 +131,42 @@ describe("utility-delivery healing jutsu apply their effect", () => {
   });
 });
 
+// Phase B fix: the SILENT no-op path for utility/buff techniques.  A
+// utility-delivery jutsu with no observable effect used to charge chakra and
+// return zero IR events.  Now it explicitly emits `technique_noop_spoken` with
+// `disposition: 'no_op_spoken'` and refunds the resource by default.
+describe("utility techniques with no observable effect noop_spoken + refund", () => {
+  it("a no-effect utility jutsu refunds chakra and emits the noop disposition", () => {
+    const caster = mkPC("Mystic");
+    // Define a content-pack jutsu with no observable effect (the bug case).
+    engine.content.addJutsu({
+      id: "regression-hollow",
+      name: "Hollow Seal",
+      classification: "Ninjutsu",
+      rank: "E",
+      castingTime: "1 Action",
+      range: "Self",
+      duration: "Instant",
+      components: [],
+      cost: 3,
+      keywords: [],
+      description: "A seal with no effect — the silent-no-op test case.",
+      atHigherRanks: null,
+      effect: { delivery: "utility" },
+    } as any);
+    const before = (engine.getEntity("characters", caster) as any).chakra.current;
+    const r = run("cast", { jutsu: "regression-hollow", force: true }, caster) as any;
+    expect(r.status).toBe("resolved");
+    const noop = r.events.find((e: any) => e.type === "technique_noop_spoken");
+    expect(noop).toBeTruthy();
+    expect(noop.data.disposition).toBe("no_op_spoken");
+    expect(noop.data.refunded).toBe(true);
+    const after = (engine.getEntity("characters", caster) as any).chakra.current;
+    // refunded == nothing spent
+    expect(after).toBe(before);
+  });
+});
+
 // bug_1780152699831 (HIGH): freeform_attack didn't persist the attacker's turn
 // budget, so an adversary could attack unlimited times per turn.
 describe("freeform_attack is action-gated within a turn", () => {

@@ -52,10 +52,26 @@ describe("Phase A — Naruto regression smoke (DLC binding preserved)", () => {
     const c = engine.getEntity("characters", haku) as any;
     const ckBefore = c.chakra.current;
 
-    // Pick the cheapest E-rank jutsu in the catalog and force-cast it
-    // (out-of-combat scene mode, so no encounter required).
-    const cheap = engine.content.jutsu.find((j: any) => (j.cost ?? 0) >= 1 && (j.cost ?? 0) <= 2) ?? engine.content.jutsu[0];
-    const r = run("cast", { jutsu: cheap.id, force: true }, haku) as any;
+    // Pick a cheap jutsu with an observable effect that resolves WITHOUT a
+    // target list (healing self-targets the caster; damage with no targets
+    // becomes a noop_spoken under Phase B).  A pure-utility no-effect jutsu
+    // would, post-Phase B, refund its cost via technique_noop_spoken — see the
+    // technique-disposition test suite for that branch.  Here we want to verify
+    // the affordability + debit path stays wired end-to-end.
+    const cheap =
+      engine.content.jutsu.find(
+        (j: any) => (j.cost ?? 0) >= 1 && (j.cost ?? 0) <= 4 && j.effect && j.effect.healing,
+      ) ??
+      engine.content.jutsu.find(
+        (j: any) =>
+          (j.cost ?? 0) >= 1 &&
+          (j.cost ?? 0) <= 4 &&
+          j.effect &&
+          (j.effect.damage || (j.effect.conditions && j.effect.conditions.length) || j.effect.buff),
+      ) ??
+      engine.content.jutsu[0];
+    const targets = cheap.effect?.damage || cheap.effect?.conditions ? [haku] : undefined;
+    const r = run("cast", { jutsu: cheap.id, force: true, ...(targets ? { targets } : {}) }, haku) as any;
     expect(r.status).toBe("resolved");
     const cAfter = engine.getEntity("characters", haku) as any;
     expect(cAfter.chakra.current).toBe(ckBefore - (cheap.cost ?? 0));
@@ -122,7 +138,10 @@ describe("Phase A — coexistence: a second named resource lives side-by-side", 
 
   it("a technique declared with `resource: 'grace'` casts against the grace pool", () => {
     const haku = mkHaku();
-    // Register a tiny DLC jutsu that costs 3 grace and does nothing controversial.
+    // Register a tiny DLC jutsu that costs 3 grace.  Phase B: utility-delivery
+    // techniques with no observable effect now refund their cost via
+    // technique_noop_spoken — so we opt this test jutsu out via
+    // `nonRefundable: true` to keep the debit-on-grace assertion meaningful.
     engine.content.addJutsu({
       id: "grace-test-1",
       name: "Grace Test 1",
@@ -138,6 +157,7 @@ describe("Phase A — coexistence: a second named resource lives side-by-side", 
       atHigherRanks: null,
       effect: { delivery: "utility" },
       resource: "grace",
+      nonRefundable: true,
     } as any);
 
     const r = run("cast", { jutsu: "grace-test-1", force: true }, haku) as any;
