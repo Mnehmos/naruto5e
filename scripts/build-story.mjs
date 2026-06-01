@@ -30,6 +30,7 @@ const ARCS = {
   chunin: { ord: "III", title: "Chūnin Exam Arc", sub: "Paper, wasteland, and the loss that proved the engine would not lie" },
   afterword: { ord: "✦", title: "Afterword — The Audit Trail", sub: "How the deterministic engine constrained the AI Dungeon Master" },
   actii: { ord: "ACT II", title: "Act II — The Associate", sub: "A Genin field-assistant, the world opening up, and a region quietly beginning to tighten" },
+  actii2: { ord: "ACT II · ②", title: "The Hollow Road — Movement Two", sub: "The war's architect slipped the net; now the lens must hunt a man who forges nothing — and learns the peace he defends is built on a buried crime" },
 };
 
 const PROOF_TAGS = new Set(["Engine Proof", "Dice-over-plan"]);
@@ -97,6 +98,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch10_where_it_breaks.md", slug: "act2-ch10-where-it-breaks", arc: "actii", tags: ["Combat", "Climax", "Engine Proof", "Dice-over-plan"],
     teaser: "The staged 'Cloud' strike comes where it hurts most — a courtyard of children. Iwao falls holding the frame (down, dying, a failed death save) — and the alliance he built catches him. The lie breaks in the light.",
     callout: { kind: "proof", label: "The hero fell — the engine didn't blink", text: "Iwao dropped to 0 and FAILED his death save (6) live at the climax. No fudge: the rescue came from the watch + the framed Cloud envoy he'd spent the arc learning to trust. He won by not being alone — the thesis made literal by the dice." } },
+  { path: "chapters/act2_ch11_the_cold_trail.md", slug: "act2-ch11-the-cold-trail", arc: "actii2", tags: ["Intrigue", "Investigation", "Dice-over-plan"],
+    teaser: "The believer fell; the architect walked. Tasked to hunt a forger who now forges nothing, Iwao stops chasing the man and reads the wound instead — and finds, buried in the Stone's own ledgers, that the enemy's grudge is true.",
+    callout: { kind: "proof", label: "Track the wound, not the man", text: "History 22 vs DC 18 — the lens can't read a trail that was never forged, so he reads decades of buried border records instead, and uncovers a real Stone–Cloud atrocity at the root of Gomei's war. The hunt gains a conscience: the peace Iwao defends was bought with unmarked graves." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
