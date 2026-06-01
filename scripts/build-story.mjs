@@ -110,6 +110,9 @@ export const MANIFEST = [
   { path: "chapters/act2_ch14_where_no_one_dies.md", slug: "act2-ch14-where-no-one-dies", arc: "actii2", tags: ["Combat", "Engine Proof", "Dice-over-plan"],
     teaser: "The incident Gomei wanted springs at last — dead Stone genin with Cloud sign, a war no lens can refute. UFC-called, dice live. Iwao answers a +20 killer with a cage instead of a grave, and declines the free kill on the one ground built by people who never did.",
     callout: { kind: "proof", label: "A 42-damage bind that chose not to kill", text: "Sand-Coffin Binding rolled 42 earth (50→8) and PARALYZED the elite Captain — a near-kill that spared him by the shape of the technique. With the +20 killer helpless at 8 HP (break-save 6 vs 15), Iwao declined the free kill, took him alive (incident defused), and offered the hired blade a way home. No graves made in the valley of graves — and Gomei, watching, withdrew with a doubt instead of a plan." } },
+  { path: "chapters/act2_ch15_the_more_honest_thing.md", slug: "act2-ch15-the-more-honest-thing", arc: "actii2", tags: ["Intrigue", "Politics", "Alliance"],
+    teaser: "Gomei believes a war is the only honest thing left. Iwao has until dawn to prove him wrong — not with an argument but with a thing that actually happens: two villages choosing, for the first time in eighteen years, to dig up the crime they buried.",
+    callout: { kind: "proof", label: "Argue the cure, not the culprit", text: "Ninshou 21 vs DC 16 — the scholar's element turned from catching a villain to arguing a remedy: un-erase the Eleven and you deny every future Gomei his recruiting wound. Ōnoki (model-driven) commits the Stone to open its archives and name its dead; Raido pledges to carry the Cloud's harder half home unsoftened. The cure for a war built on a buried crime is the crime, confessed by the hands that buried it." } },
 ];
 
 /* ----------------------------- markdown → html ----------------------------- */
