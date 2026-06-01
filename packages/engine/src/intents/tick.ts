@@ -4,6 +4,7 @@ import type { ResolveContext } from "./registry.js";
 import type { Npc } from "../domain/world.js";
 import { DECAY_ORDER, NpcRelationshipSchema, type Corpse, type NpcRelationship, type StolenItem } from "../domain/world.js";
 import { applyStandingDelta } from "../rules/standing.js";
+import type { StandingLedger } from "../domain/standing.js";
 import { npcSituation, composeNpcMessages } from "./world.js";
 
 export type Magnitude = "small" | "medium" | "large";
@@ -43,6 +44,8 @@ export interface TickResult {
     corpseDecay: { corpseId: string; decayStage: string }[];
     economyDrift: string[];
     npcMemories: { npcId: string; summary: string }[];
+    /** Phase C — debts the world-tick called via call_favor (firable by tick). */
+    debtsCalled: { charId: string; counterparty: string; debtId: string; terms: string }[];
   };
 }
 
@@ -57,7 +60,7 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
     agentsCalled: [],
     agentPrompts: [],
     resolved: [],
-    consequenceDeltas: { standing: [], heatDecay: [], corpseDecay: [], economyDrift: [], npcMemories: [] },
+    consequenceDeltas: { standing: [], heatDecay: [], corpseDecay: [], economyDrift: [], npcMemories: [], debtsCalled: [] },
   };
   const digest: string[] = [];
   const playerSet = new Set(playerIds);
@@ -180,6 +183,33 @@ export function runEmbeddedTick(ctx: ResolveContext, magnitude: Magnitude, playe
     const sit = npcSituation(ctx, npc);
     const { messages } = composeNpcMessages(npc, sit, `Time has passed (a ${magnitude} rest). What did you do while the party rested?`);
     tick.agentPrompts.push({ npcId: npc.id, name: npc.name, model: npc.model ?? null, messages });
+  }
+
+  // ---- Phase C: world-tick fires call_favor on outstanding debts (large ticks only) ----
+  // The world-tick is one of the two firing channels for call_favor (the other is
+  // an NPC intent). A "large" downtime tick collects every undischarged debt owed
+  // by an in-scope player to an in-scope authority — the world remembers.
+  if (magnitude === "large" && ctx.engine.getHandler("call_favor")) {
+    for (const charId of playerSet) {
+      const ledgers = ctx.store.collection<StandingLedger>("standings").find((l) => l.charId === charId);
+      for (const led of ledgers) {
+        for (const debt of led.debts) {
+          if (debt.discharged) continue;
+          // Fire via the registered call_favor handler so the same invariants
+          // (IR event with disposition, ledger persistence) apply uniformly.
+          try {
+            const handler = ctx.engine.getHandler("call_favor")!;
+            handler({ ...ctx, op: { type: "call_favor", actorId: charId, params: { counterparty: led.authorityId, debtId: debt.id, calledBy: "world_tick" } } });
+            tick.consequenceDeltas.debtsCalled.push({ charId, counterparty: led.authorityId, debtId: debt.id, terms: debt.terms });
+            tick.resolved.push({ op: "call_favor", detail: `${led.authorityId} called debt ${debt.id}` });
+            if (playerSet.has(charId)) digest.push(`${led.authorityId} called in your debt: "${debt.terms}".`);
+          } catch {
+            // call_favor reject paths emit their own bargain IR; tick just
+            // continues to the next debt.
+          }
+        }
+      }
+    }
   }
 
   // ---- economy drift (downtime restocks; long: minor) ----

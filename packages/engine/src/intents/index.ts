@@ -17,6 +17,8 @@ import { registerAdminIntents } from "./admin.js";
 import { registerAgentIntents } from "./agent.js";
 import { registerCampaignIntents } from "./campaign.js";
 import { registerAcquisitionIntents } from "./acquisition.js";
+import { registerBargainIntents } from "./bargain.js";
+import { registerLegibilityIntents } from "./legibility.js";
 
 /**
  * Wire every phase's intent handlers onto the engine. Each phase adds its
@@ -41,4 +43,6 @@ export function registerAllHandlers(engine: Engine): void {
   registerAgentIntents(engine); // LLM-agent seam (agent_context: assemble an actor's turn context + legal moves)
   registerCampaignIntents(engine); // campaign/world layer (clock, arc, party, journal, scenes)
   registerAcquisitionIntents(engine); // jutsu acquisition (teach / scrolls / fame-bought slots)
+  registerBargainIntents(engine); // Phase C — bargain surface (strike_bargain / call_favor / incur_debt / discharge_debt)
+  registerLegibilityIntents(engine); // Phase C — hidden-state primitive (mark/read/reveal/mask)
 }
