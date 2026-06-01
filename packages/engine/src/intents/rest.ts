@@ -5,6 +5,7 @@ import type { Character } from "../domain/character.js";
 import { abilityMod } from "../rules/abilities.js";
 import { clearedByRest } from "../rules/conditions.js";
 import { magnitudeForRest, runEmbeddedTick } from "./tick.js";
+import { creditPool, readPool } from "../rules/resourcePool.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -48,6 +49,15 @@ export function registerRestIntents(engine: Engine): void {
       c.hitDice.remaining = Math.min(c.hitDice.total, c.hitDice.remaining + recoverHd);
       c.chakraDice.remaining = Math.min(c.chakraDice.total, c.chakraDice.remaining + recoverCd);
       if (c.exhaustion > 0) c.exhaustion -= 1;
+      // Phase A: every NON-chakra resource pool refills to max on long/downtime
+      // rest.  Chakra is already handled above (it owns the legacy `chakra`
+      // field, not `resources[id]`).  Pools without `poolField` route through
+      // the generic chokepoint.
+      for (const def of ctx.engine.content.listResources()) {
+        if (def.id === "chakra" || def.poolField) continue;
+        const pool = readPool(c, def);
+        if (pool.max > 0) creditPool(c, ctx.engine.content, def.id, pool.max);
+      }
       // A long/downtime rest brings HP to full, so the character is unambiguously no
       // longer dying — zero any lingering death-save tally (belt-and-suspenders for the
       // heal-from-0 reset; also repairs state persisted before that fix existed).

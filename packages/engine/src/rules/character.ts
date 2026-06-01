@@ -22,6 +22,8 @@ import {
 } from "./abilities.js";
 import { ABILITIES, canonicalSkill, type Ability } from "./skills.js";
 import type { Character } from "../domain/character.js";
+import type { ContentPack } from "../content.js";
+import type { ResourceDef } from "../domain/resource.js";
 
 export type Archetype = "caster" | "hybrid" | "martial";
 
@@ -346,3 +348,49 @@ export function deriveCharacter(char: Character): Character {
   }
   return char;
 }
+
+/**
+ * Phase A: initialize ALL non-chakra resources declared in the content pack.
+ * Chakra retains its existing tuned formula (handled inline above) so Naruto
+ * numerics are bit-identical when no extra resources are registered.
+ *
+ * Each additional ResourceDef gets a pool at `character.resources[id]` with:
+ *   max = defaultDie + conMod  (first level)
+ *        + sum over subsequent levels of max(1, avg(defaultDie) + conMod)
+ * Pool.current defaults to max when the slot is freshly created; otherwise
+ * existing current is clamped to the new max (preserves partially-spent pools
+ * across rederivations).
+ */
+export function applyResourceRegistry(char: Character, content: ContentPack): Character {
+  const totals = char.abilityTotals ?? char.abilities;
+  const conMod = abilityMod(totals.con);
+  const level = Math.max(1, char.level);
+
+  if (!char.resources || typeof char.resources !== "object") char.resources = {};
+
+  for (const def of content.listResources()) {
+    if (def.id === "chakra") continue; // chakra owns its tuned derivation
+    if (def.poolField) continue; // legacy-binding resources route to dedicated fields
+
+    const die = def.defaultDie ?? 6;
+    let max = Math.max(1, die + conMod);
+    for (let l = 2; l <= level; l++) {
+      max += Math.max(1, dieAverage(die) + conMod);
+    }
+
+    const existing = char.resources[def.id] as any;
+    const isPool = existing && typeof existing === "object" && typeof existing.current === "number" && typeof existing.max === "number";
+    if (isPool) {
+      // preserve a fresh pool's current value; rederive only clamps overflow
+      existing.max = max;
+      existing.current = Math.min(existing.current, max);
+      existing.temp = existing.temp ?? 0;
+    } else {
+      char.resources[def.id] = { current: max, max, temp: 0 };
+    }
+  }
+  return char;
+}
+
+/** Re-export so callers can probe a resource without importing from domain/. */
+export type { ResourceDef };

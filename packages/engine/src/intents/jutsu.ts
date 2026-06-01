@@ -12,6 +12,7 @@ import { learnGate } from "../rules/learn.js";
 import { blockedComponents, INCAPACITATING, SAVE_TO_END, conditionSaveAbility } from "../rules/conditions.js";
 import { costFromCastingTime, canAfford, spend } from "../rules/turnBudget.js";
 import { activeCombatantId } from "../rules/turn.js";
+import { debitPool, readPool, resolveResource } from "../rules/resourcePool.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -104,14 +105,35 @@ export function castJutsu(ctx: ResolveContext): void {
   const upcastExtra = atRank && atRankValue > baseRankValue && /rank/i.test(jutsu.atHigherRanks ?? "") ? (atRankValue - baseRankValue) * 3 : 0;
   const chakraCost = baseCost + upcastExtra;
 
-  // chakra gate
-  const chakra = caster.chakra ?? { current: 0, max: 0 };
-  if (chakraCost > chakra.current) {
+  // resource-affordability gate.  Phase A: routes through the generic resource
+  // chokepoint.  For the chakra binding we preserve the legacy rule string
+  // "chakra_affordability" so existing playtests + tests keep matching.  New
+  // resources surface as the generic "resource_affordability_gate".
+  const resourceId = (jutsu as any).resource ?? "chakra";
+  const resourceDef = ctx.engine.content.getResource(resourceId);
+  if (!resourceDef) {
     throw reject(
-      "chakra_affordability",
-      `${jutsu.name} costs ${chakraCost} chakra; ${caster.name} has ${chakra.current} remaining.`,
-      { required: chakraCost, available: chakra.current, shortfall: chakraCost - chakra.current },
-      [`Cast a lower-rank jutsu (<= ${chakra.current} chakra), or rest to recover chakra.`],
+      "unknown_resource",
+      `Jutsu ${jutsu.name} requires resource "${resourceId}" which is not registered.`,
+      { resource: resourceId },
+      ["Register the resource via the content pack."],
+    );
+  }
+  const pool = readPool(caster, resourceDef);
+  if (chakraCost > pool.current) {
+    const isLegacy = resourceId === "chakra";
+    throw reject(
+      isLegacy ? "chakra_affordability" : "resource_affordability_gate",
+      `${jutsu.name} costs ${chakraCost} ${resourceDef.label || resourceDef.id}; ${caster.name} has ${pool.current} remaining.`,
+      {
+        required: chakraCost,
+        available: pool.current,
+        shortfall: chakraCost - pool.current,
+        resource: resourceDef.id,
+        legacyRule: isLegacy ? undefined : undefined,
+        rule: "resource_affordability_gate",
+      },
+      [`Cast a lower-cost technique (<= ${pool.current} ${resourceDef.label || resourceDef.id}), or rest to recover.`],
     );
   }
 
@@ -160,13 +182,16 @@ export function castJutsu(ctx: ResolveContext): void {
   }
 
   // ---- pay costs ----
-  caster.chakra.current -= chakraCost;
+  // Route through the generic resource chokepoint so non-chakra DLC pools work.
+  debitPool(caster, ctx.engine.content, resourceDef.id, chakraCost);
   if (active && isCombatant(caster) && !legendary) spend(caster.turnBudget, cost);
 
   const casting = actorCasting(caster, jutsu.classification);
   const attackerEl = jutsuElement(jutsu);
 
-  // cast IR (carries area for the visualizer; element for tinting)
+  // cast IR (carries area for the visualizer; element for tinting).
+  // `cost` carries both the generic resource shape AND the legacy `chakra` key
+  // so existing UI / log consumers keep working.
   ctx.ir.emit("cast", {
     actor: caster.id,
     data: {
@@ -174,14 +199,14 @@ export function castJutsu(ctx: ResolveContext): void {
       jutsuId: jutsu.id,
       classification: jutsu.classification,
       rank: atRank ?? jutsu.rank,
-      cost: { chakra: chakraCost },
+      cost: { chakra: resourceDef.id === "chakra" ? chakraCost : 0, resource: resourceDef.id, amount: chakraCost },
       area: eff?.area,
       element: attackerEl,
       delivery: eff?.delivery ?? "utility",
       targets: ctx.op.params.targets,
       origin: ctx.op.params.areaOrigin,
     },
-    narration: `${caster.name} casts ${jutsu.name} (${atRank ?? jutsu.rank}-rank, ${chakraCost} chakra).`,
+    narration: `${caster.name} casts ${jutsu.name} (${atRank ?? jutsu.rank}-rank, ${chakraCost} ${resourceDef.label || resourceDef.id}).`,
   });
   saveActor(ctx.store, ref);
 

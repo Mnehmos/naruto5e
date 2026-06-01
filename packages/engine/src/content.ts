@@ -1,5 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+import {
+  ClassificationDefSchema,
+  ResourceDefSchema,
+  type ClassificationDef,
+  type ResourceDef,
+} from "./domain/resource.js";
 
 /**
  * Content pack loader (Architecture: engine/content separation — "The engine
@@ -7,6 +13,12 @@ import path from "node:path";
  * (jutsu catalog, clans, classes, backgrounds, equipment, adversaries, feats,
  * bingo book) loads from a local content directory. Missing files are
  * tolerated so the pack fills in as phases land their data.
+ *
+ * Phase A (platform generalization) adds two new registries:
+ *  - resources  (ResourceDef[]) — named pools (chakra is just one).
+ *  - technique_classifications (ClassificationDef[]) — Naruto's nin/gen/tai/buki.
+ * Both are OPTIONAL files; if absent, the loader synthesizes the Naruto defaults
+ * so existing tests / playtests see zero behavior change.
  */
 
 export interface JutsuRecord {
@@ -51,6 +63,29 @@ function readJson<T>(file: string, fallback: T): T {
   }
 }
 
+/** The chakra ResourceDef the engine synthesizes when no `resources.json` is present.
+ *  Binds to the legacy `chakra` / `chakraDice` fields so existing characters keep working. */
+const DEFAULT_CHAKRA: ResourceDef = ResourceDefSchema.parse({
+  id: "chakra",
+  label: "Chakra",
+  poolField: "chakra",
+  dicePoolField: "chakraDice",
+  firstLevelFormula: "die+con",
+  subsequentFormula: "avg+con",
+  defaultDie: 6,
+  adversaryScaling: { mode: "tier" },
+  nonRefundable: false,
+});
+
+/** Naruto's classification defaults when no `technique_classifications.json` is present.
+ *  Keeps actorCasting() bit-identical when the file is absent (Phase A risk mitigation). */
+const DEFAULT_CLASSIFICATIONS: ClassificationDef[] = [
+  ClassificationDefSchema.parse({ id: "ninjutsu", label: "Ninjutsu", castingAbility: "int", elementBound: true }),
+  ClassificationDefSchema.parse({ id: "genjutsu", label: "Genjutsu", castingAbility: "wis" }),
+  ClassificationDefSchema.parse({ id: "taijutsu", label: "Taijutsu", castingAbility: "str/dex" }),
+  ClassificationDefSchema.parse({ id: "bukijutsu", label: "Bukijutsu", castingAbility: "str/dex" }),
+];
+
 export class ContentPack {
   readonly dir: string;
   jutsu: JutsuRecord[] = [];
@@ -61,6 +96,8 @@ export class ContentPack {
   adversaries: any[] = [];
   feats: any[] = [];
   bingoBook: any[] = [];
+  resources: ResourceDef[] = [];
+  classifications: ClassificationDef[] = [];
 
   private jutsuById = new Map<string, JutsuRecord>();
   private jutsuByName = new Map<string, JutsuRecord>();
@@ -68,6 +105,8 @@ export class ContentPack {
   private classByName = new Map<string, any>();
   private backgroundByName = new Map<string, any>();
   private itemByKey = new Map<string, any>();
+  private resourceById = new Map<string, ResourceDef>();
+  private classificationById = new Map<string, ClassificationDef>();
 
   constructor(dir: string) {
     this.dir = dir;
@@ -84,6 +123,18 @@ export class ContentPack {
     this.adversaries = readJson<any[]>(path.join(d, "adversaries.json"), []);
     this.feats = readJson<any[]>(path.join(d, "feats.json"), []);
     this.bingoBook = readJson<any[]>(path.join(d, "bingo_book.json"), []);
+
+    // Phase A: optional resource + classification registries (Naruto-as-DLC).
+    const rawResources = readJson<any[]>(path.join(d, "resources.json"), []);
+    const rawClassifications = readJson<any[]>(path.join(d, "technique_classifications.json"), []);
+    this.resources = rawResources.length
+      ? rawResources.map((r) => ResourceDefSchema.parse(r))
+      : [DEFAULT_CHAKRA];
+    // Synthesize chakra if a custom resources.json forgot it (Naruto regression invariant).
+    if (!this.resources.find((r) => r.id === "chakra")) this.resources.push(DEFAULT_CHAKRA);
+    this.classifications = rawClassifications.length
+      ? rawClassifications.map((c) => ClassificationDefSchema.parse(c))
+      : [...DEFAULT_CLASSIFICATIONS];
 
     this.jutsuById.clear();
     this.jutsuByName.clear();
@@ -102,6 +153,10 @@ export class ContentPack {
       if (it.id) this.itemByKey.set(String(it.id).toLowerCase(), it);
       if (it.name) this.itemByKey.set(String(it.name).toLowerCase(), it);
     }
+    this.resourceById.clear();
+    for (const r of this.resources) this.resourceById.set(r.id, r);
+    this.classificationById.clear();
+    for (const c of this.classifications) this.classificationById.set(c.id, c);
   }
 
   getItem(idOrName: string): any | undefined {
@@ -150,6 +205,43 @@ export class ContentPack {
   }
   backgroundNames(): string[] {
     return this.backgrounds.map((b) => b.name);
+  }
+
+  // ---- Phase A: resource + classification registries --------------------
+
+  getResource(id: string): ResourceDef | undefined {
+    return this.resourceById.get(id);
+  }
+  listResources(): ResourceDef[] {
+    return [...this.resources];
+  }
+  /** Register or replace a ResourceDef at runtime (DLC layering). */
+  addResource(rec: ResourceDef): void {
+    const parsed = ResourceDefSchema.parse(rec);
+    const existing = this.resourceById.get(parsed.id);
+    if (existing) {
+      Object.assign(existing, parsed);
+    } else {
+      this.resources.push(parsed);
+    }
+    this.resourceById.set(parsed.id, parsed);
+  }
+
+  getClassification(id: string): ClassificationDef | undefined {
+    return this.classificationById.get(id.toLowerCase()) ?? this.classificationById.get(id);
+  }
+  listClassifications(): ClassificationDef[] {
+    return [...this.classifications];
+  }
+  addClassification(rec: ClassificationDef): void {
+    const parsed = ClassificationDefSchema.parse(rec);
+    const existing = this.classificationById.get(parsed.id);
+    if (existing) {
+      Object.assign(existing, parsed);
+    } else {
+      this.classifications.push(parsed);
+    }
+    this.classificationById.set(parsed.id, parsed);
   }
 
   static load(dir: string): ContentPack {

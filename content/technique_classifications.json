@@ -1,0 +1,6 @@
+[
+  { "id": "ninjutsu", "label": "Ninjutsu", "castingAbility": "int", "elementBound": true },
+  { "id": "genjutsu", "label": "Genjutsu", "castingAbility": "wis", "elementBound": false },
+  { "id": "taijutsu", "label": "Taijutsu", "castingAbility": "str/dex", "elementBound": false },
+  { "id": "bukijutsu", "label": "Bukijutsu", "castingAbility": "str/dex", "elementBound": false }
+]

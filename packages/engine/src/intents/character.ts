@@ -7,6 +7,7 @@ import {
   applyBackground,
   applyClass,
   applyClan,
+  applyResourceRegistry,
   deriveCharacter,
   setAbilitiesByMethod,
   type BuildSelections,
@@ -16,6 +17,7 @@ import { levelForXp, xpToNext } from "../rules/progression.js";
 import { getLedger, applyStandingDelta } from "../rules/standing.js";
 import { learnGate } from "../rules/learn.js";
 import { jutsuElement } from "../rules/combat.js";
+import { debitPool, readPool, resolveResource } from "../rules/resourcePool.js";
 
 function chars(ctx: ResolveContext) {
   return ctx.store.collection<Character>("characters");
@@ -151,6 +153,9 @@ export function registerCharacterIntents(engine: Engine): void {
 
     // derive while still "unbuilt" so pools fill to max, then mark built
     char = deriveCharacter(char);
+    // Phase A: fill in any DLC-declared resource pools (non-chakra). Naruto with
+    // no extra resources registered = no-op, preserving baseline numerics.
+    applyResourceRegistry(char, ctx.engine.content);
     char.built = true;
 
     // Optional authored bloodline: pin a Kekkei Genkai (e.g. "Dust (Jinton)") and/or
@@ -285,6 +290,7 @@ export function registerCharacterIntents(engine: Engine): void {
   engine.registerHandler("character_finalize", (ctx) => {
     const char = loadChar(ctx, ctx.op.actorId);
     deriveCharacter(char); // fill pools to max while still unbuilt
+    applyResourceRegistry(char, ctx.engine.content);
     char.built = true;
     chars(ctx).put(char);
     ctx.ir.emit("character_created", { actor: char.id, data: { character: summary(char) }, narration: `${char.name} is ready.` });
@@ -369,14 +375,47 @@ export function registerCharacterIntents(engine: Engine): void {
   });
 
   // ---- resource mutations (also used by combat/rest) ------------------
+  // character_spend_resource — the generic Phase A verb.  Routes through the
+  // resource-pool chokepoint so it works for any registered pool (chakra,
+  // grace, etc.).  Emits the standard `resource` IR event with the resource id.
+  engine.registerHandler("character_spend_resource", (ctx) => {
+    const char = loadChar(ctx, ctx.op.actorId);
+    const resourceId = String(ctx.op.params.resourceId ?? ctx.op.params.resource ?? "chakra");
+    const amount = Number(ctx.op.params.amount ?? 0);
+    if (!Number.isFinite(amount) || amount < 0) {
+      throw reject("invalid_amount", `Spend amount must be a non-negative number.`, { amount: ctx.op.params.amount }, ["Pass a positive integer amount."]);
+    }
+    const def = resolveResource(ctx.engine.content, resourceId);
+    const pool = readPool(char, def);
+    if (amount > pool.current) {
+      const isLegacy = resourceId === "chakra";
+      throw reject(
+        isLegacy ? "chakra_affordability" : "resource_affordability_gate",
+        `${char.name} has ${pool.current} ${def.label || def.id}; needs ${amount}.`,
+        { required: amount, available: pool.current, shortfall: amount - pool.current, resource: def.id, rule: "resource_affordability_gate" },
+        [`Recover ${def.label || def.id} (rest), or spend less.`],
+      );
+    }
+    debitPool(char, ctx.engine.content, def.id, amount);
+    chars(ctx).put(char);
+    ctx.ir.emit("resource", {
+      actor: char.id,
+      data: { kind: def.id, resource: def.id, delta: -amount, current: readPool(char, def).current },
+    });
+  });
+
+  // character_spend_chakra — legacy alias, delegates to the generic verb.
+  // Preserves the existing rule string + IR event shape on rejection.
   engine.registerHandler("character_spend_chakra", (ctx) => {
     const char = loadChar(ctx, ctx.op.actorId);
     const amount = Number(ctx.op.params.amount ?? 0);
     if (amount > char.chakra.current)
       throw reject("chakra_affordability", `${char.name} has ${char.chakra.current} chakra; needs ${amount}.`, { required: amount, available: char.chakra.current, shortfall: amount - char.chakra.current }, ["Rest to recover chakra, or spend less."]);
-    char.chakra.current -= amount;
+    // Route the actual debit through the generic chokepoint so a future DLC that
+    // redefines chakra's pool field continues to work.
+    debitPool(char, ctx.engine.content, "chakra", amount);
     chars(ctx).put(char);
-    ctx.ir.emit("resource", { actor: char.id, data: { kind: "chakra", delta: -amount, current: char.chakra.current } });
+    ctx.ir.emit("resource", { actor: char.id, data: { kind: "chakra", resource: "chakra", delta: -amount, current: char.chakra.current } });
   });
 
   engine.registerHandler("character_heal", (ctx) => {

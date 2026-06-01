@@ -1,0 +1,13 @@
+[
+  {
+    "id": "chakra",
+    "label": "Chakra",
+    "poolField": "chakra",
+    "dicePoolField": "chakraDice",
+    "firstLevelFormula": "die+con",
+    "subsequentFormula": "avg+con",
+    "defaultDie": 6,
+    "adversaryScaling": { "mode": "tier" },
+    "nonRefundable": false
+  }
+]
