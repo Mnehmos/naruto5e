@@ -8,6 +8,8 @@ The model is the *storyteller and the interpreter*. It never decides whether an 
 
 > **Unofficial fan work.** Not affiliated with or endorsed by the rights holders. Naruto © Masashi Kishimoto / Shueisha / Viz Media / Shonen Jump. Non-commercial, local-first. The Naruto content is data loaded from a local content pack; the engine core is generic, IP-clean mechanics.
 
+> **SRD attribution.** General 5e mechanics in this engine are derivative of the System Reference Document 5.1 by Wizards of the Coast, licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/legalcode). See [`NOTICE`](./NOTICE) for the full attribution. Naruto-specific content (clans, jutsu catalog, chakra natures, KKG recipes) is fan-authored and NOT covered by the SRD license.
+
 ---
 
 ## The real differentiator: the engine is developed through *agentic playtesting*

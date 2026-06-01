@@ -1,0 +1,37 @@
+Naruto 5e
+=========
+
+Unofficial fan-work. Not affiliated with or endorsed by the rights holders.
+Naruto (c) Masashi Kishimoto / Shueisha / Viz Media / Shonen Jump.
+
+---
+
+5e SRD attribution
+------------------
+
+This engine reuses general 5e mechanics (proficiency progression, ability
+scores, advantage/disadvantage, save DC arithmetic, the d20 resolution loop,
+condition vocabulary, the dual-pool rest/recovery shape, and the standard array)
+which are derived from the System Reference Document 5.1 published by Wizards
+of the Coast.
+
+Portions of this work are derivative of the System Reference Document 5.1
+("SRD 5.1") by Wizards of the Coast LLC, available at
+https://dnd.wizards.com/resources/systems-reference-document and licensed under
+the Creative Commons Attribution 4.0 International License
+(https://creativecommons.org/licenses/by/4.0/legalcode).
+
+CC-BY-4.0 attribution notice:
+"This work includes material taken from the System Reference Document 5.1
+(SRD 5.1) by Wizards of the Coast LLC and available at
+https://dnd.wizards.com/resources/systems-reference-document.
+The SRD 5.1 is licensed under the Creative Commons Attribution 4.0
+International License available at
+https://creativecommons.org/licenses/by/4.0/legalcode."
+
+Naruto-specific content (clan rosters, jutsu catalog, chakra natures, KKG
+recipes, in-world setting) is fan-authored and is NOT covered by the SRD
+license. The Phase A generalization in this engine deliberately separates the
+generic 5e-derived rules surface from the Naruto content pack so that the
+content can later be replaced by other DLCs without redistributing the Naruto
+material.
