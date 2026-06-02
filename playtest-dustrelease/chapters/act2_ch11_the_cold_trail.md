@@ -1,18 +1,18 @@
 TITLE: Act II, Chapter 11 — The Cold Trail
-DATES: Iwagakure · Day 100 · the believer fell, the architect walked, and the lens turns to read a wound instead of a man
+DATES: Hidden Tor · Day 100 · the believer fell, the architect walked, and the lens turns to read a wound instead of a man
 ---
 The village exhaled, and Iwao did not.
 
-For one bright morning Iwagakure let itself believe the thing was finished. The children were alive. The false-Cloud striker sat in a cell with his mask in an evidence bag and his paymaster's name already on his lips. Administrator Jōzen sat in another cell with his chain of office confiscated and his certainty intact. The envoys of the Cloud had gone home un-blamed, and a true Cloud envoy named Raido had walked through the heart of the Stone and out again without a single hand raised against him, which had not happened in the lifetime of anyone watching. The lie was broken. The believer was caught. The mountain held.
+For one bright morning Hidden Tor let itself believe the thing was finished. The children were alive. The false-Cloud striker sat in a cell with his mask in an evidence bag and his paymaster's name already on his lips. Administrator Jōzen sat in another cell with his chain of office confiscated and his certainty intact. The envoys of the Cloud had gone home un-blamed, and a true Cloud envoy named Raido had walked through the heart of the Stone and out again without a single hand raised against him, which had not happened in the lifetime of anyone watching. The lie was broken. The believer was caught. The mountain held.
 
 And the man who had built all of it was simply gone.
 
 ## The Terrace — A Charge With No Trail to Follow
-Ōnoki sent for him at the grey edge of morning, when the heir was still wrapped to the ribs and moving like a man who remembered, in his body, the exact weight of a courtyard stone against his back. The old Tsuchikage did not waste the boy's strength on standing.
+Vohl sent for him at the grey edge of morning, when the heir was still wrapped to the ribs and moving like a man who remembered, in his body, the exact weight of a courtyard stone against his back. The old Stoneward did not waste the boy's strength on standing.
 
-> "You rest first," Ōnoki said. "Then you listen. Jōzen was only a hinge; the door he served is still open somewhere in the dark. Gomei is the hand behind the lie — and a hand like that leaves no easy trace for my eyes to catch. But yours may see what mine cannot. When you can stand, you and I will speak of every rumor, every route, every silence around this village. Until then — heal. Stone holds, but it does not hold by stubbornness alone."
+> "You rest first," Vohl said. "Then you listen. Jōzen was only a hinge; the door he served is still open somewhere in the dark. Gomei is the hand behind the lie — and a hand like that leaves no easy trace for my eyes to catch. But yours may see what mine cannot. When you can stand, you and I will speak of every rumor, every route, every silence around this village. Until then — heal. Stone holds, but it does not hold by stubbornness alone."
 
-[OOC · Ōnoki (npc_9cc97845) — on-demand model turn → social_speak (grave). The Tsuchikage names the Movement-Two problem himself: the architect, unlike the broker, forges nothing now, so there is no false mark for a forgery-reader to catch. He charges the lens with the hunt — and orders recovery first.]
+[OOC · Vohl (npc_9cc97845) — on-demand model turn → social_speak (grave). The Stoneward names the Movement-Two problem himself: the architect, unlike the broker, forges nothing now, so there is no false mark for a forgery-reader to catch. He charges the lens with the hunt — and orders recovery first.]
 
 It was, Iwao understood, the hardest assignment the old man had ever handed him, and it was hidden inside the gentlest. *Find me a man who has stopped leaving footprints.* Every success of the past two weeks had been a success of reading: the killing-bend's geometry, the planted token's lie, the chain of office on every smoothed report. Iwao was a reader of forgeries, and he was very good, and Gomei the Hollow Road had just taught the whole village what a reader of forgeries cannot do. You cannot read a lie that no one has bothered to tell. The architect had burned his frame and walked into the country like weather, and the country does not keep a ledger.
 
@@ -60,7 +60,7 @@ Gennai set down the net he wasn't fixing. "That's not a hunt, boy," he said quie
 Tsuru's wheel slowed, just once, and then went on. "Eat," she said, gentler than the word. But she was looking at her son the way you look at something that has finished becoming itself when you weren't ready, and over the slow turning of the clay she said, almost to herself, the thing she would not say to his face: *He doesn't want to beat the man. He wants to heal the reason. Stone help me, I raised something the village doesn't have a word for yet.*
 
 ## What He Knew, and What He Didn't
-He had the wound now — its outline, in the Stone's own grey hand. But the Stone's ledgers would only ever hold the Stone's half of the lie; the other half, the Cloud's eleven and the Cloud's shame and wherever the Hollow Road had gone to ground after eighteen years of carrying it, lived in records no Iwagakure boy would ever be allowed to read. To know the whole shape of the man, he would have to do again the thing that had cost him the most and won him the most across the whole arc behind him.
+He had the wound now — its outline, in the Stone's own grey hand. But the Stone's ledgers would only ever hold the Stone's half of the lie; the other half, the Cloud's eleven and the Cloud's shame and wherever the Hollow Road had gone to ground after eighteen years of carrying it, lived in records no Hidden Tor boy would ever be allowed to read. To know the whole shape of the man, he would have to do again the thing that had cost him the most and won him the most across the whole arc behind him.
 
 He would have to ask the Cloud.
 
@@ -71,7 +71,7 @@ And somewhere out in the country that keeps no ledger, the patient man who had r
 ---LOG---
 ACT II · DAY 100 · "The Cold Trail" — Movement Two opens. Iwao L6, Genin. Strict temporal: 2 required blocks + 1 optional lived + resolved; clock advanced 99 → 100. Engine fix shipped first: regaining HP from 0 now resets death saves (5e) — a long rest cleared Iwao's courtyard residue (failures 1 → 0); HP 38/38, chakra 59/59.
 PLAYED BEATS:
- • Ōnoki (npc_9cc97845, on-demand model turn → social_speak): names the Movement-Two problem — the architect (Gomei the Hollow Road) forges nothing now, so leaves no trail the lens can read; charges Iwao with the hunt; orders recovery first.
+ • Vohl (npc_9cc97845, on-demand model turn → social_speak): names the Movement-Two problem — the architect (Gomei the Hollow Road) forges nothing now, so leaves no trail the lens can read; charges Iwao with the hunt; orders recovery first.
  • Iwao History 22 vs DC 18 — SUCCESS. The reframe: track the WOUND, not the man. Reading buried border ledgers, he uncovers Gomei's origin — "the Eleven of the Hollow Pass": ~18 years ago a Cloud recon cell was wiped at a contested pass and STRUCK from BOTH villages' records so a clean border accord could be signed; the eleven were spent to PREVENT a war, mourned by neither side. Gomei was the 12th — the runner, left for dead, his name buried by his own village. He took his epithet from the pass. His grudge against BOTH villages is TRUE; the "rotting peace" he wants to burn was literally bought with his squad's unmarked graves.
  • Tsuru (npc_51945b85, on-demand model turn → social_speak): the maternal counterweight — won't forbid the hunt, asks "what do YOU want back." Iwao's answer reframes the whole movement: not to CATCH Gomei (he'd go down still right about the wound), but to make the true thing he's right about stop being a reason for war. "That's a harder thing than a hunt." — Gennai.
 THESIS (Movement Two): the antagonist is RIGHT about the wound and WRONG about the cure; the lens must do more than win a fight — he must heal a reason. The dice keep drawing the same soul: Iwao WINS the knowledge/pattern roll (History) where he'd fail the field.

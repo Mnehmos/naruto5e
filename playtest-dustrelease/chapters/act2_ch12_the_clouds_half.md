@@ -1,9 +1,9 @@
 TITLE: Act II, Chapter 12 — The Cloud's Half
-DATES: Iwagakure · Day 101 · two villages' buried shames laid on one table, and a boy who decides to walk into the kind of place that made the man he hunts
+DATES: Hidden Tor · Day 101 · two villages' buried shames laid on one table, and a boy who decides to walk into the kind of place that made the man he hunts
 ---
-There is a thing an Iwa shinobi is taught from the cradle never to do, and Iwao did it on purpose, in a quiet room, to an enemy.
+There is a thing an Tor shinobi is taught from the cradle never to do, and Iwao did it on purpose, in a quiet room, to an enemy.
 
-He had the wound's outline now — the Stone's grey half of it, the Eleven of the Hollow Pass, the engagement scrubbed and the accord signed clean. But the Stone's ledgers would only ever hold the Stone's share of the lie, and to know the whole shape of the man he hunted he needed the other half, which lived in records no boy of the Hidden Stone would ever be allowed to read. There was exactly one person in reach who might hold it, and he was a loyal envoy of the Cloud, and asking him to confirm his own village's complicity in murdering its own dead was the sort of request that gets a man recalled, or worse.
+He had the wound's outline now — the Stone's grey half of it, the Eleven of the Hollow Pass, the engagement scrubbed and the accord signed clean. But the Stone's ledgers would only ever hold the Stone's share of the lie, and to know the whole shape of the man he hunted he needed the other half, which lived in records no boy of the Hidden Tor would ever be allowed to read. There was exactly one person in reach who might hold it, and he was a loyal envoy of the Cloud, and asking him to confirm his own village's complicity in murdering its own dead was the sort of request that gets a man recalled, or worse.
 
 So Iwao did not ask. He confessed first.
 
@@ -43,13 +43,13 @@ Ganryū snorted and said something about how someone had to keep the heir from w
 Iwao did not trust himself to answer that out loud, so he just nodded, and the nod held everything. The boy who had once solved problems by removing the variables was going to walk into the most dangerous silence on the map carrying three other people's hands on purpose, because the man he was hunting had been made by a silence that left him with none.
 
 ## The Sanction, and the Echo
-Ōnoki gave the crossing his blessing and could not give it his protection — that was the whole grim arithmetic of the contested march, and the old man named it without flinching. Out there they would be Iwagakure shinobi only as long as it was convenient for two villages to say so. Step wrong in the Hollow Pass and the Stone could lose them the way it had lost the Eleven, and call it weather.
+Vohl gave the crossing his blessing and could not give it his protection — that was the whole grim arithmetic of the contested march, and the old man named it without flinching. Out there they would be Hidden Tor shinobi only as long as it was convenient for two villages to say so. Step wrong in the Hollow Pass and the Stone could lose them the way it had lost the Eleven, and call it weather.
 
-"You understand what you're asking to do," Ōnoki said. It was not quite a question.
+"You understand what you're asking to do," Vohl said. It was not quite a question.
 
 "I'm asking to go where eleven people were erased," Iwao said, "and not be erased, and not erase anyone. To stand in the exact place the lie was made and refuse to make another one." He paused. "He thinks the only honest thing left is a war. I want to prove there's a more honest thing than that, on the same ground where they proved there wasn't."
 
-The Tsuchikage looked at his heir for a long moment with an expression that had buried too many shinobi to spend hope cheaply, and spent a little anyway. "Then go to the Hollow Pass, lens," he said. "And bring back more than you carry in. That's the only kind of crossing that's ever been worth the loss."
+The Stoneward looked at his heir for a long moment with an expression that had buried too many shinobi to spend hope cheaply, and spent a little anyway. "Then go to the Hollow Pass, lens," he said. "And bring back more than you carry in. That's the only kind of crossing that's ever been worth the loss."
 
 They would leave at dawn. East and down, off the mountain, into the country that keeps no ledger — toward a pass that two nations had agreed to forget, and one man had refused to.
 
@@ -61,6 +61,6 @@ PLAYED BEATS:
  • Raido (npc_5251c1ab, on-demand model turn → social_speak): Iwao lays the Stone's buried ledger of the Eleven on the table FIRST — confession before demand, NO persuasion roll (his weakest suit; he trades vulnerability instead of leverage). Raido answers in kind: "I will not pretend innocence for the comfort of either village... measure it together rather than let old men's silence keep the score." The Cloud's half joins the Stone's: BOTH commands disavowed the eleven and struck their names the same week, to sign a clean accord. Raido names the Cloud's "ghost" — a struck-through runner + 18 years of border rumors filed as "weather" = the Hollow Road, who "never left the wound."
  • Iwao Ninshou 19 vs DC 17 — SUCCESS (pattern roll, his element): a man erased from BOTH records hides where neither country looks — the contested borderland around the Hollow Pass itself, the no-man's-land both pretend is empty. Gomei went HOME to the only ground as erased as he is.
  • Akemi (npc_907075f3, on-demand model turn → social_speak): agrees to cross off Stone soil — "don't make yourself a symbol... if you're afraid of your own hands, then use mine." The Day-5 blind-spot answered by the friend who named it. Ganryu in too (authored texture).
- • Onoki's sanction without protection: the contested march means they can be disavowed like the Eleven. Iwao's stated aim reframes the climb: "stand in the exact place the lie was made and refuse to make another one... prove there's a more honest thing than war on the same ground where they proved there wasn't."
+ • Vohl's sanction without protection: the contested march means they can be disavowed like the Eleven. Iwao's stated aim reframes the climb: "stand in the exact place the lie was made and refuse to make another one... prove there's a more honest thing than war on the same ground where they proved there wasn't."
 THESIS deepens: the lens chooses to walk INTO the kind of silence that makes a Gomei — carrying hands on purpose, because the man was made by having none. Dice again drew the soul: he WINS the knowledge roll (Ninshou) and never rolls the social one he'd lose, winning the room by honesty instead.
 HOOK: dawn — the cell + (likely) Raido cross east/down off the mountain into the contested march toward the Hollow Pass. First steps off Stone soil; Iwao's field weaknesses (Nature/Survival) about to matter on the Hollow Road.

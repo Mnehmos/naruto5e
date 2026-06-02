@@ -26,7 +26,7 @@ He never heard the sensei come.
 
 Ryūen saw the numb fingers. He saw the hole in the wall where solid stone had decided to stop existing. And the color went out of his face entirely.
 
-The forbidding was absolute, and it came fast and hard — *never alone, never unsupervised, not for years, do you understand me, never again* — but under the anger was something Iwao had not expected, and it frightened him more than the wall had: it was *fear.* Old fear, carried a long time. This was a man who had seen, once, what half-formed Dust does to the body of a child who reached too soon, and had never been able to set the image down.
+The forbidding was absolute, and it came fast and hard — *never alone, never unsupervised, not for years, do you understand me, never again* — but under the anger was something Iwao had not expected, and it frightened him more than the wall had: it was *fear.* Old fear, carried a long time. This was a man who had seen, once, what half-formed Particle does to the body of a child who reached too soon, and had never been able to set the image down.
 
 He marched Iwao back to the range by the collar and supervised an afternoon of deliberately, almost insultingly *small* work — wind held thin as thread, earth shaped into clean dull blocks, nothing fused, nothing reaching — and he did not look away from the boy for a single second until the last bell rang.
 

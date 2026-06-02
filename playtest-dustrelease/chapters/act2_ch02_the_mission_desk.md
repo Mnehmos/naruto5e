@@ -1,5 +1,5 @@
 TITLE: Act II, Chapter 2 — The Mission Desk
-DATES: Iwagakure · Day 91 · a clerk's day, and the first crack in a quiet wall
+DATES: Hidden Tor · Day 91 · a clerk's day, and the first crack in a quiet wall
 ---
 A village runs on two things: the shinobi who go out, and the paper that says where they went. Iwao had spent his whole life imagining he would be the first kind. No one had warned him that the road to the first kind ran, for a while, straight through the second.
 
@@ -11,16 +11,16 @@ The cliff-stairs were grey and endless and honest, and Iwao climbed them with a 
 
 He wore Cloud grey under a traveler's coat, and an envoy's papers folded in two fingers, and a smile that had been measured to the millimeter.
 
-> "Good morning. Your ascent is impressive for such a young shinobi." A small bow, perfectly weighted. "Might I walk beside you a moment? I'm Raido, of the Cloud. I'd be pleased to hear how Iwagakure is treating its promising young talent today."
+> "Good morning. Your ascent is impressive for such a young shinobi." A small bow, perfectly weighted. "Might I walk beside you a moment? I'm Raido, of the Cloud. I'd be pleased to hear how Hidden Tor is treating its promising young talent today."
 
-[OOC · Raido of the Cloud (Kumo observer) — on-demand NPC turn, his own declaration → social_speak. Goal: confirm the Dust woke earlier than Iwa admitted.]
+[OOC · Raido of the Cloud (Cloud observer) — on-demand NPC turn, his own declaration → social_speak. Goal: confirm Particle art woke earlier than Tor admitted.]
 
 Every word was a kindness and every kindness was a ruler laid against him. *How is the village treating its talent* — which meant *are you the weapon we heard about,* which meant *is it awake.* Iwao had recited the deeds of foreign sensors in a classroom; he knew the shape of a man taking a reading. He gave the envoy a boy's shrug and a boy's tired answer — *they have me filing papers, sir* — and watched something flicker behind the pleasant eyes that might have been disappointment and might have been a note taken. The Cloud did not climb a mountain to hear that the heir filed papers. Which meant the Cloud would climb it again.
 
 He carried the small cold weight of being *read* the rest of the way up.
 
 ## The Desk
-Kazan ran the mission desk the way some men run a dam — by making very sure no one downstream ever heard the water. He was tired in the bones and kind in the way tired men are kind, which is to say efficiently, and he took one look at the dust-heir reporting for assist duty and saw, with visible relief, a strong back.
+Kazan ran the mission desk the way some men run a dam — by making very sure no one downstream ever heard the water. He was tired in the bones and kind in the way tired men are kind, which is to say efficiently, and he took one look at the Particle art-heir reporting for assist duty and saw, with visible relief, a strong back.
 
 "You're the famous one," he said, not unkindly. "Good. The famous one can carry. Those stacks to the archive, sorted by road and moon. Try not to be a legend about it."
 
@@ -52,16 +52,16 @@ His father came home grey with quarry-dust and listened to the day over the ston
 
 Tsuru said nothing, and turned her wheel, and watched her son hold a thing in an open hand that he could not put down and could not yet lift.
 
-Above the village, on his terrace, a small old man received a quiet report that the heir had been set to carry paper and had, instead of carrying it, *read* it — and had asked the desk a question the desk did not want asked. Ōnoki folded his hands. *Good,* he thought. *Eyes before blood. Let us see what he does with a thing he is too small to fix.*
+Above the village, on his terrace, a small old man received a quiet report that the heir had been set to carry paper and had, instead of carrying it, *read* it — and had asked the desk a question the desk did not want asked. Vohl folded his hands. *Good,* he thought. *Eyes before blood. Let us see what he does with a thing he is too small to fix.*
 
 And far to the east, past the last waystation, in the treeline where the road bent blind, a patient man counted crates by moonlight and was pleased that the village had not yet begun to count them too.
 
 ---LOG---
 ACT II · DAY 91 · "The Mission Desk." Iwao L6, Genin (associate/teaching-aide duty). Strict temporal mode: day planned into 5 blocks; 3 required blocks lived + resolved before the clock advanced 90→91 (the engine refused to skip).
 PLAYED BEATS (engine-adjudicated, NPC turns are real model declarations the DM routed):
- • Raido of the Cloud (Kumo observer, npc_5251c1ab) — on-demand npc_turn → social_speak at the gate, courteously probing whether the Dust is awake. His goal advances off-camera.
+ • Raido of the Cloud (Cloud observer, npc_5251c1ab) — on-demand npc_turn → social_speak at the gate, courteously probing whether Particle art is awake. His goal advances off-camera.
  • Iwao Perception 14 vs DC 14 — SUCCESS by one: noticed the eastern-road reports don't agree (more departed than arrived; arrival counts recopied/smoothed).
  • Kazan (mission desk, npc_563a0763) — on-demand npc_turn → social_speak (whisper): deflects, "keep it quiet, proper channels." Not a lie — containment. His suppression goal continues.
-WORLD: the eastern-road caravan bleed is now a thing IWAO has personally seen (not just off-camera). Gomei's incident still seeded; Doki's garrison pressure + Dosu's hidden losses are the same wound from three angles. Ōnoki's measure: "eyes before blood."
+WORLD: the eastern-road caravan bleed is now a thing IWAO has personally seen (not just off-camera). Gomei's incident still seeded; Doki's garrison pressure + Dosu's hidden losses are the same wound from three angles. Vohl's measure: "eyes before blood."
 THEME: the associate who is given the small thing and finds the large thing inside it. He cannot fix the road. He can refuse to un-see it.
 HOOK: the discrepancy won't leave him; a "little escort" is next on the board.

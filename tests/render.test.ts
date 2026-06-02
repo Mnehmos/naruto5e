@@ -19,7 +19,7 @@ describe("Phase 10 — web renderer is served", () => {
     const res = await fetch(`http://localhost:${port}/`);
     expect(res.status).toBe(200);
     const html = await res.text();
-    expect(html).toMatch(/Naruto.?5e/);
+    expect(html).toMatch(/Hidden Hand(?:&nbsp;|\s)5e/);
     expect(html).toMatch(/\/v1\/rooms\/.*\/stream/); // subscribes to the IR websocket
     expect(html.toLowerCase()).toMatch(/canvas/); // the tactical map
   });

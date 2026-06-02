@@ -10,13 +10,14 @@
  * calls POST /v1/audio/speech per chunk, concatenates the mp3, and writes docs/audio/<slug>.mp3.
  * Idempotent: a content+voice hash in docs/audio/.hashes.json means unchanged chapters are skipped.
  * Output is committed static audio; the page player is native <audio> (no JS, no key client-side).
- * Reads OPENAI_API_KEY (+ optional NARUTO_TTS_MODEL / NARUTO_TTS_VOICE) from .env or the env.
+ * Reads OPENAI_API_KEY (+ optional HIDDEN_HAND_TTS_MODEL / HIDDEN_HAND_TTS_VOICE) from .env or the env.
+ * Legacy NARUTO_TTS_MODEL / NARUTO_TTS_VOICE names are still honored as fallbacks.
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
-import { MANIFEST, SRC, narrationText, build as buildStory } from "./build-story.mjs";
+import { AUDIO_MANIFEST, narrationText, build as buildStory } from "./build-story.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const AUDIO = join(ROOT, "docs", "audio");
@@ -35,10 +36,10 @@ function loadEnv() {
 }
 const ENV = loadEnv();
 const KEY = ENV.OPENAI_API_KEY;
-const MODEL = ENV.NARUTO_TTS_MODEL || "gpt-4o-mini-tts";
-const VOICE = ENV.NARUTO_TTS_VOICE || "onyx";
+const MODEL = ENV.HIDDEN_HAND_TTS_MODEL || ENV.NARUTO_TTS_MODEL || "gpt-4o-mini-tts";
+const VOICE = ENV.HIDDEN_HAND_TTS_VOICE || ENV.NARUTO_TTS_VOICE || "onyx";
 const INSTRUCTIONS =
-  "Narrate like the reader of a literary shinobi audiobook: measured, weighty, unhurried. Stone, dust, and quiet gravity; let the sentences breathe. Warm but restrained — never melodramatic.";
+  "Narrate like the reader of a literary fantasy serial: measured, weighty, unhurried. Let the sentences breathe. Warm but restrained — never melodramatic.";
 
 if (!KEY) { console.error("✗ OPENAI_API_KEY not found (.env or env). Aborting."); process.exit(1); }
 
@@ -73,7 +74,7 @@ async function tts(input) {
 }
 
 async function generate(entry) {
-  const p = join(SRC, entry.path);
+  const p = join(entry.sourceRoot, entry.path);
   if (!existsSync(p)) { console.warn(`! ${entry.slug}: source missing — skipped`); return false; }
   const text = narrationText(readFileSync(p, "utf8"));
   if (!text.trim()) { console.warn(`! ${entry.slug}: no narratable prose — skipped`); return false; }
@@ -98,10 +99,10 @@ async function generate(entry) {
 const args = process.argv.slice(2);
 if (!args.length) {
   console.log("usage: node scripts/build-tts.mjs <slug> [<slug> ...] | --all");
-  console.log("slugs:", MANIFEST.map((e) => e.slug).join(", "));
+  console.log("slugs:", AUDIO_MANIFEST.map((e) => e.slug).join(", "));
   process.exit(0);
 }
-const targets = args.includes("--all") ? MANIFEST : MANIFEST.filter((e) => args.includes(e.slug));
+const targets = args.includes("--all") ? AUDIO_MANIFEST : AUDIO_MANIFEST.filter((e) => args.includes(e.slug));
 if (!targets.length) { console.error("no matching slugs in the manifest."); process.exit(1); }
 
 let made = 0;

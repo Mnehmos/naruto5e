@@ -1,14 +1,14 @@
-# Naruto 5e
+# Hidden Hand 5e
 
-**A rules-authoritative Naruto 5e engine where LLMs parse player intent and narrate outcomes — but deterministic code owns state, dice, chakra, jutsu legality, combat, and persistence.**
+**A rules-authoritative Hidden Hand 5e engine where LLMs parse player intent and narrate outcomes — but deterministic code owns state, dice, chakra, jutsu legality, combat, and persistence.**
 
-The model is the *storyteller and the interpreter*. It never decides whether an attack hits, whether a jutsu is legal, how much chakra is left, or what happened last week. A deterministic TypeScript engine owns all of that and exposes it through a single tool surface (MCP). The LLM reads intent ("I slip into the crowd and detonate the dust"), the engine adjudicates it against the rules and the saved world, and the LLM narrates whatever the engine actually returned — **never ahead of it.**
+The model is the *storyteller and the interpreter*. It never decides whether an attack hits, whether a jutsu is legal, how much chakra is left, or what happened last week. A deterministic TypeScript engine owns all of that and exposes it through a single tool surface (MCP). The LLM reads intent ("I slip into the crowd and detonate the Particle art"), the engine adjudicates it against the rules and the saved world, and the LLM narrates whatever the engine actually returned — **never ahead of it.**
 
 > 📖 **Live journey site:** https://mnehmos.github.io/naruto5e/ — an autonomous playtest rendered as a manga.
 
-> **Unofficial fan work.** Not affiliated with or endorsed by the rights holders. Naruto © Masashi Kishimoto / Shueisha / Viz Media / Shonen Jump. Non-commercial, local-first. The Naruto content is data loaded from a local content pack; the engine core is generic, IP-clean mechanics.
+> **Unofficial fan work.** Not affiliated with or endorsed by the rights holders. Non-commercial, local-first. The original setting content is data loaded from a local content pack; the engine core is generic, IP-clean mechanics.
 
-> **SRD attribution.** General 5e mechanics in this engine are derivative of the System Reference Document 5.1 by Wizards of the Coast, licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/legalcode). See [`NOTICE`](./NOTICE) for the full attribution. Naruto-specific content (clans, jutsu catalog, chakra natures, KKG recipes) is fan-authored and NOT covered by the SRD license.
+> **SRD attribution.** General 5e mechanics in this engine are derivative of the System Reference Document 5.1 by Wizards of the Coast, licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/legalcode). See [`NOTICE`](./NOTICE) for the full attribution. Original setting content (clans, jutsu catalog, chakra natures, bloodline recipes) is fan-authored and NOT covered by the SRD license.
 
 ---
 
@@ -22,15 +22,15 @@ Most rules engines are tested by their authors writing assertions. This one is h
 4. **Patch.** The agent fixes it in engine source, rebuilds, and **re-verifies through the same tool surface**.
 5. **Regress.** The verified fix becomes a **regression test**, so the contradiction can never silently return.
 
-The Naruto engine is the fun part. **This self-improving play → detect → file → patch → regress loop is the point.**
+The engine is the fun part. **This self-improving play → detect → file → patch → regress loop is the point.**
 
 ### Proof from the current playtest — *"Iwao: The Particle Heir"*
 
-A Dust Release (Jinton) genin of the Hidden Stone, played day by day. Two real engine defects were caught *while playing* and fixed live:
+A Particle Release genin of the Hidden Tor, played day by day. Two real engine defects were caught *while playing* and fixed live:
 
 | Found in play | What broke | Fix | Became a test |
 |---|---|---|---|
-| Character genesis | `create_character` rolled affinity/KKG **blindly** — the campaign's required Dust Release bloodline was effectively unrollable | a `kkg`/`affinities` param pins genesis deterministically (`rules/affinity.ts`, `intents/character.ts`) | ✅ deterministic-pin + unknown-KKG rejection |
+| Character genesis | `create_character` rolled affinity/bloodline **blindly** — the campaign's required Particle Release bloodline was effectively unrollable | a `kkg`/`affinities` param pins genesis deterministically (`rules/affinity.ts`, `intents/character.ts`) | ✅ deterministic-pin + unknown-bloodline rejection |
 | First ninja spar | `agent_context` read a PC-only field, so **kitted enemies always showed "0 jutsu castable"** — silently pushing every NPC toward generic freeform attacks | read the adversary's own kit (`intents/agent.ts`) | ✅ "surfaces a kitted adversary's jutsu" |
 
 Both shipped as commits with green suites, then were confirmed back *in the campaign* (an enemy genin cast a real Earth Release technique the very next day). The playtest manuscript lives in [`playtest-dustrelease/chapters/`](playtest-dustrelease/chapters/).
@@ -39,7 +39,7 @@ Both shipped as commits with green suites, then were confirmed back *in the camp
 
 ## The three tiers (Architecture)
 
-1. **Engine** (`packages/engine`) — the authoritative, deterministic game server. Owns all state, dice, and rules: chakra/HP/resources, jutsu legality & multi-axis gating, combat & turn economy, affinity/KKG genesis, NPC memory + a world-tick, Standing/factions, missions, and persistence. REST API + websocket IR stream + scoped state reads. Knows nothing of MCP or LLMs.
+1. **Engine** (`packages/engine`) — the authoritative, deterministic game server. Owns all state, dice, and rules: chakra/HP/resources, jutsu legality & multi-axis gating, combat & turn economy, affinity/bloodline genesis, NPC memory + a world-tick, Standing/factions, missions, and persistence. REST API + websocket IR stream + scoped state reads. Knows nothing of MCP or LLMs.
 2. **MCP controller** (`packages/mcp-controller`) — a thin, stateless adapter that exposes engine capabilities as MCP tools and routes calls to the engine's REST API. Holds no game state and no game logic; every tool collapses to "submit an intent."
 3. **DM/LLM harness** (`packages/harness`) — the write-path for play: parses intent, adjudicates via the engine, narrates the result. Falls back to a deterministic parser with no API key required.
 

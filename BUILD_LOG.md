@@ -1,4 +1,4 @@
-# Naruto 5e — Build Log
+# Hidden Hand 5e — Build Log
 
 Decisions, real-vs-stub status, and "next" at every phase boundary. The
 discipline: **the system RUNS at every checkpoint.** Authoritative sources are
@@ -92,7 +92,7 @@ Fire), Ch.4 (8 classes), Ch.6 (skills + checks), casting-by-jutsu-type rule.
 - `domain/character.ts`: the dual-pool sheet (HP/Hit Dice + Chakra/Chakra Dice
   first-class), abilities (base + tracked bonuses + derived totals), three casting
   tracks, proficiencies, clan traits, class features, conditions, jutsuKnown +
-  cap, ryo, Will of Fire, unique clan resources, affinities, `classes[]` (multiclass-ready).
+  cap, ryo, Stone Oath, unique clan resources, affinities, `classes[]` (multiclass-ready).
 - `rules/skills.ts`: the verified custom skill list by ability (Martial Arts/STR,
   Chakra Control/CON, Crafting+Ninshou/INT, Illusions/WIS, etc.).
 - `rules/abilities.ts`: ability mod, **proficiency +3 at L1** scaling +1/4 levels,
@@ -117,7 +117,7 @@ Fire), Ch.4 (8 classes), Ch.6 (skills + checks), casting-by-jutsu-type rule.
 **Checkpoint proven:** builds any legal character end-to-end with correct dual
 pools, ability totals, proficiency, rank, saves, AC, and the three type-keyed
 casting mods; educational rejections for unknown clan / bad point-buy / missing
-choices; Will of Fire spend/gift; deterministic rolled abilities; level-up scaling.
+choices; Stone Oath spend/gift; deterministic rolled abilities; level-up scaling.
 19 tests pass; E2E builds a character through the controller.
 
 **Logged divergences / rules-faithful defaults (data cells the spec flagged
@@ -365,14 +365,14 @@ deltas through standing_manage (the currency spine).
   threshold/repeat), theft_heat_decay, theft_fence (launder via a heat-capacity
   vendor → builds patron Standing).
 - **corpse_manage**: corpse_create, corpse_loot (mundane), corpse_harvest (a
-  weighted KKG/secret/scroll → craters the deceased's authority, spikes the
-  patron's; KKG gated to a *fresh* body — real time pressure), corpse_recover
+  weighted bloodline/secret/scroll → craters the deceased's authority, spikes the
+  patron's; bloodline gated to a *fresh* body — real time pressure), corpse_recover
   (honor → Standing-positive), corpse_advance_decay.
 - All standing-affecting acts go through `applyStandingDelta`. MCP tools:
   npc_interact, economy_buy, steal, harvest_corpse, recover_corpse.
 
 **Checkpoint proven:** a theft (reported → Standing drops, repeats → rogue
-trigger) and a corpse-harvest (KKG → deceased authority craters + patron spikes;
+trigger) and a corpse-harvest (bloodline → deceased authority craters + patron spikes;
 decayed body rejects harvest) each move Standing; gated stock blocks/unblocks on
 reputation; recovery raises Standing. 52 tests pass.
 
@@ -449,7 +449,7 @@ via direct REST) and the role-aware app shell (player|DM).
 **Built (real):** `apps/web/index.html` — a self-contained, zero-build web client
 the engine serves at `/` (`express.static`). It is a pure renderer of engine state
 + IR (never a source of truth):
-- **App shell** (role-aware): top bar (scene · round/turn · Will of Fire · role
+- **App shell** (role-aware): top bar (scene · round/turn · Stone Oath · role
   toggle), left rail (character sheet + party/field cards with HP/Chakra bars +
   conditions), center tactical map, right rail (narration/IR feed as prose), bottom
   drawer tabs (Jutsu · Inventory · Console).
@@ -520,7 +520,7 @@ findings and the autonomous-NPC loop. 171 tests pass; tsc clean.
   longer auto-promoted by leveling. `deriveCharacter` sets a separate level-derived
   `char.rankTier`; `jutsuRankCap()` takes the more-permissive of (tier, title) so a
   strong-but-un-promoted Genin still grows their jutsu ladder while an exam-earned title
-  persists. (Honors the playtest: Iwao stays Genin, but his Dust ladder can still grow.)
+  persists. (Honors the playtest: Iwao stays Genin, but his Particle ladder can still grow.)
 - **Conditions lifecycle** (per spec): transient conditions end three ways — duration
   expiry (`conditionStates.rounds`, already worked), spending action economy (NEW
   `stand`/`stand_up`/`get_up`: half-speed to rise from Prone), and **end_combat** (now
@@ -540,11 +540,11 @@ schedule. The structural anti-time-compression guardrail (an Academy day must be
 each required block resolved before the calendar moves).
 
 **Jutsu acquisition (commit 21489be):** grow arsenals through social/world channels, each
-lifting only the gates it legitimately can. `jutsu_teach` (tutor/teacher/trainer/Kage/school +
+lifting only the gates it legitimately can. `jutsu_teach` (tutor/teacher/trainer/village leader/school +
 standing-gated vault via `requires`); `study_scroll` + `jutsu_buy_scroll` (the Ryo/market path)
 + `jutsu_scroll_grant`; `jutsu_slot_buy` (purchase technique SLOTS with FAME/reputation through
 a social leader). Distinct paths: **Ryo** buys gear/scrolls · **fame** buys slots · **favor**
-unlocks off-affinity · a **teacher/Kage** grants past gates · **standing** opens vaults.
+unlocks off-affinity · a **teacher/village leader** grants past gates · **standing** opens vaults.
 
 **Resource-hint frontloading (commit f68e318):** `rules/hints.ts` (RESOURCE_HINTS) + a `hints`
 intent/tool + `agent_context.affordances.spendHints` — the model learns "you have THIS

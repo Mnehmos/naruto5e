@@ -1,5 +1,5 @@
 TITLE: Act II, Chapter 4 — Road Work
-DATES: Iwagakure, the eastern road · Day 93 · the ground starts talking, in a language he half-speaks
+DATES: Hidden Tor, the eastern road · Day 93 · the ground starts talking, in a language he half-speaks
 ---
 They sent him east to fix a road, which is how the village says *go look at the thing we are afraid of without admitting we are afraid.*
 
@@ -31,11 +31,11 @@ At dusk they came to the eastern garrison post — a tired wooden thing manned b
 
 Captain Doki heard it like a man hearing rain after a drought.
 
-> "Then we stop treating this as a slip of weather and start treating it as a killing ground." His voice went hard and bright at once. "I want the heir's report copied to my hand, the washout marked on the eastern map, and a rider sent at once to Iwagakure: the road matches staged ambush geometry from the old battle-histories. If they want proof —" and here something desperate showed through the iron "— they can send men to count the corpses before they happen."
+> "Then we stop treating this as a slip of weather and start treating it as a killing ground." His voice went hard and bright at once. "I want the heir's report copied to my hand, the washout marked on the eastern map, and a rider sent at once to Hidden Tor: the road matches staged ambush geometry from the old battle-histories. If they want proof —" and here something desperate showed through the iron "— they can send men to count the corpses before they happen."
 
 [OOC · Captain Doki (eastern garrison, npc_2486c7f4) — on-demand npc_turn → social_speak. His standing goal: win reinforcements by inflating the danger he also genuinely believes in.]
 
-And Iwao, who had carried the warning in good faith, watched it become something else in the captain's hands — a *weapon in an old argument.* Doki had been begging Iwagakure for men for months; everyone knew it; the command read his alarms the way you read the boy who cried wolf. Now the captain had the famous heir's name to wave, and he would wave it hard, and the very force of his waving would make the truth easier to dismiss. *Doki again. Doki and his killing grounds. Doki using a Genin's book-report to pry loose a garrison.* Iwao could see the shape of that, too — another blueprint, this one made of politics — and it frightened him more than the bend had. The truest warning he could give was about to be discounted precisely because a desperate man believed it.
+And Iwao, who had carried the warning in good faith, watched it become something else in the captain's hands — a *weapon in an old argument.* Doki had been begging Hidden Tor for men for months; everyone knew it; the command read his alarms the way you read the boy who cried wolf. Now the captain had the famous heir's name to wave, and he would wave it hard, and the very force of his waving would make the truth easier to dismiss. *Doki again. Doki and his killing grounds. Doki using a Genin's book-report to pry loose a garrison.* Iwao could see the shape of that, too — another blueprint, this one made of politics — and it frightened him more than the bend had. The truest warning he could give was about to be discounted precisely because a desperate man believed it.
 
 He rode back toward the wall in the dark with two cold certainties: that something was being built on the eastern road, and that the village had three good reasons not to believe it yet.
 

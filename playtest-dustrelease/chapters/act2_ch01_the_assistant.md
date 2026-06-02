@@ -1,5 +1,5 @@
 TITLE: Act II, Chapter 1 — The Assistant
-DATES: Iwagakure · Day 90 · the morning after the finals settled into the bone
+DATES: Hidden Tor · Day 90 · the morning after the finals settled into the bone
 ---
 The summons came on Academy paper, and for the first time in his life it did not call Iwao back as a student.
 
@@ -17,14 +17,14 @@ Tetsuna-sensei was built like a retaining wall and had not, in the year Iwao had
 
 "You are not their teacher," she said. "You are not a chūnin. You are a Genin the village has decided is *useful*, and I have a room full of eight-year-olds copying rumors of you badly. One of them is going to hurt himself trying to be you." Her jaw set. "So you will help. You will show them control. And you will do it without turning my classroom into a shrine." A beat. "Can you do that, heir? Or only the legend part?"
 
-He understood, then, what she was really asking — and what the Tsuchikage was asking through her, up on his terrace, measuring. Not *can the bloodline cut a leaf.* Can the boy stand near responsibility without it isolating him, or crushing the small ones under it.
+He understood, then, what she was really asking — and what the Stoneward was asking through her, up on his terrace, measuring. Not *can the bloodline cut a leaf.* Can the boy stand near responsibility without it isolating him, or crushing the small ones under it.
 
 "I'll try," Iwao said. It was the most honest thing he owned.
 
 ## The Boy Who Molded Like a Fist
 His name was Kosuke. He was eight, and he had the particular ferocity of a child who has decided that being scared is the same as being weak, and that power is a thing you *seize.*
 
-The drill was the oldest one in the building — the floating leaf, channel one nature, one clean cut. Most of the room mangled it gently. Kosuke did not mangle it gently. Kosuke set his jaw and his whole small body and *clenched,* hauling his chakra up into his fists the way he imagined the dust-heir must do it, grinding it tight and tighter, because that was what power looked like to him: a held breath that never let go. His leaf didn't cut. It *blackened* at the edges, and the air around his knuckles went wrong — that thin, sick shimmer of chakra molded past the point where it wants to come apart.
+The drill was the oldest one in the building — the floating leaf, channel one nature, one clean cut. Most of the room mangled it gently. Kosuke did not mangle it gently. Kosuke set his jaw and his whole small body and *clenched,* hauling his chakra up into his fists the way he imagined the Particle art-heir must do it, grinding it tight and tighter, because that was what power looked like to him: a held breath that never let go. His leaf didn't cut. It *blackened* at the edges, and the air around his knuckles went wrong — that thin, sick shimmer of chakra molded past the point where it wants to come apart.
 
 Iwao knew that shimmer. He had nearly eaten a wall with it once, on Day Three, reaching for something he wasn't ready to hold.
 
@@ -39,7 +39,7 @@ He did the thing he knew how to do — the thing he was *best* at in all the wor
 
 [OOC · Chakra Control — d20 **5**, +6 = **11** vs DC 15 · **FAILURE.** The prodigy cannot teach by control.]
 
-It did not take. Of course it did not take. You cannot hand a child your open hand by closing yours around his. Kosuke felt the older boy's chakra press into his and did what any frightened thing does when squeezed — he clenched *harder,* and the sick shimmer flared, and the leaf went to ash and a thin welt of heat snapped across the boy's own knuckles. Kosuke yelped, more startled than hurt, and snatched his hands back, and looked up at the legend of Iwagakure with the beginning of tears and the worse beginning of *shame* — because the dust-heir had come to fix him, and he had failed at being fixed.
+It did not take. Of course it did not take. You cannot hand a child your open hand by closing yours around his. Kosuke felt the older boy's chakra press into his and did what any frightened thing does when squeezed — he clenched *harder,* and the sick shimmer flared, and the leaf went to ash and a thin welt of heat snapped across the boy's own knuckles. Kosuke yelped, more startled than hurt, and snatched his hands back, and looked up at the legend of Hidden Tor with the beginning of tears and the worse beginning of *shame* — because the Particle art-heir had come to fix him, and he had failed at being fixed.
 
 The whole room had gone quiet in the particular way rooms do when something has happened the rules did not account for.
 
@@ -52,7 +52,7 @@ He didn't. He had been larger than a problem once, in a ring, alone, and it had 
 
 Instead Iwao knelt down to the boy's height, which no legend had ever done in that room, and he turned his own hands over and showed Kosuke the palms — the calluses, the faint old scar where Day Three had nearly unmade him, the hands that eleven days ago had held the deadliest bloodline in history and still *lost.*
 
-"You know how I lost the finals?" he asked, quiet enough that it was only for Kosuke. The boy blinked. Everyone knew the heir had lost; no one had ever heard him *say* it. "I held on too tight. I was alone, and I got scared, and I made a fist of everything I had — and a stronger boy put me on the ground, because a fist is just one thing, and it breaks." He spread his fingers. "The dust doesn't live in the fist, Kosuke. It lives in the *space.* Three things that don't trust each other, held loose, pulling — and the power's in the part where you don't squeeze at all." He didn't reach for the boy's chakra again. He just held his own open hand in the air between them, three threads rising into it, trembling, *trusting,* doing nothing. "Like that. Try it like *that.* You're allowed to be scared of it. I still am."
+"You know how I lost the finals?" he asked, quiet enough that it was only for Kosuke. The boy blinked. Everyone knew the heir had lost; no one had ever heard him *say* it. "I held on too tight. I was alone, and I got scared, and I made a fist of everything I had — and a stronger boy put me on the ground, because a fist is just one thing, and it breaks." He spread his fingers. "The Particle art doesn't live in the fist, Kosuke. It lives in the *space.* Three things that don't trust each other, held loose, pulling — and the power's in the part where you don't squeeze at all." He didn't reach for the boy's chakra again. He just held his own open hand in the air between them, three threads rising into it, trembling, *trusting,* doing nothing. "Like that. Try it like *that.* You're allowed to be scared of it. I still am."
 
 Kosuke didn't get it right. He was eight; he wasn't going to get it right today. But his shoulders came down out of his ears, and he opened his fists — just a little, just enough — and tried the loose way instead of the hard way, and the leaf, this time, only trembled instead of burning.
 
@@ -75,6 +75,6 @@ Tomorrow, the paper said, the mission desk could use a hand.
 ACT II · DAY 90 · arc "Act II — The Associate." Iwao L6, HP 38/38, Chakra 59/59, XP 1700. In-world TITLE: Genin (the engine rank field carries the legacy "Chunin" jutsu-tier marker from a since-fixed auto-derive; the decouple now keeps title and tier separate going forward). STRICT TEMPORAL MODE engaged — Act II time is lived block by block.
 RECONCILIATION (engine restart loaded the buildout): the finals-lingering **Prone** condition CLEARED on a long rest (clearedConditions:["Prone"]) — the conditions fix, validated live. passiveStanding:false silenced the off-screen reputation drip; directed-goal standing is milestone-gated.
 THE PLAYED BEAT: Iwao tried to defuse + teach Kosuke's clenched chakra by IMPOSING his own control — **Chakra Control 11 vs DC 15, FAILURE** (nat 5 +6). Honest dice: the prodigy can't teach by control. The resolution was NOT a re-rolled win — it was a human turn (he showed the boy his scarred hands and named his own finals loss). The engine authored the failure; the DM reconciled it into the theme: you can't open a fist by closing yours.
-THE WORLD TICK (downtime pulse, NPC agents invoked — real model declarations the DM adjudicated, not auto-resolved): Kazan suppresses road reports + uses the heir as labor; Dosu (syndicate) hides caravan losses + hires muscle; Raido (Kumo) measures whether the Dust woke early; Captain Doki (garrison) inflates road danger for reinforcements; Kosuke drills "like a fist"; Gomei (missing-nin) SEEDED a border-incident scheme (intensity-3 goal completed on the large tick — recalibrating to medium/small ticks so future plans escalate in layers) and now shadows the eastern caravans after dark.
-DURABLE ACT II CAST seeded with goals: Ōnoki (measure the heir near responsibility), Kurikara (teach him to carry without clenching), Tetsuna (use him to teach restraint, not terror), Ganryū (surpass him honestly), Akemi (keep him human), + 6 new actors (Kazan, Dosu, Raido, Gomei, Doki, Kosuke).
+THE WORLD TICK (downtime pulse, NPC agents invoked — real model declarations the DM adjudicated, not auto-resolved): Kazan suppresses road reports + uses the heir as labor; Dosu (syndicate) hides caravan losses + hires muscle; Raido (Cloud) measures whether Particle art woke early; Captain Doki (garrison) inflates road danger for reinforcements; Kosuke drills "like a fist"; Gomei (missing-nin) SEEDED a border-incident scheme (intensity-3 goal completed on the large tick — recalibrating to medium/small ticks so future plans escalate in layers) and now shadows the eastern caravans after dark.
+DURABLE ACT II CAST seeded with goals: Vohl (measure the heir near responsibility), Kurikara (teach him to carry without clenching), Tetsuna (use him to teach restraint, not terror), Ganryū (surpass him honestly), Akemi (keep him human), + 6 new actors (Kazan, Dosu, Raido, Gomei, Doki, Kosuke).
 THEME: "Can Iwao help someone grow without turning them into proof of himself?" — opened, not answered. Hook: the mission desk wants a hand (Kazan's suppressed road reports).

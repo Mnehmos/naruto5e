@@ -1,20 +1,20 @@
 TITLE: Act II, Chapter 10 — Where It Breaks
-DATES: Iwagakure, the Academy courtyard · Day 99 · the heir falls, and the frame holds anyway
+DATES: Hidden Tor, the Academy courtyard · Day 99 · the heir falls, and the frame holds anyway
 ---
-*Be where it breaks,* his father had said, *not where it was.* So when the village held a memorial in the Academy courtyard — the Kumo envoys present as a gesture of the peace someone was trying so hard to end, the first-years lined up in their too-big sandals, the whole soft sentimental heart of the village gathered in one bright square — Iwao was there, and so was the doubled watch, coiled and quiet, and so was a Cloud envoy who had decided to stop being measured and start being useful. They did not know the hour. They knew the shape. A cornered believer would bring his fire forward, and it would come here, where the breaking would hurt most.
+*Be where it breaks,* his father had said, *not where it was.* So when the village held a memorial in the Academy courtyard — the Cloud envoys present as a gesture of the peace someone was trying so hard to end, the first-years lined up in their too-big sandals, the whole soft sentimental heart of the village gathered in one bright square — Iwao was there, and so was the doubled watch, coiled and quiet, and so was a Cloud envoy who had decided to stop being measured and start being useful. They did not know the hour. They knew the shape. A cornered believer would bring his fire forward, and it would come here, where the breaking would hurt most.
 
 It came at half past ten, in Cloud grey.
 
 ## THE BELL — The Courtyard
-*Movement on the north side — grey cloak, mask, moving wrong against the crowd, and there's a second one flanking toward the children — this is it, this is the staged strike, and it's dressed as Kumo for the whole village to see—*
+*Movement on the north side — grey cloak, mask, moving wrong against the crowd, and there's a second one flanking toward the children — this is it, this is the staged strike, and it's dressed as Cloud for the whole village to see—*
 
-[OOC · THE INCIDENT. Iwao (L6, 38 HP) vs a **Masked Striker in Cloud Grey** (elite, AC 14, 50 HP, **+20**, posing as Kumo — Jōzen's proxy) + a **Grey Accomplice** (minion, AC 10, 20 HP, +11). Init: Accomplice 17, Iwao 9, Striker 5. Objective: shield the children; take the Striker ALIVE for the proof.]
+[OOC · THE INCIDENT. Iwao (L6, 38 HP) vs a **Masked Striker in Cloud Grey** (elite, AC 14, 50 HP, **+20**, posing as Cloud — Jōzen's proxy) + a **Grey Accomplice** (minion, AC 10, 20 HP, +11). Init: Accomplice 17, Iwao 9, Striker 5. Objective: shield the children; take the Striker ALIVE for the proof.]
 
 The accomplice broke for the children first, and Iwao did the only thing the creed has ever asked of him — he put the heaviest stone he had between the danger and the small ones, and took the lightning meant for a first-year across his own chest.
 
 [OOC · Accomplice → Iwao: 18 vs AC 12, hit, **9 lightning. Iwao 38 → 29.**]
 
-Then he answered — not the masked blade, not yet, but the one among the children. The dust came off his open hand aimed and clean, and the accomplice never finished his lunge.
+Then he answered — not the masked blade, not yet, but the one among the children. The Particle art came off his open hand aimed and clean, and the accomplice never finished his lunge.
 
 [OOC · Iwao → Honed Detachment @ Accomplice: its **DEX save 7 vs 15 FAILS**; 28 force → **20, slain.** The threat among the kids is down.]
 
@@ -29,7 +29,7 @@ Eighteen left, and a fifty-HP blade in front of him, and a courtyard of children
 
 [OOC · Iwao → Sand-Coffin Binding @ Striker: **DEX save 19 vs 15** — slips the bind; 40 rolled → **20 earth. Striker 50 → 30.** Not captured. Iwao still 18.]
 
-The bind didn't hold. And the blade, free and furious, came back for the heir with everything, and this time the dust-heir's luck ran out in front of the whole village.
+The bind didn't hold. And the blade, free and furious, came back for the heir with everything, and this time the Particle art-heir's luck ran out in front of the whole village.
 
 *OH — he's HIT, that's a clean strike, the heir is DOWN — Iwao is down in the courtyard—*
 
@@ -64,7 +64,7 @@ Iwao went home carried, not walking, and his mother did not scold and his father
 
 "You found the crack," Tsuru said quietly, over the wheel that never stopped. "You worked it. You didn't crush the mountain to do it." She touched his hair the way she had when he was small and frightened of his own hands. "And you weren't alone when it broke. That's the part I'll sleep on, my heir. Not that you're strong. That you weren't alone."
 
-Up on the terrace the old man stood a long time in the dark, looking east, where a patient enemy had slipped the net and a war sat postponed like a held breath. *He fell,* Ōnoki thought, *and the village he'd taught to trust him caught him, and the lie died in the light, and the true enemy lives to try again.* He was too old to call that a victory and too wise to call it anything less. *The boy is not a weapon and not a vest and not a throne. He is a lens, and around him people stop being alone, and that — that is worth more to a village than any bloodline.* He tapped the cane once on the stone. *Heal up, heir. The Hollow Road is still out there. And next time he will not make the mistake of building his fire where you are standing.*
+Up on the terrace the old man stood a long time in the dark, looking east, where a patient enemy had slipped the net and a war sat postponed like a held breath. *He fell,* Vohl thought, *and the village he'd taught to trust him caught him, and the lie died in the light, and the true enemy lives to try again.* He was too old to call that a victory and too wise to call it anything less. *The boy is not a weapon and not a vest and not a throne. He is a lens, and around him people stop being alone, and that — that is worth more to a village than any bloodline.* He tapped the cane once on the stone. *Heal up, heir. The Hollow Road is still out there. And next time he will not make the mistake of building his fire where you are standing.*
 
 The mountain settled, certain it would outlast anything that climbed it — and, for the first time in a long time, perhaps a little less alone in the outlasting. A war had been postponed by a boy who fell holding a frame that did not break because he had finally, fully, learned to fill it with other hands.
 
@@ -73,9 +73,9 @@ The mountain settled, certain it would outlast anything that climbed it — and,
 ---LOG---
 ACT II · DAY 99 · "Where It Breaks" — the mid-Act-II climax (Movement One close). Iwao L6, Genin. Strict temporal: 4 required blocks lived + resolved before the clock advanced 98→99.
 COMBAT (engine-adjudicated, UFC-narrated, dice live):
- • Foes: Masked Striker in Cloud Grey (elite L6, AC14/50hp/+20, posing as Kumo = Jōzen's proxy) + Grey Accomplice (minion). Init: Acc 17, Iwao 9, Striker 5.
+ • Foes: Masked Striker in Cloud Grey (elite L6, AC14/50hp/+20, posing as Cloud = Jōzen's proxy) + Grey Accomplice (minion). Init: Acc 17, Iwao 9, Striker 5.
  • R1: Accomplice hit Iwao (9 lightning, 38→29); Iwao Honed Detachment dropped the accomplice threatening the children (its DEX save 7 vs 15 failed; 20 force, slain); Striker hit Iwao (11, →18).
  • R2: Iwao Sand-Coffin to CAPTURE the Striker — Striker DEX save 19 vs 15 slipped the bind (20 earth, 50→30); Striker cut Iwao for 18 → 0 HP, DOWN/DYING; death save 6 — FAILED (1/3). The protagonist fell at the climax.
  • THE RESCUE (thesis made literal, not a fudge): the alliance Iwao built across the arc caught him — the doubled unchained watch + Raido (framed Cloud envoy) OPENLY took the masked striker ALIVE in front of the village (the Cloud stopping the fake-Cloud). Iwao stabilized/revived to 14/38. A live false-Cloud assassin taken by a true-Cloud envoy = a confession, not a casus belli. The war is AVERTED.
-RESOLUTION: the proxy's chain led to Administrator Jōzen — TAKEN at his desk, unrepentant ("a soft village will thank me"). Gomei the Hollow Road (Cloud-rogue mastermind) ESCAPED — revises, does not rage; the deeper threat survives for Act II's later climax. Family + Ōnoki close on the theme: "you weren't alone when it broke" / "he is a lens, and around him people stop being alone."
+RESOLUTION: the proxy's chain led to Administrator Jōzen — TAKEN at his desk, unrepentant ("a soft village will thank me"). Gomei the Hollow Road (Cloud-rogue mastermind) ESCAPED — revises, does not rage; the deeper threat survives for Act II's later climax. Family + Vohl close on the theme: "you weren't alone when it broke" / "he is a lens, and around him people stop being alone."
 ARC: Movement One complete (Ch.1-10, Days 90-99): the associate became the village's eyes, fell holding the frame, and the frame held because it had more than one force in it. Gomei runs on. The climb continues.

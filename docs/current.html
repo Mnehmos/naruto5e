@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Read The Borrowed Current</title>
+<meta name="description" content="The Borrowed Current: a stat-forward portal-fantasy playtest powered by the same deterministic Hidden Hand 5e engine." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@500;700;900&family=Shippori+Mincho:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/story.css">
+</head>
+<body class="series-current">
+<div class="vignette"></div><div id="bar"></div>
+<div class="topbar">
+  <a class="home" href="index.html"><b>◆</b> The Borrowed Current</a>
+  <nav><a class="btn" href="index.html">↩ Home</a><a class="btn" href="https://github.com/Mnehmos/naruto5e" target="_blank" rel="noopener">★ Repo</a></nav>
+</div>
+<header class="idx-hero">
+  <div class="eyebrow">A Hidden Hand 5e System-window playtest serial</div>
+  <h1>THE BORROWED CURRENT</h1>
+  <div class="vol">Arc I · The Founts' Trials</div>
+  <p class="blurb">Eli Vance wanted to matter. The sky takes him literally, drops him over Saltgrave, and gives him a visible System, a borrowed body, and a Tide that only understands weight. The numbers stay on-screen because Eli can see them too.</p>
+  <div class="cta">
+    <a class="btn solid" href="chapters-bc/ep01-heavy.html">▶ Start Reading</a>
+    
+  </div>
+  <div class="howto"><b>How to read this</b>This series is deliberately stat-forward. System windows, HP, quests, and dice are diegetic UI that Eli alone can see; the engine still owns every number behind them.</div>
+</header>
+
+  <section class="arc reveal">
+    <div class="arc-h"><span class="ord">ARC I</span><h2>The Founts' Trials</h2></div>
+    <p class="arc-sub">A sky-fallen boy, a visible System, and a power that only knows how to push down</p>
+    <div class="cards">
+      <a class="card" href="chapters-bc/ep01-heavy.html">
+        <div class="inner">
+          <div class="eyebrow">The Reach · the fount-town of Saltgrave · Day 1 · a nobody falls out of the sky with a System only he can see</div>
+          <h3>Episode 1 — Heavy</h3>
+          <p>Eli Vance falls out of the sky over Saltgrave with a System only he can see, eight hit points, one shoe, and the Ninth Tide roaring in his chest.</p>
+          <div class="meta"><span class="tag">System</span><span class="tag">The Reach</span><span class="tag proof">Engine Proof</span><span class="badge launch">Launch</span></div>
+        </div>
+      </a>
+    </div>
+  </section>
+<footer class="chap-foot">The Borrowed Current · every die rolled by the engine · <a href="https://github.com/Mnehmos/naruto5e" target="_blank" rel="noopener">Engine Repo</a></footer>
+<script>
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;document.getElementById('bar').style.width=(h>0?100*scrollY/h:0)+'%'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

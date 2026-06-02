@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🍥</text></svg>" />
-<title>Naruto 5e — Table</title>
+<title>Hidden Hand 5e — Table</title>
 <style>
   :root { --bg:#0e1116; --panel:#161b22; --line:#2b323c; --ink:#e6edf3; --dim:#8b949e; --pc:#3b82f6; --enemy:#ef4444; --acc:#f59e0b; --chakra:#22d3ee; --hp:#34d399; }
   * { box-sizing:border-box; }
@@ -46,7 +46,7 @@
 </head>
 <body>
 <header>
-  <b>Naruto&nbsp;5e</b>
+  <b>Hidden Hand&nbsp;5e</b>
   <span id="scene" class="pill">—</span>
   <span id="turn" class="pill"></span>
   <span class="grow"></span>
@@ -139,7 +139,7 @@ function renderSheet(){
     Chakra ${c.chakra.current}/${c.chakra.max} ${bar(c.chakra.current,c.chakra.max,'var(--chakra)')}
     ${ab.str!==undefined?`<div class="row pill">STR ${ab.str} DEX ${ab.dex} CON ${ab.con} INT ${ab.int} WIS ${ab.wis} CHA ${ab.cha}</div>`:''}
     ${cast.ninjutsu?`<div class="pill">Nin +${cast.ninjutsu.attack}/DC${cast.ninjutsu.saveDC} · Gen +${cast.genjutsu.attack}/DC${cast.genjutsu.saveDC} · Tai +${cast.taijutsu.attack}/DC${cast.taijutsu.saveDC}</div>`:''}
-    ${c.willOfFire?`<span class="pill">🔥 Will of Fire</span>`:''}`;
+    ${c.willOfFire?`<span class="pill">🔥 Stone Oath</span>`:''}`;
 }
 function renderDrawer(){
   const d=$("#drawer");

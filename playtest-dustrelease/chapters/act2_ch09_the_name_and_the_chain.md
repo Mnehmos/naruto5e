@@ -1,7 +1,7 @@
 TITLE: Act II, Chapter 9 — The Name and the Chain
-DATES: Iwagakure · Day 98 · the boy who reads, reading a traitor out of the registry
+DATES: Hidden Tor · Day 98 · the boy who reads, reading a traitor out of the registry
 ---
-Ōnoki had given him a watch — two trusted hands, deliberately *unchained,* working off the official channel so that no broker with office could hear his own name coming down the wire. And he had given Iwao the one task in all the world that fit the boy like a key fits a lock: not to fight, not to track, not to charm. To *read.*
+Vohl had given him a watch — two trusted hands, deliberately *unchained,* working off the official channel so that no broker with office could hear his own name coming down the wire. And he had given Iwao the one task in all the world that fit the boy like a key fits a lock: not to fight, not to track, not to charm. To *read.*
 
 So Iwao read.
 
@@ -14,10 +14,10 @@ He found the marks. And then he did the thing he was best at in all the world, a
 
 It came together all at once, the way the bend's geometry had, the way the token's lie had — but complete this time, crowned, undeniable. The same chain of office sat on the corner of every smoothed eastern report. The same authority had signed the routing that moved the muscle. The same trusted hand had been quietly steering the village's not-knowing for months, using honest tired Kazan's instinct for *calm* as a blind to hide behind — letting the dam-keeper hold back the water while he, upstream, decided which water rose. The forger was Cloud-rogue and far away. But the *broker,* the inside hand that had built the war's local half, had a name and a face and a chain, and Iwao had nodded to him in a corridor a dozen times without ever once seeing him.
 
-Administrator Jōzen. Of the mission registry. A proud career servant of the Hidden Stone.
+Administrator Jōzen. Of the mission registry. A proud career servant of the Hidden Tor.
 
 ## The Man Who Thought the Village Had Gone Soft
-The hardest part, Iwao would reflect later, was that Jōzen was not a monster. He was something worse and more ordinary: a true believer. Somewhere in his long grey service the administrator had decided that Iwagakure had gone *soft* under the old Tsuchikage — sentimental, slow, unwilling to harden against the enemies he was certain were coming — and that a controlled crisis, a war scare with a foreign name forged onto it, would *wake* the village, force it to rearm, save it from its own decadence. He had let an outside hand steer him toward that end and he called it patriotism, and he had told himself, signing each routed coin, that he was the only one with the spine to do what saving the Stone required.
+The hardest part, Iwao would reflect later, was that Jōzen was not a monster. He was something worse and more ordinary: a true believer. Somewhere in his long grey service the administrator had decided that Hidden Tor had gone *soft* under the old Stoneward — sentimental, slow, unwilling to harden against the enemies he was certain were coming — and that a controlled crisis, a war scare with a foreign name forged onto it, would *wake* the village, force it to rearm, save it from its own decadence. He had let an outside hand steer him toward that end and he called it patriotism, and he had told himself, signing each routed coin, that he was the only one with the spine to do what saving the Stone required.
 
 A patriot. That was the whole horror of him. He was burning the village down to forge it harder, and he believed every word.
 
@@ -41,7 +41,7 @@ He walked home in the dark knowing he had started a clock he could not see the f
 
 His father heard the shape of it over the cold stew — *I found the crack, and the crack knows I found it* — and was quiet a long time. "Then it'll move," Gennai said finally. "A cornered thing always moves. The only question your mother's wheel ever answers —" he nodded at the slow turning in the next room "— is whether you've got your hands in the right place when it does." He set his bowl down. "Be where it breaks, boy. Not where it was."
 
-Up on the terrace the old man received word that the heir had named the broker with total certainty and no proof, and had let the man see he was named, and Ōnoki — who had buried traitors and knew exactly what naming one too early costs — did not rebuke him. *He found the hand,* the Tsuchikage thought, *the way only he could, and he did the honest thing with it, which was also the dangerous thing. Now the hand will move, and we will finally see its shape — at the price of the time we no longer have.* He gave three quiet orders, and doubled the unchained watch, and looked east into the dark where a patient man and an inside patriot were about to light the same fire from two ends, and thought, without fear, only: *Be ready. The crack is about to spread, and the boy is going to be standing in it.*
+Up on the terrace the old man received word that the heir had named the broker with total certainty and no proof, and had let the man see he was named, and Vohl — who had buried traitors and knew exactly what naming one too early costs — did not rebuke him. *He found the hand,* the Stoneward thought, *the way only he could, and he did the honest thing with it, which was also the dangerous thing. Now the hand will move, and we will finally see its shape — at the price of the time we no longer have.* He gave three quiet orders, and doubled the unchained watch, and looked east into the dark where a patient man and an inside patriot were about to light the same fire from two ends, and thought, without fear, only: *Be ready. The crack is about to spread, and the boy is going to be standing in it.*
 
 And Jōzen, alone in the registry after the heir had gone, took off his chain of office, and held it a moment in his hand, and did not feel like a traitor at all. He felt like the only loyal man left. He put it back on, and he reached for the one piece of his second shape that was already in motion inside the wall, and he brought it forward.
 
@@ -49,8 +49,8 @@ And Jōzen, alone in the registry after the heir had gone, took off his chain of
 ACT II · DAY 98 · "The Name and the Chain" — the hunt's identification. Iwao L6, Genin. Strict temporal: 3 required blocks lived + resolved before the clock advanced 97→98.
 PLAYED BEATS:
  • Iwao Ninshou 27 vs DC 16 — NATURAL 20 / CRITICAL SUCCESS: after a week of analysis walls (the bend, the room, the forgery), his scholar's element finally crowns him — total certainty naming the inside broker: Administrator Jōzen (npc_c9cd4d5e), who wore the chain on every smoothed report + routed coin, using honest Kazan's 'calm' instinct as cover. (Kazan = tool, not traitor.)
- • Jōzen humanized: a true-believer saboteur, not a monster — thinks Iwagakure has gone soft and a controlled war-scare will harden it; calls it patriotism.
+ • Jōzen humanized: a true-believer saboteur, not a monster — thinks Hidden Tor has gone soft and a controlled war-scare will harden it; calls it patriotism.
  • The corner: Iwao confronts him with certainty but NOT arrest-proof; Jōzen (on-demand npc_turn) hides behind office — 'put it in writing or you're slandering a civil servant.' Untouchable in exact measure that he's trusted.
- • Consequence of being right: naming him early forces his hand. Ōnoki doubles the unchained watch; Gennai: "be where it breaks, not where it was." Jōzen brings his 'second shape' forward.
+ • Consequence of being right: naming him early forces his hand. Vohl doubles the unchained watch; Gennai: "be where it breaks, not where it was." Jōzen brings his 'second shape' forward.
 WORLD / climax pending: the inside-incident is now MOVING (Jōzen accelerated by exposure). Layer 3 → mid-Act-II climax. Gomei (Cloud-rogue) + Jōzen (inside patriot) lighting the same fire from two ends.
 HOOK: the incident-from-inside fires early — a race to "be where it breaks."

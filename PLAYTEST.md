@@ -1,4 +1,4 @@
-﻿# Naruto 5e â€” Playtest Guide
+﻿# Hidden Hand 5e â€” Playtest Guide
 
 How to run the engine, drive it, and what's playable right now.
 
@@ -32,7 +32,7 @@ curl -s localhost:8970/v1/rooms/demo/intent -H 'content-type: application/json' 
 
 # set the scene
 curl -s localhost:8970/v1/rooms/demo/intent -H 'content-type: application/json' \
-  -d '{"type":"scene","params":{"location":"The Great Naruto Bridge","mode":"scene"}}'
+  -d '{"type":"scene","params":{"location":"The Great Bridge","mode":"scene"}}'
 
 # read room state
 curl -s localhost:8970/v1/rooms/demo/state
@@ -118,7 +118,7 @@ curl -s localhost:8970/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"equip"
   - the **mission board**: post (ranked Dâ€“S), accept (rank-gated), resolve (Ryo +
     mission-point rewards), fail, rank-up.
   - **rest**: short (spend Hit/Chakra Dice) and long (full pools + dice recovery +
-    Will of Fire refresh); downtime (train/research/recuperate/shop).
+    Stone Oath refresh); downtime (train/research/recuperate/shop).
   - **equipment & Ryo economy**: 21 weapons / 6 armor tiers / consumables, buy/sell,
     equip/unequip with armor-aware AC, consumable effects, equipment packs.
 
@@ -186,7 +186,7 @@ curl -s localhost:8970/v1/rooms/demo/intent -d '{"actorId":"<id>","type":"defect
 - Everything in Phases 1â€“6, plus the **world-consequence web** (all moving
   Standing): NPC memory (a defining memory raises reputation), economy with
   Standing-gated stock + discounts, theft (heat â†’ reported â†’ Standing hit â†’ rogue
-  trigger â†’ defect), corpse harvest (KKG/secret = patron-positive / authority-
+  trigger â†’ defect), corpse harvest (bloodline/secret = patron-positive / authority-
   negative, gated to a fresh body) vs. honorable recovery.
 
 ## Author a jutsu / price an improv (Phase 8)

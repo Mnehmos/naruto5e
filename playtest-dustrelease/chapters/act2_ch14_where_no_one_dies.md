@@ -1,12 +1,12 @@
 TITLE: Act II, Chapter 14 — Where No One Dies
 DATES: The Hollow Pass · Day 103 · the incident he wanted, sprung at last — and answered with a cage instead of a grave
 ---
-Gomei had revised. He could not forge a war past a lens that read forgeries, so he had stopped forging and reached for the one thing no lens can argue with: a *real* incident. Three Stone genin — one of them the Tsuchikage's own heir — dead on contested ground, with Lightning-burns and Cloud-cut sign left on the bodies for any patrol to find. Not a planted token this time. Not a smoothed report. Corpses. You cannot read the truth out of a corpse that is exactly as dead as it looks. The boy had walked his own cell into the perfect casus belli, and at first light, on the valley floor below the eleven cairns, the trap closed.
+Gomei had revised. He could not forge a war past a lens that read forgeries, so he had stopped forging and reached for the one thing no lens can argue with: a *real* incident. Three Stone genin — one of them the Stoneward's own heir — dead on contested ground, with Lightning-burns and Cloud-cut sign left on the bodies for any patrol to find. Not a planted token this time. Not a smoothed report. Corpses. You cannot read the truth out of a corpse that is exactly as dead as it looks. The boy had walked his own cell into the perfect casus belli, and at first light, on the valley floor below the eleven cairns, the trap closed.
 
 It came out of the rocks in Cloud grey, and the commentary of the next ninety seconds is worth calling the way it happened.
 
 ## Round One — The Opening Exchange
-The Proxy Captain moved first and moved like a professional — no words, no banner, just a Lightning Cutter already screaming down the line at the boy in the Iwa flak jacket, the contract made flesh, a killing blow dressed as a Kumo execution.
+The Proxy Captain moved first and moved like a professional — no words, no banner, just a Lightning Cutter already screaming down the line at the boy in the Tor flak jacket, the contract made flesh, a killing blow dressed as a Cloud execution.
 
 [OOC · COMBAT — the proxy ambush. **Iwao (L6, 38 HP, AC 12)** vs a **Proxy Captain (false Cloud)** (elite, AC 14, 50 HP, **+20**, hired to kill the heir + leave Cloud sign) and a **Hired Blade** (minion, AC 10, 20 HP, +14). Init: Captain 17, Iwao 6, Blade 2. Objective: keep the cell alive — and make no incident of it.]
 
@@ -14,7 +14,7 @@ It landed clean — of course it landed, with a striker that fast — and the li
 
 [OOC · Captain → Iwao: **24 vs AC 12, hit, 12 damage. Iwao 38 → 26.**]
 
-And here is where a different fighter dies. Here is where the boy who once treated everything as a problem to be solved at range reaches for the deadliest answer he owns — the Dust, the Detachment, the bloodline that unmakes — and ends the Captain and the fight and his own principles all at once. The crowd, if there had been one, would have screamed for it.
+And here is where a different fighter dies. Here is where the boy who once treated everything as a problem to be solved at range reaches for the deadliest answer he owns — Particle art, the Detachment, the bloodline that unmakes — and ends the Captain and the fight and his own principles all at once. The crowd, if there had been one, would have screamed for it.
 
 He did not throw it. Standing in the one valley on earth that had been *made* by people choosing the killing answer, the heir reached instead for the cage.
 
@@ -56,7 +56,7 @@ Iwao let the cage soften — not open, just enough to bind without crushing — 
 ACT II · DAY 103 · "Where No One Dies" — Movement Two combat set-piece, UFC-called, engine dice live. Iwao L6, Genin. Strict temporal: 2 required + 1 optional block; clock 102 → 103.
 THE FIGHT (engine-adjudicated):
  • Foes: Proxy Captain (false Cloud) — elite L6, AC14/50hp/+20, hired to kill the heir + leave Lightning 'Cloud sign'; Hired Blade — minion L5, AC10/20hp/+14. Init: Captain 17, Iwao 6, Blade 2. Gomei's REVISED design: a REAL incident (dead heir + Cloud sign = casus belli no lens can refute).
- • R1: Captain Lightning Cutter HIT Iwao 24 vs AC12 → 12 dmg (38→26). Iwao answered the +20 killer with a CAGE not the lethal Dust — Sand-Coffin Binding: Captain DEX save 14 vs DC15 FAILS, 42 earth dmg (6+9+11+12+4!) 50→8 + PARALYZED. Blade lunged at Iwao: NAT-1 miss.
+ • R1: Captain Lightning Cutter HIT Iwao 24 vs AC12 → 12 dmg (38→26). Iwao answered the +20 killer with a CAGE not the lethal Particle — Sand-Coffin Binding: Captain DEX save 14 vs DC15 FAILS, 42 earth dmg (6+9+11+12+4!) 50→8 + PARALYZED. Blade lunged at Iwao: NAT-1 miss.
  • R2: Captain break-save 6 vs DC15 — still PARALYZED, helpless at 8 HP (a free kill). Iwao DECLINED the kill — held the cage, made the offer (social_speak, heard by all incl. Gomei): named the Eleven, "I'm not going to crush him, and I'm not going to spend you either." Blade BROKE & fled; Captain taken ALIVE (a captured false-Cloud proxy = incident defused, courtyard logic). Iwao ended 26/38; no graves made.
  • Gomei (npc_2441ef66, model turn): watched from the treeline; chose a REFLECTION (no reveal, no kill) — "I let the silence weigh on me before I decide whether to withdraw or reveal myself." Cracked, not converted; withdrew to reckon. (Also passed up killing Iwao in his sleep the night before = the question before the conversation.)
 THESIS made literal in combat: on the exact ground built by people who always chose the killing answer, the lens refused it — answered a killer with a cage, gave grief 'somewhere else to go than war.' Honest dice throughout (incl. the 42-earth bind that COULD have killed and didn't, by the shape of the technique). Combat won by control, not death — the arc's whole creed.
